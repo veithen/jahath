@@ -17,10 +17,14 @@ package com.google.code.jahath.client;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import com.google.code.jahath.common.CRLFInputStream;
+import com.google.code.jahath.common.CRLFOutputStream;
 
 public class JahathClient {
     private final String serverHost;
@@ -49,6 +53,29 @@ public class JahathClient {
 
     ExecutorService getExecutorService() {
         return executorService;
+    }
+    
+    HttpRequest createRequest(HttpRequest.Method method, String path) throws IOException {
+        Socket socket;
+        if (proxyConfiguration == null) {
+            socket = new Socket(serverHost, serverPort);
+        } else {
+            socket = new Socket(proxyConfiguration.getHost(), proxyConfiguration.getPort());
+        }
+        CRLFOutputStream request = new CRLFOutputStream(socket.getOutputStream());
+        String address = serverPort == 80 ? serverHost : serverHost + ":" + serverPort;
+        if (proxyConfiguration == null) {
+            request.writeLine(method + " " + path + " HTTP/1.1");
+        } else {
+            request.writeLine(method + " http://" + address + path + " HTTP/1.1");
+        }
+        HttpRequest httpRequest = new HttpRequest(request, new CRLFInputStream(socket.getInputStream()));
+        httpRequest.addHeader("Host", address);
+        httpRequest.addHeader("Connection", "keep-alive");
+        if (proxyConfiguration != null) {
+            httpRequest.addHeader("Proxy-Connection", "keep-alive");
+        }
+        return httpRequest;
     }
 
     public Tunnel createTunnel(int port, String remoteHost, int remotePort) throws IOException {

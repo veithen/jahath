@@ -15,6 +15,8 @@
  */
 package com.google.code.jahath.client;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -22,11 +24,6 @@ import java.util.concurrent.Future;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.CRLFOutputStream;
-import com.google.code.jahath.common.ChunkedInputStream;
-import com.google.code.jahath.common.ChunkedOutputStream;
-import com.google.code.jahath.common.Headers;
 import com.google.code.jahath.common.Relay;
 
 class ConnectionHandler implements Runnable {
@@ -43,40 +40,14 @@ class ConnectionHandler implements Runnable {
     public void run() {
         try {
             JahathClient client = tunnel.getClient();
-            ProxyConfiguration proxyConfiguration = client.getProxyConfiguration();
-            Socket outSocket;
-            if (proxyConfiguration == null) {
-                outSocket = new Socket(client.getServerHost(), client.getServerPort());
-            } else {
-                outSocket = new Socket(proxyConfiguration.getHost(), proxyConfiguration.getPort());
-            }
-            CRLFOutputStream request = new CRLFOutputStream(outSocket.getOutputStream());
-            CRLFInputStream response = new CRLFInputStream(outSocket.getInputStream());
-            int serverPort = client.getServerPort();
-            String address = serverPort == 80 ? client.getServerHost() : client.getServerHost() + ":" + serverPort;
-            if (proxyConfiguration == null) {
-                request.writeLine("POST / HTTP/1.1");
-            } else {
-                request.writeLine("POST http://" + address + "/ HTTP/1.1");
-            }
-            request.writeLine("Host: " + address);
-            request.writeLine("Content-Type: application/octet-stream");
-            request.writeLine("Transfer-Encoding: chunked");
-            request.writeLine("Connection: keep-alive");
-            if (proxyConfiguration != null) {
-                request.writeLine("Proxy-Connection: keep-alive");
-            }
-            request.writeLine("X-JHT-Remote-Host: " + tunnel.getRemoteHost());
-            request.writeLine("X-JHT-Remote-Port: " + tunnel.getRemotePort());
-            request.writeLine("");
-            String status = response.readLine();
-            log.info(status);
-            // TODO: process status line
-            Headers headers = new Headers(response);
-            // TODO: process headers
+            HttpRequest httpRequest = client.createRequest(HttpRequest.Method.POST, "/");
+            httpRequest.addHeader("X-JHT-Remote-Host", tunnel.getRemoteHost());
+            httpRequest.addIntHeader("X-JHT-Remote-Port", tunnel.getRemotePort());
+            OutputStream out = httpRequest.getOutputStream("application/octet-stream");
+            InputStream in = httpRequest.getResponse().getInputStream();
             ExecutorService executorService = client.getExecutorService();
-            Future<?> f1 = executorService.submit(new Relay("request", socket.getInputStream(), new ChunkedOutputStream(request)));
-            Future<?> f2 = executorService.submit(new Relay("response", new ChunkedInputStream(response), socket.getOutputStream()));
+            Future<?> f1 = executorService.submit(new Relay("request", socket.getInputStream(), out));
+            Future<?> f2 = executorService.submit(new Relay("response", in, socket.getOutputStream()));
             f1.get();
             f2.get();
             socket.close();
