@@ -13,28 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client;
+package com.google.code.jahath.server;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.concurrent.ExecutorService;
 
 import com.google.code.jahath.common.AbstractAcceptor;
 
 class Acceptor extends AbstractAcceptor {
-    private static final Log log = LogFactory.getLog(Acceptor.class);
-    
-    private final Tunnel tunnel;
+    private final ExecutorService executorService;
 
-    public Acceptor(ServerSocket serverSocket, Tunnel tunnel) {
+    public Acceptor(ServerSocket serverSocket, ExecutorService executorService) {
         super(serverSocket);
-        this.tunnel = tunnel;
+        this.executorService = executorService;
     }
 
     @Override
     protected void handleConnection(Socket socket) {
-        tunnel.getClient().getExecutorService().execute(new ConnectionHandler(socket, tunnel));
+        executorService.execute(new ConnectionHandler(socket, executorService));
     }
 }

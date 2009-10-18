@@ -31,7 +31,7 @@ import org.junit.Test;
 
 import com.google.code.jahath.client.JahathClient;
 import com.google.code.jahath.client.Tunnel;
-import com.google.code.jahath.server.JahathServer;
+import com.google.code.jahath.server.JahathServer2;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
 
@@ -50,7 +50,7 @@ public class MailTest {
         greenMail.setUser("user@localhost", "user", "password");
         greenMail.start();
         
-        JahathServer server = new JahathServer(serverPort);
+        JahathServer2 server = new JahathServer2(serverPort);
         
         JahathClient client = new JahathClient("localhost", serverPort);
         Tunnel smtpTunnel = client.createTunnel(smtpTunnelPort, "localhost", smtpPort);

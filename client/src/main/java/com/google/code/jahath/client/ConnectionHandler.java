@@ -26,6 +26,7 @@ import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.CRLFOutputStream;
 import com.google.code.jahath.common.ChunkedInputStream;
 import com.google.code.jahath.common.ChunkedOutputStream;
+import com.google.code.jahath.common.Headers;
 import com.google.code.jahath.common.Relay;
 
 class ConnectionHandler implements Runnable {
@@ -56,10 +57,8 @@ class ConnectionHandler implements Runnable {
             String status = response.readLine();
             log.info(status);
             // TODO: process status line
-            String header;
-            while ((header = response.readLine()).length() > 0) {
-                // TODO: process header line
-            }
+            Headers headers = new Headers(response);
+            // TODO: process headers
             ExecutorService executorService = client.getExecutorService();
             Future<?> f1 = executorService.submit(new Relay("request", socket.getInputStream(), new ChunkedOutputStream(request)));
             Future<?> f2 = executorService.submit(new Relay("response", new ChunkedInputStream(response), socket.getOutputStream()));
