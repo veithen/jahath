@@ -16,7 +16,6 @@
 package com.google.code.jahath.common;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Random;
 
@@ -30,25 +29,15 @@ import org.mortbay.jetty.Request;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.AbstractHandler;
 
-public class ChunkedInputStreamTest {
+public class ChunkedOutputStreamTest {
     @Test
     public void test() throws Exception {
         Server server = new Server(5555);
-        final CRC expectedCRC = new CRC();
+        final CRC actualCRC = new CRC();
         server.setHandler(new AbstractHandler() {
             public void handle(String target, HttpServletRequest request, HttpServletResponse response,
                     int dispatch) throws IOException, ServletException {
-                Random random = new Random();
-                response.setContentType("application/octet-stream");
-                OutputStream out = response.getOutputStream();
-                for (int i=0; i<100; i++) {
-                    int len = 16 + random.nextInt(4080);
-                    byte[] buffer = new byte[len];
-                    random.nextBytes(buffer);
-                    out.write(buffer);
-                    out.flush();
-                    expectedCRC.update(buffer);
-                }
+                actualCRC.update(request.getInputStream());
                 ((Request)request).setHandled(true);
             }
         });
@@ -57,10 +46,23 @@ public class ChunkedInputStreamTest {
             Socket socket = new Socket("localhost", 5555);
             try {
                 CRLFOutputStream out = new CRLFOutputStream(socket.getOutputStream());
-                out.writeLine("GET / HTTP/1.1");
+                out.writeLine("POST / HTTP/1.1");
                 out.writeLine("Host: localhost");
                 out.writeLine("Connection: keep-alive");
+                out.writeLine("Transfer-Encoding: chunked");
+                out.writeLine("Content-Type: application/octet-stream");
                 out.writeLine("");
+                ChunkedOutputStream chunked = new ChunkedOutputStream(out);
+                CRC expectedCRC = new CRC();
+                Random random = new Random();
+                for (int i=0; i<100; i++) {
+                    int len = 16 + random.nextInt(4080);
+                    byte[] buffer = new byte[len];
+                    random.nextBytes(buffer);
+                    chunked.write(buffer);
+                    expectedCRC.update(buffer);
+                }
+                chunked.close();
                 CRLFInputStream in = new CRLFInputStream(socket.getInputStream());
                 while (true) {
                     String line = in.readLine();
@@ -68,9 +70,6 @@ public class ChunkedInputStreamTest {
                         break;
                     }
                 }
-                ChunkedInputStream chunked = new ChunkedInputStream(in);
-                CRC actualCRC = new CRC();
-                actualCRC.update(chunked);
                 Assert.assertEquals(expectedCRC.getValue(), actualCRC.getValue());
             } finally {
                 socket.close();
