@@ -15,10 +15,11 @@
  */
 package com.google.code.jahath.server;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -27,17 +28,16 @@ import com.google.code.jahath.common.CRLFOutputStream;
 import com.google.code.jahath.common.ChunkedInputStream;
 import com.google.code.jahath.common.ChunkedOutputStream;
 import com.google.code.jahath.common.Headers;
-import com.google.code.jahath.common.Relay;
 
 class ConnectionHandler implements Runnable {
     private static final Log log = LogFactory.getLog(ConnectionHandler.class);
     
     private final Socket socket;
-    private final ExecutorService executorService;
+    private final JahathServer2 server;
 
-    public ConnectionHandler(Socket socket, ExecutorService executorService) {
+    public ConnectionHandler(Socket socket, JahathServer2 server) {
         this.socket = socket;
-        this.executorService = executorService;
+        this.server = server;
     }
 
     public void run() {
@@ -45,28 +45,42 @@ class ConnectionHandler implements Runnable {
             CRLFInputStream request = new CRLFInputStream(socket.getInputStream());
             CRLFOutputStream response = new CRLFOutputStream(socket.getOutputStream());
             String requestLine = request.readLine();
-            log.info(requestLine);
-            // TODO: process request line
             Headers headers = new Headers(request);
-            // TODO: process all relevant headers!
-            String targetHost = headers.getHeader("X-JHT-Remote-Host");
-            int targetPort = headers.getIntHeader("X-JHT-Remote-Port");
+            // TODO: do this properly!
+            String[] parts = requestLine.split(" ");
+            String path = parts[1];
+            int type;
+            SessionWrapper session;
+            if (path.equals("/")) {
+                type = 1;
+                session = server.createSession();
+            } else {
+                String sessionId = path.substring(1);
+                session = server.getSession(sessionId);
+                type = headers.getHeader("Content-Type") != null ? 2 : 3;
+            }
+            if (type == 2) {
+                IOUtils.copy(new ChunkedInputStream(request), session.getSession().getOutputStream());
+            }
             response.writeLine("HTTP/1.1 200 OK");
-            response.writeLine("Content-Type: application/octet-stream");
-            response.writeLine("Transfer-Encoding: chunked");
+            if (type == 1) {
+                response.writeLine("X-JHT-Session-Id: " + session.getId());
+            } else if (type == 3) {
+                response.writeLine("Content-Type: application/octet-stream");
+                response.writeLine("Transfer-Encoding: chunked");
+            }
             response.writeLine("Connection: keep-alive");
             response.writeLine("");
-            response.flush();
-            Socket outSocket = new Socket(targetHost, targetPort);
-            String remoteHost = socket.getInetAddress().getHostName();
-            Future<?> f1 = executorService.submit(new Relay(remoteHost + " -> " + targetHost + ":" + targetPort, new ChunkedInputStream(request), outSocket.getOutputStream()));
-            Future<?> f2 = executorService.submit(new Relay(targetHost + ":" + targetPort + " -> " + remoteHost, outSocket.getInputStream(), new ChunkedOutputStream(response)));
-            try {
-                f1.get();
-                f2.get();
-            } catch (Exception ex) {
-                log.error("", ex);
+            if (type == 3) {
+                InputStream in = session.getSession().getInputStream();
+                OutputStream out = new ChunkedOutputStream(response);
+                // TODO: loop here unless available() return 0
+                byte[] buffer = new byte[4096];
+                int c = in.read(buffer);
+                out.write(buffer, 0, c);
+                out.close();
             }
+            response.flush();
             socket.close();
         } catch (Exception ex) {
             log.error("", ex);

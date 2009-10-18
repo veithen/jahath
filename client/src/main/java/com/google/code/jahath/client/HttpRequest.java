@@ -58,4 +58,10 @@ class HttpRequest {
         // TODO: process headers
         return new HttpResponse(headers, new ChunkedInputStream(response));
     }
+    
+    public HttpResponse execute() throws IOException {
+        request.writeLine("");
+        request.flush();
+        return getResponse();
+    }
 }

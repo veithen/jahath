@@ -13,23 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server;
+package com.google.code.jahath.tests;
 
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.IOException;
 
-import com.google.code.jahath.common.AbstractAcceptor;
+import com.google.code.jahath.server.Session;
+import com.google.code.jahath.server.SessionFactory;
 
-class Acceptor extends AbstractAcceptor {
-    private final JahathServer2 server;
-
-    public Acceptor(ServerSocket serverSocket, JahathServer2 server) {
-        super(serverSocket);
-        this.server = server;
-    }
-
-    @Override
-    protected void handleConnection(Socket socket) {
-        server.getExecutorService().execute(new ConnectionHandler(socket, server));
+public class EchoSessionFactory implements SessionFactory {
+    public Session createSession() throws IOException {
+        return new EchoSession();
     }
 }

@@ -78,6 +78,13 @@ public class JahathClient {
         return httpRequest;
     }
 
+    public Session createSession() throws IOException {
+        HttpRequest request = createRequest(HttpRequest.Method.POST, "/");
+        HttpResponse response = request.execute();
+        String sessionId = response.getHeader("X-JHT-Session-Id");
+        return new Session(this, sessionId);
+    }
+
     public Tunnel createTunnel(int port, String remoteHost, int remotePort) throws IOException {
         ServerSocket ss = new ServerSocket(port);
         Tunnel tunnel = new Tunnel(this, remoteHost, remotePort);

@@ -13,26 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client;
+package com.google.code.jahath.tests;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 
-import com.google.code.jahath.common.Headers;
+import com.google.code.jahath.server.Session;
 
-class HttpResponse {
-    private final Headers headers;
-    private final InputStream content;
-
-    public HttpResponse(Headers headers, InputStream content) {
-        this.headers = headers;
-        this.content = content;
-    }
+public class EchoSession implements Session {
+    private final PipedOutputStream out;
+    private final PipedInputStream in;
     
-    public String getHeader(String name) {
-        return headers.getHeader(name);
+    public EchoSession() throws IOException {
+        out = new PipedOutputStream();
+        in = new PipedInputStream(out);
+    }
+
+    public OutputStream getOutputStream() {
+        return out;
     }
     
     public InputStream getInputStream() {
-        return content;
+        return in;
     }
 }

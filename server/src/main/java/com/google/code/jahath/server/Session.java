@@ -15,21 +15,10 @@
  */
 package com.google.code.jahath.server;
 
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-import com.google.code.jahath.common.AbstractAcceptor;
-
-class Acceptor extends AbstractAcceptor {
-    private final JahathServer2 server;
-
-    public Acceptor(ServerSocket serverSocket, JahathServer2 server) {
-        super(serverSocket);
-        this.server = server;
-    }
-
-    @Override
-    protected void handleConnection(Socket socket) {
-        server.getExecutorService().execute(new ConnectionHandler(socket, server));
-    }
+public interface Session {
+    OutputStream getOutputStream();
+    InputStream getInputStream();
 }

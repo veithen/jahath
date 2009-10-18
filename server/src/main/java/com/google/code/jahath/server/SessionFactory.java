@@ -15,21 +15,8 @@
  */
 package com.google.code.jahath.server;
 
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.IOException;
 
-import com.google.code.jahath.common.AbstractAcceptor;
-
-class Acceptor extends AbstractAcceptor {
-    private final JahathServer2 server;
-
-    public Acceptor(ServerSocket serverSocket, JahathServer2 server) {
-        super(serverSocket);
-        this.server = server;
-    }
-
-    @Override
-    protected void handleConnection(Socket socket) {
-        server.getExecutorService().execute(new ConnectionHandler(socket, server));
-    }
+public interface SessionFactory {
+    Session createSession() throws IOException;
 }
