@@ -43,14 +43,29 @@ class ConnectionHandler implements Runnable {
     public void run() {
         try {
             JahathClient client = tunnel.getClient();
-            Socket outSocket = new Socket(client.getServerHost(), client.getServerPort());
+            ProxyConfiguration proxyConfiguration = client.getProxyConfiguration();
+            Socket outSocket;
+            if (proxyConfiguration == null) {
+                outSocket = new Socket(client.getServerHost(), client.getServerPort());
+            } else {
+                outSocket = new Socket(proxyConfiguration.getHost(), proxyConfiguration.getPort());
+            }
             CRLFOutputStream request = new CRLFOutputStream(outSocket.getOutputStream());
             CRLFInputStream response = new CRLFInputStream(outSocket.getInputStream());
-            request.writeLine("POST / HTTP/1.1");
-            request.writeLine("Host: " + client.getServerHost() + ":" + client.getServerPort());
+            int serverPort = client.getServerPort();
+            String address = serverPort == 80 ? client.getServerHost() : client.getServerHost() + ":" + serverPort;
+            if (proxyConfiguration == null) {
+                request.writeLine("POST / HTTP/1.1");
+            } else {
+                request.writeLine("POST http://" + address + "/ HTTP/1.1");
+            }
+            request.writeLine("Host: " + address);
             request.writeLine("Content-Type: application/octet-stream");
             request.writeLine("Transfer-Encoding: chunked");
             request.writeLine("Connection: keep-alive");
+            if (proxyConfiguration != null) {
+                request.writeLine("Proxy-Connection: keep-alive");
+            }
             request.writeLine("X-JHT-Remote-Host: " + tunnel.getRemoteHost());
             request.writeLine("X-JHT-Remote-Port: " + tunnel.getRemotePort());
             request.writeLine("");

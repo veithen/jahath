@@ -15,13 +15,21 @@
  */
 package com.google.code.jahath.tests;
 
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.mortbay.http.HttpContext;
+import org.mortbay.http.HttpException;
+import org.mortbay.http.HttpRequest;
+import org.mortbay.http.HttpResponse;
 import org.mortbay.http.SocketListener;
+import org.mortbay.http.handler.AbstractHttpHandler;
 import org.mortbay.http.handler.ProxyHandler;
 import org.mortbay.jetty.Server;
 
 public class ProxyServer {
     private final Server server;
+    final AtomicInteger requestCount = new AtomicInteger();
     
     public ProxyServer(int port) throws Exception {
         server = new Server();
@@ -29,12 +37,22 @@ public class ProxyServer {
         listener.setPort(port);
         server.addListener(listener);
         HttpContext context = new HttpContext(server, "/");
+        context.addHandler(new AbstractHttpHandler() {
+            public void handle(String pathInContext, String pathParams, HttpRequest request,
+                    HttpResponse response) throws HttpException, IOException {
+                requestCount.incrementAndGet();
+            }
+        });
         context.addHandler(new ProxyHandler());
         server.start();
     }
     
-    public final void stop() throws Exception {
+    public void stop() throws Exception {
         server.stop();
+    }
+    
+    public int getRequestCount() {
+        return requestCount.get();
     }
 
     public static void main(String[] args) throws Exception {

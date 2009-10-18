@@ -25,11 +25,13 @@ import java.util.concurrent.TimeUnit;
 public class JahathClient {
     private final String serverHost;
     private final int serverPort;
+    private final ProxyConfiguration proxyConfiguration;
     private final ExecutorService executorService;
     
-    public JahathClient(String serverHost, int serverPort) {
+    public JahathClient(String serverHost, int serverPort, ProxyConfiguration proxyConfiguration) {
         this.serverHost = serverHost;
         this.serverPort = serverPort;
+        this.proxyConfiguration = proxyConfiguration;
         executorService = new ThreadPoolExecutor(6, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
     }
     
@@ -39,6 +41,10 @@ public class JahathClient {
 
     public int getServerPort() {
         return serverPort;
+    }
+
+    ProxyConfiguration getProxyConfiguration() {
+        return proxyConfiguration;
     }
 
     ExecutorService getExecutorService() {

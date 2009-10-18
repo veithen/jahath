@@ -30,6 +30,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.code.jahath.client.JahathClient;
+import com.google.code.jahath.client.ProxyConfiguration;
 import com.google.code.jahath.client.Tunnel;
 import com.google.code.jahath.server.JahathServer2;
 import com.icegreen.greenmail.util.GreenMail;
@@ -41,9 +42,9 @@ public class MailTest {
     private final int serverPort = 9003;
     private final int smtpTunnelPort = 9004;
     private final int imapTunnelPort = 9005;
+    private final int proxyPort = 9006;
     
-    @Test
-    public void test() throws Exception {
+    private void test(boolean useProxy) throws Exception {
         GreenMail greenMail = new GreenMail(new ServerSetup[] {
                 new ServerSetup(smtpPort, "127.0.0.1", ServerSetup.PROTOCOL_SMTP),
                 new ServerSetup(imapPort, "127.0.0.1", ServerSetup.PROTOCOL_IMAP) });
@@ -52,7 +53,17 @@ public class MailTest {
         
         JahathServer2 server = new JahathServer2(serverPort);
         
-        JahathClient client = new JahathClient("localhost", serverPort);
+        ProxyServer proxy;
+        ProxyConfiguration proxyConfiguration;
+        if (useProxy) {
+            proxy = new ProxyServer(proxyPort);
+            proxyConfiguration = new ProxyConfiguration("localhost", proxyPort);
+        } else {
+            proxy = null;
+            proxyConfiguration = null;
+        }
+        
+        JahathClient client = new JahathClient("localhost", serverPort, proxyConfiguration);
         Tunnel smtpTunnel = client.createTunnel(smtpTunnelPort, "localhost", smtpPort);
         Tunnel imapTunnel = client.createTunnel(imapTunnelPort, "localhost", imapPort);
         
@@ -87,8 +98,23 @@ public class MailTest {
         imapTunnel.stop();
         client.shutdown();
         
+        if (useProxy) {
+            Assert.assertEquals(2, proxy.getRequestCount());
+            proxy.stop();
+        }
+        
         server.stop();
         
         greenMail.stop();
+    }
+
+    @Test
+    public void testWithoutProxy() throws Exception {
+        test(false);
+    }
+
+//    @Test
+    public void testWithProxy() throws Exception {
+        test(true);
     }
 }
