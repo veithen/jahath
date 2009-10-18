@@ -18,7 +18,6 @@ package com.google.code.jahath.common;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URL;
 import java.util.Random;
 
 import javax.servlet.ServletException;
@@ -55,7 +54,6 @@ public class ChunkedInputStreamTest {
         Server server = new Server(5555);
         final CRC expectedCRC = new CRC();
         server.setHandler(new AbstractHandler() {
-            
             public void handle(String target, HttpServletRequest request, HttpServletResponse response,
                     int dispatch) throws IOException, ServletException {
                 Random random = new Random();
