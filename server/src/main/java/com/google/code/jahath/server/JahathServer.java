@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009 Andreas Veithen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.google.code.jahath.server;
 
 import java.io.IOException;
@@ -24,11 +39,13 @@ import com.google.code.jahath.common.Relay;
 public class JahathServer {
     private static final Log log = LogFactory.getLog(JahathServer.class);
     
-    public static void main(String[] args) throws Exception {
+    private final Server server;
+    
+    public JahathServer(int port) throws Exception {
         final ExecutorService executorService = new ThreadPoolExecutor(6, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-        Server server = new Server();
+        server = new Server();
         SocketListener listener = new SocketListener();
-        listener.setPort(8280);
+        listener.setPort(port);
         server.addListener(listener);
         HttpContext context = new HttpContext(server, "/");
         HttpHandler handler = new AbstractHttpHandler() {
@@ -36,8 +53,8 @@ public class JahathServer {
                     HttpRequest request, HttpResponse response) throws HttpException,
                     IOException {
                 String remoteHost = request.getRemoteHost();
-                String targetHost = "svn.apache.org";
-                int targetPort = 80;
+                String targetHost = request.getField("X-JHT-Remote-Host");
+                int targetPort = request.getIntField("X-JHT-Remote-Port");
                 Socket socket = new Socket(targetHost, targetPort);
                 response.commit();
                 Future<?> f1 = executorService.submit(new Relay(remoteHost + " -> " + targetHost + ":" + targetPort, request.getInputStream(), socket.getOutputStream()));
@@ -53,7 +70,10 @@ public class JahathServer {
             }
         };
         context.addHandler(handler);
-//        handler.start();
         server.start();
+    }
+
+    public final void stop() throws InterruptedException {
+        server.stop();
     }
 }
