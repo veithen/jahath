@@ -28,7 +28,7 @@ import com.google.code.jahath.common.ChunkedInputStream;
 import com.google.code.jahath.common.ChunkedOutputStream;
 import com.google.code.jahath.common.Relay;
 
-public class ConnectionHandler implements Runnable {
+class ConnectionHandler implements Runnable {
     private static final Log log = LogFactory.getLog(ConnectionHandler.class);
     
     private final Socket socket;
