@@ -27,4 +27,24 @@
     <artifactId>server</artifactId>
     <name>Jahath :: Server</name>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>common</artifactId>
+            <version>${version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jetty</groupId>
+            <artifactId>jetty</artifactId>
+            <version>5.1.10</version>
+        </dependency>
+        <dependency>
+        	<groupId>commons-logging</groupId>
+        	<artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>log4j</groupId>
+        	<artifactId>log4j</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -27,4 +27,23 @@
     <artifactId>client</artifactId>
     <name>Jahath :: Client</name>
     <packaging>jar</packaging>
+    <dependencies>
+    	<dependency>
+    		<groupId>${groupId}</groupId>
+    		<artifactId>common</artifactId>
+    		<version>${version}</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>commons-io</groupId>
+    		<artifactId>commons-io</artifactId>
+    	</dependency>
+    	<dependency>
+    		<groupId>commons-logging</groupId>
+    		<artifactId>commons-logging</artifactId>
+    	</dependency>
+    	<dependency>
+    		<groupId>log4j</groupId>
+    		<artifactId>log4j</artifactId>
+    	</dependency>
+    </dependencies>
 </project>
