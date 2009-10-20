@@ -24,7 +24,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.CRLFOutputStream;
+import com.google.code.jahath.common.HttpOutputStream;
 
 public class JahathClient {
     private final String serverHost;
@@ -62,7 +62,7 @@ public class JahathClient {
         } else {
             socket = new Socket(proxyConfiguration.getHost(), proxyConfiguration.getPort());
         }
-        CRLFOutputStream request = new CRLFOutputStream(socket.getOutputStream());
+        HttpOutputStream request = new HttpOutputStream(socket.getOutputStream());
         String address = serverPort == 80 ? serverHost : serverHost + ":" + serverPort;
         if (proxyConfiguration == null) {
             request.writeLine(method + " " + path + " HTTP/1.1");

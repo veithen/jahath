@@ -56,11 +56,11 @@ public class ChunkedInputStreamTest {
         try {
             Socket socket = new Socket("localhost", 5555);
             try {
-                CRLFOutputStream out = new CRLFOutputStream(socket.getOutputStream());
+                HttpOutputStream out = new HttpOutputStream(socket.getOutputStream());
                 out.writeLine("GET / HTTP/1.1");
-                out.writeLine("Host: localhost");
-                out.writeLine("Connection: keep-alive");
-                out.writeLine("");
+                out.writeHeader("Host", "localhost");
+                out.writeHeader("Connection", "keep-alive");
+                out.flushHeaders();
                 CRLFInputStream in = new CRLFInputStream(socket.getInputStream());
                 while (true) {
                     String line = in.readLine();

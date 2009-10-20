@@ -20,15 +20,27 @@ import java.io.OutputStream;
 
 import org.apache.commons.io.output.ProxyOutputStream;
 
-public class CRLFOutputStream extends ProxyOutputStream {
+public class HttpOutputStream extends ProxyOutputStream {
     private static final byte[] CRLF = new byte[] { '\r', '\n' };
     
-    public CRLFOutputStream(OutputStream proxy) {
+    public HttpOutputStream(OutputStream proxy) {
         super(proxy);
     }
     
     public void writeLine(String s) throws IOException {
         write(s.getBytes("ascii"));
+        write(CRLF);
+    }
+
+    public void writeHeader(String name, String value) throws IOException {
+        writeLine(name + ": " + value);
+    }
+    
+    public void writeIntHeader(String name, int value) throws IOException {
+        writeHeader(name, String.valueOf(value));
+    }
+    
+    public void flushHeaders() throws IOException {
         write(CRLF);
     }
 }

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.CRLFOutputStream;
+import com.google.code.jahath.common.HttpOutputStream;
 import com.google.code.jahath.common.ChunkedInputStream;
 import com.google.code.jahath.common.ChunkedOutputStream;
 import com.google.code.jahath.common.Headers;
@@ -27,26 +27,26 @@ import com.google.code.jahath.common.Headers;
 class HttpRequest {
     public enum Method { GET, POST };
     
-    private final CRLFOutputStream request;
+    private final HttpOutputStream request;
     private final CRLFInputStream response;
     
-    public HttpRequest(CRLFOutputStream request, CRLFInputStream response) {
+    public HttpRequest(HttpOutputStream request, CRLFInputStream response) {
         this.request = request;
         this.response = response;
     }
     
     public void addHeader(String name, String value) throws IOException {
-        request.writeLine(name + ": " + value);
+        request.writeHeader(name, value);
     }
     
     public void addIntHeader(String name, int value) throws IOException {
-        addHeader(name, String.valueOf(value));
+        request.writeIntHeader(name, value);
     }
     
     public OutputStream getOutputStream(String contentType) throws IOException {
-        addHeader("Content-Type", contentType);
-        addHeader("Transfer-Encoding", "chunked");
-        request.writeLine("");
+        request.writeHeader("Content-Type", contentType);
+        request.writeHeader("Transfer-Encoding", "chunked");
+        request.flushHeaders();
         request.flush(); // TODO: remove this when no longer necessary
         return new ChunkedOutputStream(request);
     }

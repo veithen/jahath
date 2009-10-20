@@ -24,7 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.CRLFOutputStream;
+import com.google.code.jahath.common.HttpOutputStream;
 import com.google.code.jahath.common.ChunkedInputStream;
 import com.google.code.jahath.common.ChunkedOutputStream;
 import com.google.code.jahath.common.Headers;
@@ -43,7 +43,7 @@ class ConnectionHandler implements Runnable {
     public void run() {
         try {
             CRLFInputStream request = new CRLFInputStream(socket.getInputStream());
-            CRLFOutputStream response = new CRLFOutputStream(socket.getOutputStream());
+            HttpOutputStream response = new HttpOutputStream(socket.getOutputStream());
             String requestLine = request.readLine();
             Headers headers = new Headers(request);
             // TODO: do this properly!
@@ -73,13 +73,13 @@ class ConnectionHandler implements Runnable {
             }
             response.writeLine("HTTP/1.1 200 OK");
             if (type == 1) {
-                response.writeLine("X-JHT-Session-Id: " + session.getId());
+                response.writeHeader("X-JHT-Session-Id", session.getId());
             } else if (type == 3) {
-                response.writeLine("Content-Type: application/octet-stream");
-                response.writeLine("Transfer-Encoding: chunked");
+                response.writeHeader("Content-Type", "application/octet-stream");
+                response.writeHeader("Transfer-Encoding", "chunked");
             }
-            response.writeLine("Connection: keep-alive");
-            response.writeLine("");
+            response.writeHeader("Connection", "keep-alive");
+            response.flushHeaders();
             if (type == 3) {
                 InputStream in2 = session.getSession().getInputStream();
                 OutputStream out = new ChunkedOutputStream(response);

@@ -45,13 +45,13 @@ public class ChunkedOutputStreamTest {
         try {
             Socket socket = new Socket("localhost", 5555);
             try {
-                CRLFOutputStream out = new CRLFOutputStream(socket.getOutputStream());
+                HttpOutputStream out = new HttpOutputStream(socket.getOutputStream());
                 out.writeLine("POST / HTTP/1.1");
-                out.writeLine("Host: localhost");
-                out.writeLine("Connection: keep-alive");
-                out.writeLine("Transfer-Encoding: chunked");
-                out.writeLine("Content-Type: application/octet-stream");
-                out.writeLine("");
+                out.writeHeader("Host", "localhost");
+                out.writeHeader("Connection", "keep-alive");
+                out.writeHeader("Transfer-Encoding", "chunked");
+                out.writeHeader("Content-Type", "application/octet-stream");
+                out.flushHeaders();
                 ChunkedOutputStream chunked = new ChunkedOutputStream(out);
                 CRC expectedCRC = new CRC();
                 Random random = new Random();
