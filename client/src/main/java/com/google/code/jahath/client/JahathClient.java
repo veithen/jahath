@@ -24,7 +24,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.HttpOutputStream;
+import com.google.code.jahath.common.http.HttpOutputStream;
 
 public class JahathClient {
     private final String serverHost;

@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common;
+package com.google.code.jahath.common.http;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import com.google.code.jahath.common.CRLFInputStream;
 
 public class ChunkedInputStream extends InputStream {
     private final CRLFInputStream parent;

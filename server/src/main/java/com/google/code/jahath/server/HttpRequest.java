@@ -17,7 +17,7 @@ package com.google.code.jahath.server;
 
 import java.io.InputStream;
 
-import com.google.code.jahath.common.Headers;
+import com.google.code.jahath.common.http.Headers;
 
 class HttpRequest {
     private final String path;

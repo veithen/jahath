@@ -17,7 +17,7 @@ package com.google.code.jahath.client;
 
 import java.io.InputStream;
 
-import com.google.code.jahath.common.Headers;
+import com.google.code.jahath.common.http.Headers;
 
 class HttpResponse {
     private final Headers headers;

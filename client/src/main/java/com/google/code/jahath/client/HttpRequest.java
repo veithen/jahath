@@ -19,10 +19,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.HttpOutputStream;
-import com.google.code.jahath.common.ChunkedInputStream;
-import com.google.code.jahath.common.ChunkedOutputStream;
-import com.google.code.jahath.common.Headers;
+import com.google.code.jahath.common.http.ChunkedInputStream;
+import com.google.code.jahath.common.http.ChunkedOutputStream;
+import com.google.code.jahath.common.http.Headers;
+import com.google.code.jahath.common.http.HttpOutputStream;
 
 class HttpRequest {
     public enum Method { GET, POST };

@@ -24,10 +24,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.HttpOutputStream;
-import com.google.code.jahath.common.ChunkedInputStream;
-import com.google.code.jahath.common.ChunkedOutputStream;
-import com.google.code.jahath.common.Headers;
+import com.google.code.jahath.common.http.ChunkedInputStream;
+import com.google.code.jahath.common.http.ChunkedOutputStream;
+import com.google.code.jahath.common.http.Headers;
+import com.google.code.jahath.common.http.HttpOutputStream;
 
 class ConnectionHandler implements Runnable {
     private static final Log log = LogFactory.getLog(ConnectionHandler.class);

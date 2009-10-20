@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common;
+package com.google.code.jahath.common.http;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.code.jahath.common.CRLFInputStream;
 
 public class Headers {
     private final Map<String,String> headers = new HashMap<String,String>();

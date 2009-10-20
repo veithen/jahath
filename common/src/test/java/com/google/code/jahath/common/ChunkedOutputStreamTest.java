@@ -29,6 +29,9 @@ import org.mortbay.jetty.Request;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.AbstractHandler;
 
+import com.google.code.jahath.common.http.ChunkedOutputStream;
+import com.google.code.jahath.common.http.HttpOutputStream;
+
 public class ChunkedOutputStreamTest {
     @Test
     public void test() throws Exception {
