@@ -16,7 +16,6 @@
 package com.google.code.jahath.server;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,17 +25,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.google.code.jahath.server.http.HttpServer;
+
 public class JahathServer2 {
     private final SessionFactory sessionFactory;
     private final ExecutorService executorService;
-    private final Acceptor acceptor;
+    private final HttpServer httpServer;
     private final Map<String,SessionWrapper> sessions = Collections.synchronizedMap(new HashMap<String,SessionWrapper>());
     
     public JahathServer2(int port, SessionFactory sessionFactory) throws IOException {
         this.sessionFactory = sessionFactory;
         executorService = new ThreadPoolExecutor(6, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-        acceptor = new Acceptor(new ServerSocket(port), executorService, new HttpRequestHandlerImpl(this));
-        executorService.execute(acceptor);
+        httpServer = new HttpServer(port, executorService, new HttpRequestHandlerImpl(this));
     }
 
     ExecutorService getExecutorService() {
@@ -55,7 +55,7 @@ public class JahathServer2 {
     }
     
     public final void stop() {
-        acceptor.stop();
+        httpServer.stop();
         executorService.shutdown();
     }
 }

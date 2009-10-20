@@ -21,6 +21,10 @@ import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
 
+import com.google.code.jahath.server.http.HttpRequest;
+import com.google.code.jahath.server.http.HttpRequestHandler;
+import com.google.code.jahath.server.http.HttpResponse;
+
 public class HttpRequestHandlerImpl implements HttpRequestHandler {
     private final JahathServer2 server;
 

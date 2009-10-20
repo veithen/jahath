@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server;
+package com.google.code.jahath.server.http;
 
 import java.io.IOException;
 
 import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
-class HttpResponse extends HttpOutMessage {
+public class HttpResponse extends HttpOutMessage {
     public HttpResponse(HttpOutputStream out) {
         super(out);
     }

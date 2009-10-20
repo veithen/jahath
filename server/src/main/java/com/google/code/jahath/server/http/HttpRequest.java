@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server;
+package com.google.code.jahath.server.http;
 
 import java.io.IOException;
 
 import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.http.HttpInMessage;
 
-class HttpRequest extends HttpInMessage {
+public class HttpRequest extends HttpInMessage {
     private final String path;
     
     public HttpRequest(String path, CRLFInputStream request) throws IOException {
