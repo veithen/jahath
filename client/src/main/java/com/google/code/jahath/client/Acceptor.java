@@ -18,14 +18,9 @@ package com.google.code.jahath.client;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.google.code.jahath.common.AbstractAcceptor;
 
 class Acceptor extends AbstractAcceptor {
-    private static final Log log = LogFactory.getLog(Acceptor.class);
-    
     private final Tunnel tunnel;
 
     public Acceptor(ServerSocket serverSocket, Tunnel tunnel) {
