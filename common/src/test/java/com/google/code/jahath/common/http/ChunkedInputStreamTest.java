@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common;
+package com.google.code.jahath.common.http;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,6 +30,7 @@ import org.mortbay.jetty.Request;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.AbstractHandler;
 
+import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.http.ChunkedInputStream;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
