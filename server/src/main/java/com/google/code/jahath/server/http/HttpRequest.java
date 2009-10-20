@@ -23,7 +23,7 @@ import com.google.code.jahath.common.http.HttpInMessage;
 public class HttpRequest extends HttpInMessage {
     private final String path;
     
-    public HttpRequest(String path, CRLFInputStream request) throws IOException {
+    HttpRequest(String path, CRLFInputStream request) throws IOException {
         super(request);
         this.path = path;
     }

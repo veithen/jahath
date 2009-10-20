@@ -21,7 +21,7 @@ import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 public class HttpResponse extends HttpOutMessage {
-    public HttpResponse(HttpOutputStream out) {
+    HttpResponse(HttpOutputStream out) {
         super(out);
     }
 
