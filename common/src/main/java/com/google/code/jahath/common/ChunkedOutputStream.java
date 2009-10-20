@@ -19,21 +19,25 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class ChunkedOutputStream extends OutputStream {
-    private final CRLFOutputStream parent;
+    private final OutputStream parent;
+    private final byte[] sizeBytes = { 0, 0, 0, 0, 0, 0, 0, 0, '\r', '\n' };
     
     public ChunkedOutputStream(OutputStream parent) {
-        if (parent instanceof CRLFOutputStream) {
-            this.parent = (CRLFOutputStream)parent;
-        } else {
-            this.parent = new CRLFOutputStream(parent);
-        }
+        this.parent = parent;
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        parent.writeLine(Integer.toString(len, 16));
+        int pos = 8;
+        int num = len;
+        while (num > 0) {
+            int digit = num & 0xF;
+            sizeBytes[--pos] = (byte)(digit < 10 ? '0' + digit : 'A' + digit - 10);
+            num >>= 4;
+        }
+        parent.write(sizeBytes, pos, 10-pos);
         parent.write(b, off, len);
-        parent.writeLine("");
+        parent.write(sizeBytes, 8, 2);
     }
 
     @Override
@@ -48,7 +52,8 @@ public class ChunkedOutputStream extends OutputStream {
 
     @Override
     public void close() throws IOException {
-        parent.writeLine("0");
+        sizeBytes[7] = '0';
+        parent.write(sizeBytes, 7, 3);
     }
 
     @Override
