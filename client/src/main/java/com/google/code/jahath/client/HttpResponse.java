@@ -15,24 +15,13 @@
  */
 package com.google.code.jahath.client;
 
-import java.io.InputStream;
+import java.io.IOException;
 
-import com.google.code.jahath.common.http.Headers;
+import com.google.code.jahath.common.CRLFInputStream;
+import com.google.code.jahath.common.http.HttpInMessage;
 
-class HttpResponse {
-    private final Headers headers;
-    private final InputStream content;
-
-    public HttpResponse(Headers headers, InputStream content) {
-        this.headers = headers;
-        this.content = content;
-    }
-    
-    public String getHeader(String name) {
-        return headers.getHeader(name);
-    }
-    
-    public InputStream getInputStream() {
-        return content;
+class HttpResponse extends HttpInMessage {
+    public HttpResponse(CRLFInputStream in) throws IOException {
+        super(in);
     }
 }

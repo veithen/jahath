@@ -13,32 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client;
+package com.google.code.jahath.server;
 
-import java.io.IOException;
-
-import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
-class HttpRequest extends HttpOutMessage {
-    public enum Method { GET, POST };
-    
-    private final CRLFInputStream response;
-    
-    public HttpRequest(HttpOutputStream request, CRLFInputStream response) {
-        super(request);
-        this.response = response;
-    }
-    
-    public HttpResponse getResponse() throws IOException {
-        String status = response.readLine();
-        // TODO: process status line
-        return new HttpResponse(response);
-    }
-    
-    public HttpResponse execute() throws IOException {
-        commit();
-        return getResponse();
+class HttpResponse extends HttpOutMessage {
+    public HttpResponse(HttpOutputStream out) {
+        super(out);
     }
 }

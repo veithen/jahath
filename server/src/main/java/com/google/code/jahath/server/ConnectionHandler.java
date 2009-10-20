@@ -45,18 +45,11 @@ class ConnectionHandler implements Runnable {
             CRLFInputStream request = new CRLFInputStream(socket.getInputStream());
             HttpOutputStream response = new HttpOutputStream(socket.getOutputStream());
             String requestLine = request.readLine();
-            Headers headers = new Headers(request);
             // TODO: do this properly!
             String[] parts = requestLine.split(" ");
             String path = parts[1];
             InputStream in;
-            // TODO: this is of course not exhaustive...
-            if ("chunked".equals(headers.getHeader("Transfer-Encoding"))) {
-                in = new ChunkedInputStream(request);
-            } else {
-                in = null;
-            }
-            HttpRequest httpRequest = new HttpRequest(path, in, headers);
+            HttpRequest httpRequest = new HttpRequest(path, request);
             
             int type;
             SessionWrapper session;
@@ -66,7 +59,7 @@ class ConnectionHandler implements Runnable {
             } else {
                 String sessionId = path.substring(1);
                 session = server.getSession(sessionId);
-                type = headers.getHeader("Content-Type") != null ? 2 : 3;
+                type = httpRequest.getHeader("Content-Type") != null ? 2 : 3;
             }
             if (type == 2) {
                 IOUtils.copy(httpRequest.getInputStream(), session.getSession().getOutputStream());

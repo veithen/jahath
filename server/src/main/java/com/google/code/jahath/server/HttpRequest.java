@@ -15,28 +15,16 @@
  */
 package com.google.code.jahath.server;
 
-import java.io.InputStream;
+import java.io.IOException;
 
-import com.google.code.jahath.common.http.Headers;
+import com.google.code.jahath.common.CRLFInputStream;
+import com.google.code.jahath.common.http.HttpInMessage;
 
-class HttpRequest {
+class HttpRequest extends HttpInMessage {
     private final String path;
-    private final InputStream in;
-    private final Headers headers;
     
-    public HttpRequest(String path, InputStream in, Headers headers) {
+    public HttpRequest(String path, CRLFInputStream request) throws IOException {
+        super(request);
         this.path = path;
-        this.in = in;
-        this.headers = headers;
-    }
-    
-    /**
-     * Return the input stream for the request entity.
-     * 
-     * @return the input stream for the request entity, or <code>null</code> if the request has
-     *         no content
-     */
-    public InputStream getInputStream() {
-        return in;
     }
 }
