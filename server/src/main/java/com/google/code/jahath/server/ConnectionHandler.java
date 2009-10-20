@@ -49,6 +49,15 @@ class ConnectionHandler implements Runnable {
             // TODO: do this properly!
             String[] parts = requestLine.split(" ");
             String path = parts[1];
+            InputStream in;
+            // TODO: this is of course not exhaustive...
+            if ("chunked".equals(headers.getHeader("Transfer-Encoding"))) {
+                in = new ChunkedInputStream(request);
+            } else {
+                in = null;
+            }
+            HttpRequest httpRequest = new HttpRequest(path, in, headers);
+            
             int type;
             SessionWrapper session;
             if (path.equals("/")) {
@@ -60,7 +69,7 @@ class ConnectionHandler implements Runnable {
                 type = headers.getHeader("Content-Type") != null ? 2 : 3;
             }
             if (type == 2) {
-                IOUtils.copy(new ChunkedInputStream(request), session.getSession().getOutputStream());
+                IOUtils.copy(httpRequest.getInputStream(), session.getSession().getOutputStream());
             }
             response.writeLine("HTTP/1.1 200 OK");
             if (type == 1) {
@@ -72,11 +81,11 @@ class ConnectionHandler implements Runnable {
             response.writeLine("Connection: keep-alive");
             response.writeLine("");
             if (type == 3) {
-                InputStream in = session.getSession().getInputStream();
+                InputStream in2 = session.getSession().getInputStream();
                 OutputStream out = new ChunkedOutputStream(response);
                 // TODO: loop here unless available() return 0
                 byte[] buffer = new byte[4096];
-                int c = in.read(buffer);
+                int c = in2.read(buffer);
                 out.write(buffer, 0, c);
                 out.close();
             }
