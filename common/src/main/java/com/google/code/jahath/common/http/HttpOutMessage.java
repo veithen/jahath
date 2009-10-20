@@ -25,6 +25,10 @@ public class HttpOutMessage {
         this.request = request;
     }
 
+    protected void writeLine(String s) throws IOException {
+        request.writeLine(s);
+    }
+
     public void addHeader(String name, String value) throws IOException {
         request.writeHeader(name, value);
     }

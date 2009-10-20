@@ -24,9 +24,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.http.ChunkedInputStream;
-import com.google.code.jahath.common.http.ChunkedOutputStream;
-import com.google.code.jahath.common.http.Headers;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 class ConnectionHandler implements Runnable {
@@ -50,6 +47,7 @@ class ConnectionHandler implements Runnable {
             String path = parts[1];
             InputStream in;
             HttpRequest httpRequest = new HttpRequest(path, request);
+            HttpResponse httpResponse = new HttpResponse(response);
             
             int type;
             SessionWrapper session;
@@ -64,24 +62,23 @@ class ConnectionHandler implements Runnable {
             if (type == 2) {
                 IOUtils.copy(httpRequest.getInputStream(), session.getSession().getOutputStream());
             }
-            response.writeLine("HTTP/1.1 200 OK");
+            httpResponse.setStatus(200);
+            httpResponse.addHeader("Connection", "keep-alive");
             if (type == 1) {
-                response.writeHeader("X-JHT-Session-Id", session.getId());
+                httpResponse.addHeader("X-JHT-Session-Id", session.getId());
+                httpResponse.commit();
+            } else if (type == 2) {
+                httpResponse.commit();
             } else if (type == 3) {
-                response.writeHeader("Content-Type", "application/octet-stream");
-                response.writeHeader("Transfer-Encoding", "chunked");
-            }
-            response.writeHeader("Connection", "keep-alive");
-            response.flushHeaders();
-            if (type == 3) {
                 InputStream in2 = session.getSession().getInputStream();
-                OutputStream out = new ChunkedOutputStream(response);
+                OutputStream out = httpResponse.getOutputStream("application/octet-stream");
                 // TODO: loop here unless available() return 0
                 byte[] buffer = new byte[4096];
                 int c = in2.read(buffer);
                 out.write(buffer, 0, c);
                 out.close();
             }
+            
             response.flush();
             socket.close();
         } catch (Exception ex) {

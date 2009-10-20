@@ -15,11 +15,23 @@
  */
 package com.google.code.jahath.server;
 
+import java.io.IOException;
+
 import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 class HttpResponse extends HttpOutMessage {
     public HttpResponse(HttpOutputStream out) {
         super(out);
+    }
+
+    public void setStatus(int statusCode) throws IOException {
+        writeLine("HTTP/1.1 " + statusCode + " OK"); // TODO: obviously only 200 means OK...
+    }
+    
+    // TODO: this is only to increase visibility; shall we keep it like this?
+    @Override
+    public void commit() throws IOException {
+        super.commit();
     }
 }
