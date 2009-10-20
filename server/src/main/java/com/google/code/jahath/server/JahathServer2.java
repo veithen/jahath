@@ -35,7 +35,7 @@ public class JahathServer2 {
     public JahathServer2(int port, SessionFactory sessionFactory) throws IOException {
         this.sessionFactory = sessionFactory;
         executorService = new ThreadPoolExecutor(6, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-        acceptor = new Acceptor(new ServerSocket(port), this);
+        acceptor = new Acceptor(new ServerSocket(port), executorService, new HttpRequestHandlerImpl(this));
         executorService.execute(acceptor);
     }
 

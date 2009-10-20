@@ -17,19 +17,22 @@ package com.google.code.jahath.server;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
 
 import com.google.code.jahath.common.AbstractAcceptor;
 
 class Acceptor extends AbstractAcceptor {
-    private final JahathServer2 server;
+    private final ExecutorService executorService;
+    private final HttpRequestHandler requestHandler;
 
-    public Acceptor(ServerSocket serverSocket, JahathServer2 server) {
+    public Acceptor(ServerSocket serverSocket, ExecutorService executorService, HttpRequestHandler requestHandler) {
         super(serverSocket);
-        this.server = server;
+        this.executorService = executorService;
+        this.requestHandler = requestHandler;
     }
 
     @Override
     protected void handleConnection(Socket socket) {
-        server.getExecutorService().execute(new ConnectionHandler(socket, server));
+        executorService.execute(new HttpConnectionHandler(socket, requestHandler));
     }
 }

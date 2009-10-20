@@ -17,18 +17,6 @@ package com.google.code.jahath.server;
 
 import java.io.IOException;
 
-import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.http.HttpInMessage;
-
-class HttpRequest extends HttpInMessage {
-    private final String path;
-    
-    public HttpRequest(String path, CRLFInputStream request) throws IOException {
-        super(request);
-        this.path = path;
-    }
-
-    public String getPath() {
-        return path;
-    }
+public interface HttpRequestHandler {
+    void handle(HttpRequest request, HttpResponse response) throws IOException;
 }

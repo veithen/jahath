@@ -16,25 +16,23 @@
 package com.google.code.jahath.server;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
-class ConnectionHandler implements Runnable {
-    private static final Log log = LogFactory.getLog(ConnectionHandler.class);
+class HttpConnectionHandler implements Runnable {
+    private static final Log log = LogFactory.getLog(HttpConnectionHandler.class);
     
     private final Socket socket;
-    private final JahathServer2 server;
+    private final HttpRequestHandler requestHandler;
 
-    public ConnectionHandler(Socket socket, JahathServer2 server) {
+    public HttpConnectionHandler(Socket socket, HttpRequestHandler requestHandler) {
         this.socket = socket;
-        this.server = server;
+        this.requestHandler = requestHandler;
     }
 
     public void run() {
@@ -48,37 +46,7 @@ class ConnectionHandler implements Runnable {
             InputStream in;
             HttpRequest httpRequest = new HttpRequest(path, request);
             HttpResponse httpResponse = new HttpResponse(response);
-            
-            int type;
-            SessionWrapper session;
-            if (path.equals("/")) {
-                type = 1;
-                session = server.createSession();
-            } else {
-                String sessionId = path.substring(1);
-                session = server.getSession(sessionId);
-                type = httpRequest.getHeader("Content-Type") != null ? 2 : 3;
-            }
-            if (type == 2) {
-                IOUtils.copy(httpRequest.getInputStream(), session.getSession().getOutputStream());
-            }
-            httpResponse.setStatus(200);
-            httpResponse.addHeader("Connection", "keep-alive");
-            if (type == 1) {
-                httpResponse.addHeader("X-JHT-Session-Id", session.getId());
-                httpResponse.commit();
-            } else if (type == 2) {
-                httpResponse.commit();
-            } else if (type == 3) {
-                InputStream in2 = session.getSession().getInputStream();
-                OutputStream out = httpResponse.getOutputStream("application/octet-stream");
-                // TODO: loop here unless available() return 0
-                byte[] buffer = new byte[4096];
-                int c = in2.read(buffer);
-                out.write(buffer, 0, c);
-                out.close();
-            }
-            
+            requestHandler.handle(httpRequest, httpResponse);
             response.flush();
             socket.close();
         } catch (Exception ex) {
