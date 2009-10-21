@@ -34,33 +34,39 @@ public class HttpRequestHandlerImpl implements HttpRequestHandler {
 
     public void handle(HttpRequest request, HttpResponse response) throws IOException {
         String path = request.getPath();
-        int type;
-        SessionWrapper session;
         if (path.equals("/")) {
-            type = 1;
-            session = server.createSession();
+        	handleConnect(server.createSession(), request, response);
         } else {
             String sessionId = path.substring(1);
-            session = server.getSession(sessionId);
-            type = request.getHeader("Content-Type") != null ? 2 : 3;
+            SessionWrapper session = server.getSession(sessionId);
+            if (request.getHeader("Content-Type") != null) {
+            	handleSend(session, request, response);
+            } else {
+            	handleReceive(session, request, response);
+            }
         }
-        if (type == 2) {
-            IOUtils.copy(request.getInputStream(), session.getSession().getOutputStream());
-        }
+    }
+    
+    private void handleConnect(SessionWrapper session, HttpRequest request, HttpResponse response) throws IOException {
         response.setStatus(200);
-        if (type == 1) {
-            response.addHeader("X-JHT-Session-Id", session.getId());
-            response.commit();
-        } else if (type == 2) {
-            response.commit();
-        } else if (type == 3) {
-            InputStream in2 = session.getSession().getInputStream();
-            OutputStream out = response.getOutputStream("application/octet-stream");
-            // TODO: loop here unless available() return 0
-            byte[] buffer = new byte[4096];
-            int c = in2.read(buffer);
-            out.write(buffer, 0, c);
-            out.close();
-        }
+        response.addHeader("X-JHT-Session-Id", session.getId());
+        response.commit();
+    }
+    
+    private void handleSend(SessionWrapper session, HttpRequest request, HttpResponse response) throws IOException {
+        IOUtils.copy(request.getInputStream(), session.getSession().getOutputStream());
+        response.setStatus(200);
+        response.commit();
+    }
+    
+    private void handleReceive(SessionWrapper session, HttpRequest request, HttpResponse response) throws IOException {
+        response.setStatus(200);
+        InputStream in2 = session.getSession().getInputStream();
+        OutputStream out = response.getOutputStream("application/octet-stream");
+        // TODO: loop here unless available() return 0
+        byte[] buffer = new byte[4096];
+        int c = in2.read(buffer);
+        out.write(buffer, 0, c);
+        out.close();
     }
 }
