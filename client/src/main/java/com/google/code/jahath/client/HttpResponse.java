@@ -16,12 +16,17 @@
 package com.google.code.jahath.client;
 
 import java.io.IOException;
+import java.io.InputStream;
 
-import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.http.HttpInMessage;
 
 class HttpResponse extends HttpInMessage {
-    public HttpResponse(CRLFInputStream in) throws IOException {
+    public HttpResponse(InputStream in) throws IOException {
         super(in);
+    }
+
+    @Override
+    protected void processFirstLine(String line) {
+        // TODO: process status line
     }
 }

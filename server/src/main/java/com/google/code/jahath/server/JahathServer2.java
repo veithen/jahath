@@ -28,13 +28,13 @@ import java.util.concurrent.TimeUnit;
 import com.google.code.jahath.server.http.HttpServer;
 
 public class JahathServer2 {
-    private final SessionFactory sessionFactory;
+    private final SessionHandler sessionHandler;
     private final ExecutorService executorService;
     private final HttpServer httpServer;
-    private final Map<String,SessionWrapper> sessions = Collections.synchronizedMap(new HashMap<String,SessionWrapper>());
+    private final Map<String,Session> sessions = Collections.synchronizedMap(new HashMap<String,Session>());
     
-    public JahathServer2(int port, SessionFactory sessionFactory) throws IOException {
-        this.sessionFactory = sessionFactory;
+    public JahathServer2(int port, SessionHandler sessionHandler) throws IOException {
+        this.sessionHandler = sessionHandler;
         executorService = new ThreadPoolExecutor(6, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
         httpServer = new HttpServer(port, executorService, new HttpRequestHandlerImpl(this));
     }
@@ -43,14 +43,20 @@ public class JahathServer2 {
         return executorService;
     }
 
-    SessionWrapper createSession() throws IOException {
+    Session createSession() throws IOException {
         String id = UUID.randomUUID().toString();
-        SessionWrapper session = new SessionWrapper(id, sessionFactory.createSession());
+        final SessionHandler sessionHandler = this.sessionHandler;
+        final Session session = new Session(id);
         sessions.put(id, session);
+        executorService.execute(new Runnable() {
+            public void run() {
+                sessionHandler.handle(session);
+            }
+        });
         return session;
     }
     
-    SessionWrapper getSession(String id) {
+    Session getSession(String id) {
         return sessions.get(id);
     }
     

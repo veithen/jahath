@@ -16,19 +16,26 @@
 package com.google.code.jahath.server.http;
 
 import java.io.IOException;
+import java.io.InputStream;
 
-import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.http.HttpInMessage;
 
 public class HttpRequest extends HttpInMessage {
-    private final String path;
+    private String path;
     
-    HttpRequest(String path, CRLFInputStream request) throws IOException {
-        super(request);
-        this.path = path;
+    HttpRequest(InputStream in) throws IOException {
+        super(in);
     }
 
-    public String getPath() {
+    @Override
+    protected void processFirstLine(String line) {
+        // TODO: do this properly!
+        String[] parts = line.split(" ");
+        path = parts[1];
+    }
+
+    public String getPath() throws IOException {
+        await();
         return path;
     }
 }

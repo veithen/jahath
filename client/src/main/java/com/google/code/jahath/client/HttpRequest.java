@@ -16,24 +16,22 @@
 package com.google.code.jahath.client;
 
 import java.io.IOException;
+import java.io.InputStream;
 
-import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 class HttpRequest extends HttpOutMessage {
     public enum Method { GET, POST };
     
-    private final CRLFInputStream response;
+    private final InputStream response;
     
-    public HttpRequest(HttpOutputStream request, CRLFInputStream response) {
+    public HttpRequest(HttpOutputStream request, InputStream response) {
         super(request, null);
         this.response = response;
     }
     
     public HttpResponse getResponse() throws IOException {
-        String status = response.readLine();
-        // TODO: process status line
         return new HttpResponse(response);
     }
     

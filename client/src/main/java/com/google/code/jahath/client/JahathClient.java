@@ -69,7 +69,7 @@ public class JahathClient {
         } else {
             request.writeLine(method + " http://" + address + path + " HTTP/1.1");
         }
-        HttpRequest httpRequest = new HttpRequest(request, new CRLFInputStream(socket.getInputStream()));
+        HttpRequest httpRequest = new HttpRequest(request, socket.getInputStream());
         httpRequest.addHeader("Host", address);
         httpRequest.addHeader("Connection", "keep-alive");
         if (proxyConfiguration != null) {

@@ -16,13 +16,11 @@
 package com.google.code.jahath.server.http;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.http.HttpHeadersProvider;
 import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
@@ -44,14 +42,9 @@ class HttpConnectionHandler implements Runnable, HttpHeadersProvider {
 
     public void run() {
         try {
-            CRLFInputStream request = new CRLFInputStream(socket.getInputStream());
+            // TODO: should wrapping the stream as an HttpOutputStream be done here or in HttpRequest??
             HttpOutputStream response = new HttpOutputStream(socket.getOutputStream());
-            String requestLine = request.readLine();
-            // TODO: do this properly!
-            String[] parts = requestLine.split(" ");
-            String path = parts[1];
-            InputStream in;
-            HttpRequest httpRequest = new HttpRequest(path, request);
+            HttpRequest httpRequest = new HttpRequest(socket.getInputStream());
             HttpResponse httpResponse = new HttpResponse(response, this);
             requestHandler.handle(httpRequest, httpResponse);
             response.flush();

@@ -29,7 +29,7 @@ import com.google.code.jahath.server.JahathServer2;
 public class EchoTest {
     @Test
     public void test() throws Exception {
-        JahathServer2 server = new JahathServer2(5555, new EchoSessionFactory());
+        JahathServer2 server = new JahathServer2(5555, new EchoSessionHandler());
         JahathClient client = new JahathClient("localhost", 5555, null);
         Session session = client.createSession();
         OutputStream out = session.getOutputStream();

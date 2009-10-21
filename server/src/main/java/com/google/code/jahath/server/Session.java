@@ -15,10 +15,129 @@
  */
 package com.google.code.jahath.server;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 
-public interface Session {
-    OutputStream getOutputStream();
-    InputStream getInputStream();
+public class Session {
+    static class SessionInputStream extends InputStream {
+        InputStream parent;
+
+        private void awaitParent() throws InterruptedIOException {
+            while (parent == null) {
+                try {
+                    wait();
+                } catch (InterruptedException ex) {
+                    throw new InterruptedIOException();
+                }
+            }
+        }
+        
+        @Override
+        public synchronized int read() throws IOException {
+            while (true) {
+                awaitParent();
+                int b = parent.read();
+                if (b == -1) {
+                    parent = null;
+                    notifyAll();
+                } else {
+                    return b;
+                }
+            }
+        }
+
+        @Override
+        public synchronized int read(byte[] b, int off, int len) throws IOException {
+            while (true) {
+                awaitParent();
+                int c = parent.read(b, off, len);
+                if (c == -1) {
+                    parent = null;
+                    notifyAll();
+                } else {
+                    return c;
+                }
+            }
+        }
+    }
+    
+    static class SessionOutputStream extends OutputStream {
+        OutputStream parent;
+
+        private void awaitParent() throws InterruptedIOException {
+            while (parent == null) {
+                try {
+                    wait();
+                } catch (InterruptedException ex) {
+                    throw new InterruptedIOException();
+                }
+            }
+        }
+        
+        @Override
+        public synchronized void write(byte[] b, int off, int len) throws IOException {
+            awaitParent();
+            parent.write(b, off, len);
+        }
+
+        @Override
+        public synchronized void write(int b) throws IOException {
+            awaitParent();
+            parent.write(b);
+        }
+
+        @Override
+        public synchronized void flush() throws IOException {
+            parent = null;
+            notifyAll();
+        }
+    }
+    
+    private final String id;
+    private final SessionInputStream sessionInputStream = new SessionInputStream();
+    private final SessionOutputStream sessionOutputStream = new SessionOutputStream();
+    
+    Session(String id) {
+        this.id = id;
+    }
+
+    String getId() {
+        return id;
+    }
+
+    void consume(InputStream in) throws InterruptedException {
+        synchronized (sessionInputStream) {
+            while (sessionInputStream.parent != null) {
+                sessionInputStream.wait();
+            }
+            sessionInputStream.parent = in;
+            sessionInputStream.notifyAll();
+            while (sessionInputStream.parent != null) {
+                sessionInputStream.wait();
+            }
+        }
+    }
+    
+    void produce(OutputStream out) throws InterruptedException {
+        synchronized (sessionOutputStream) {
+            while (sessionOutputStream.parent != null) {
+                sessionOutputStream.wait();
+            }
+            sessionOutputStream.parent = out;
+            sessionOutputStream.notifyAll();
+            while (sessionOutputStream.parent != null) {
+                sessionOutputStream.wait();
+            }
+        }
+    }
+    
+    public InputStream getInputStream() {
+        return sessionInputStream;
+    }
+    
+    public OutputStream getOutputStream() {
+        return sessionOutputStream;
+    }
 }

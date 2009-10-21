@@ -13,15 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.tests;
+package com.google.code.jahath.server;
 
-import java.io.IOException;
-
-import com.google.code.jahath.server.Session;
-import com.google.code.jahath.server.SessionFactory;
-
-public class EchoSessionFactory implements SessionFactory {
-    public Session createSession() throws IOException {
-        return new EchoSession();
-    }
+public interface SessionHandler {
+    void handle(Session session);
 }

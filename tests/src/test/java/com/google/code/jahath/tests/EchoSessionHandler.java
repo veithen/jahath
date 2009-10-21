@@ -18,25 +18,22 @@ package com.google.code.jahath.tests;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 
 import com.google.code.jahath.server.Session;
+import com.google.code.jahath.server.SessionHandler;
 
-public class EchoSession implements Session {
-    private final PipedOutputStream out;
-    private final PipedInputStream in;
-    
-    public EchoSession() throws IOException {
-        out = new PipedOutputStream();
-        in = new PipedInputStream(out);
-    }
-
-    public OutputStream getOutputStream() {
-        return out;
-    }
-    
-    public InputStream getInputStream() {
-        return in;
+public class EchoSessionHandler implements SessionHandler {
+    public void handle(Session session) {
+        try {
+            byte[] buffer = new byte[4096];
+            InputStream in = session.getInputStream();
+            OutputStream out = session.getOutputStream();
+            int c;
+            while ((c = in.read(buffer)) != -1) {
+                out.write(buffer, 0, c);
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -41,6 +41,7 @@ public class Session {
         @Override
         public void flush() throws IOException {
             out.close();
+            // TODO: we need to consume the response somewhere!
             request.getResponse();
             request = null;
             out = null;

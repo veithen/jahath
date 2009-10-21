@@ -20,21 +20,32 @@ import java.io.InputStream;
 
 import com.google.code.jahath.common.CRLFInputStream;
 
-public class HttpInMessage {
-    private final Headers headers;
-    private final InputStream contentStream;
+public abstract class HttpInMessage {
+    private final CRLFInputStream in;
+    private Headers headers;
+    private InputStream contentStream;
 
-    public HttpInMessage(CRLFInputStream in) throws IOException {
-        headers = new Headers(in);
-        // TODO: this is of course not exhaustive...
-        if ("chunked".equals(headers.getHeader("Transfer-Encoding"))) {
-            contentStream = new ChunkedInputStream(in);
-        } else {
-            contentStream = null;
-        }
+    public HttpInMessage(InputStream in) throws IOException {
+        this.in = new CRLFInputStream(in);
     }
 
-    public String getHeader(String name) {
+    protected abstract void processFirstLine(String line);
+    
+    public void await() throws IOException {
+        if (headers == null) {
+            processFirstLine(in.readLine());
+            headers = new Headers(in);
+            // TODO: this is of course not exhaustive...
+            if ("chunked".equals(headers.getHeader("Transfer-Encoding"))) {
+                contentStream = new ChunkedInputStream(in);
+            } else {
+                contentStream = null;
+            }
+        }
+    }
+    
+    public String getHeader(String name) throws IOException {
+        await();
         return headers.getHeader(name);
     }
     
@@ -43,8 +54,10 @@ public class HttpInMessage {
      * 
      * @return the input stream for the request entity, or <code>null</code> if the request has
      *         no content
+     * @throws IOException 
      */
-    public InputStream getInputStream() {
+    public InputStream getInputStream() throws IOException {
+        await();
         return contentStream;
     }
 }

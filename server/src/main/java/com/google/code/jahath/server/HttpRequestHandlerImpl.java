@@ -16,10 +16,7 @@
 package com.google.code.jahath.server;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-
-import org.apache.commons.io.IOUtils;
 
 import com.google.code.jahath.server.http.HttpRequest;
 import com.google.code.jahath.server.http.HttpRequestHandler;
@@ -38,7 +35,7 @@ public class HttpRequestHandlerImpl implements HttpRequestHandler {
         	handleConnect(server.createSession(), request, response);
         } else {
             String sessionId = path.substring(1);
-            SessionWrapper session = server.getSession(sessionId);
+            Session session = server.getSession(sessionId);
             if (request.getHeader("Content-Type") != null) {
             	handleSend(session, request, response);
             } else {
@@ -47,26 +44,32 @@ public class HttpRequestHandlerImpl implements HttpRequestHandler {
         }
     }
     
-    private void handleConnect(SessionWrapper session, HttpRequest request, HttpResponse response) throws IOException {
+    private void handleConnect(Session session, HttpRequest request, HttpResponse response) throws IOException {
         response.setStatus(200);
         response.addHeader("X-JHT-Session-Id", session.getId());
         response.commit();
     }
     
-    private void handleSend(SessionWrapper session, HttpRequest request, HttpResponse response) throws IOException {
-        IOUtils.copy(request.getInputStream(), session.getSession().getOutputStream());
+    private void handleSend(Session session, HttpRequest request, HttpResponse response) throws IOException {
+        try {
+            session.consume(request.getInputStream());
+        } catch (InterruptedException ex) {
+            // TODO: check what to do here
+            Thread.currentThread().interrupt();
+        }
         response.setStatus(200);
         response.commit();
     }
     
-    private void handleReceive(SessionWrapper session, HttpRequest request, HttpResponse response) throws IOException {
+    private void handleReceive(Session session, HttpRequest request, HttpResponse response) throws IOException {
         response.setStatus(200);
-        InputStream in2 = session.getSession().getInputStream();
         OutputStream out = response.getOutputStream("application/octet-stream");
-        // TODO: loop here unless available() return 0
-        byte[] buffer = new byte[4096];
-        int c = in2.read(buffer);
-        out.write(buffer, 0, c);
+        try {
+            session.produce(out);
+        } catch (InterruptedException ex) {
+            // TODO: check what to do here
+            Thread.currentThread().interrupt();
+        }
         out.close();
     }
 }
