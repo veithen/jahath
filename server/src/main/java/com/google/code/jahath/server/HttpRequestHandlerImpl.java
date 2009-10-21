@@ -48,7 +48,6 @@ public class HttpRequestHandlerImpl implements HttpRequestHandler {
             IOUtils.copy(request.getInputStream(), session.getSession().getOutputStream());
         }
         response.setStatus(200);
-        response.addHeader("Connection", "keep-alive"); // TODO: this should not be here!
         if (type == 1) {
             response.addHeader("X-JHT-Session-Id", session.getId());
             response.commit();

@@ -20,9 +20,11 @@ import java.io.OutputStream;
 
 public class HttpOutMessage {
     private final HttpOutputStream request;
+    private final HttpHeadersProvider headersProvider;
 
-    public HttpOutMessage(HttpOutputStream request) {
+    public HttpOutMessage(HttpOutputStream request, HttpHeadersProvider headersProvider) {
         this.request = request;
+        this.headersProvider = headersProvider;
     }
 
     protected void writeLine(String s) throws IOException {
@@ -38,6 +40,9 @@ public class HttpOutMessage {
     }
     
     public OutputStream getOutputStream(String contentType) throws IOException {
+        if (headersProvider != null) {
+            headersProvider.writeHeaders(this);
+        }
         request.writeHeader("Content-Type", contentType);
         request.writeHeader("Transfer-Encoding", "chunked");
         request.flushHeaders();

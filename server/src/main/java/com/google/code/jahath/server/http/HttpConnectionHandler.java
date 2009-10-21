@@ -15,6 +15,7 @@
  */
 package com.google.code.jahath.server.http;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
@@ -22,9 +23,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.code.jahath.common.CRLFInputStream;
+import com.google.code.jahath.common.http.HttpHeadersProvider;
+import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
-class HttpConnectionHandler implements Runnable {
+class HttpConnectionHandler implements Runnable, HttpHeadersProvider {
     private static final Log log = LogFactory.getLog(HttpConnectionHandler.class);
     
     private final Socket socket;
@@ -33,6 +36,10 @@ class HttpConnectionHandler implements Runnable {
     public HttpConnectionHandler(Socket socket, HttpRequestHandler requestHandler) {
         this.socket = socket;
         this.requestHandler = requestHandler;
+    }
+
+    public void writeHeaders(HttpOutMessage message) throws IOException {
+        message.addHeader("Connection", "keep-alive");
     }
 
     public void run() {
@@ -45,7 +52,7 @@ class HttpConnectionHandler implements Runnable {
             String path = parts[1];
             InputStream in;
             HttpRequest httpRequest = new HttpRequest(path, request);
-            HttpResponse httpResponse = new HttpResponse(response);
+            HttpResponse httpResponse = new HttpResponse(response, this);
             requestHandler.handle(httpRequest, httpResponse);
             response.flush();
             socket.close();

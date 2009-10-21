@@ -27,7 +27,7 @@ class HttpRequest extends HttpOutMessage {
     private final CRLFInputStream response;
     
     public HttpRequest(HttpOutputStream request, CRLFInputStream response) {
-        super(request);
+        super(request, null);
         this.response = response;
     }
     

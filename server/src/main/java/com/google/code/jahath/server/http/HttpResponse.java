@@ -17,12 +17,13 @@ package com.google.code.jahath.server.http;
 
 import java.io.IOException;
 
+import com.google.code.jahath.common.http.HttpHeadersProvider;
 import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 public class HttpResponse extends HttpOutMessage {
-    HttpResponse(HttpOutputStream out) {
-        super(out);
+    HttpResponse(HttpOutputStream out, HttpHeadersProvider headersProvider) {
+        super(out, headersProvider);
     }
 
     public void setStatus(int statusCode) throws IOException {
