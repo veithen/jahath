@@ -24,7 +24,7 @@ import java.util.concurrent.Future;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.code.jahath.common.Relay;
+import com.google.code.jahath.common.StreamRelay;
 
 class ConnectionHandler implements Runnable {
     private static final Log log = LogFactory.getLog(ConnectionHandler.class);
@@ -46,8 +46,8 @@ class ConnectionHandler implements Runnable {
             OutputStream out = httpRequest.getOutputStream("application/octet-stream");
             InputStream in = httpRequest.getResponse().getInputStream();
             ExecutorService executorService = client.getExecutorService();
-            Future<?> f1 = executorService.submit(new Relay("request", socket.getInputStream(), out));
-            Future<?> f2 = executorService.submit(new Relay("response", in, socket.getOutputStream()));
+            Future<?> f1 = executorService.submit(new StreamRelay("request", socket.getInputStream(), out));
+            Future<?> f2 = executorService.submit(new StreamRelay("response", in, socket.getOutputStream()));
             f1.get();
             f2.get();
             socket.close();

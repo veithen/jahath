@@ -16,10 +16,34 @@
 package com.google.code.jahath.common.socks;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 public class SocksDataOutputStream extends DataOutputStream {
     public SocksDataOutputStream(OutputStream out) {
         super(out);
+    }
+    
+    public void writeASCII(String ascii) throws IOException {
+        writeByte(ascii.length());
+        write(ascii.getBytes("ascii"));
+    }
+    
+    public void writeAddress(InetAddress address) throws IOException {
+        // TODO: unfortunately there seems to be no reliable way to tell if the InetAddress has been created from an IP address or a host name
+        byte[] addr = address.getAddress();
+        if (addr.length == 4) {
+            writeByte(SocksConstants.ADDRESS_IPV4);
+        } else {
+            writeByte(SocksConstants.ADDRESS_IPV6);
+        }
+        write(addr);
+    }
+    
+    public void writeSocketAddress(InetSocketAddress socketAddress) throws IOException {
+        writeAddress(socketAddress.getAddress());
+        writeShort(socketAddress.getPort());
     }
 }

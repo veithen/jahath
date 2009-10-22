@@ -34,7 +34,7 @@ public class SocksConstants {
     public static final byte ADDRESS_DNS = 3;
     public static final byte ADDRESS_IPV6 = 4;
     
-    public static final byte STATUS_REQUEST_GRANTED = 0;
+    public static final byte STATUS_OK = 0; // request granted
     public static final byte STATUS_GENERAL_FAILURE = 1;
     public static final byte STATUS_CONNECTION_NOT_ALLOWED = 2; // connection not allowed by ruleset
     public static final byte STATUS_NETWORK_UNREACHABLE = 3;

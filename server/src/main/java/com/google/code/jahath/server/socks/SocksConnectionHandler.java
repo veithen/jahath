@@ -17,14 +17,24 @@ package com.google.code.jahath.server.socks;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.concurrent.ExecutorService;
 
+import com.google.code.jahath.common.ConnectionRelay;
 import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.common.socks.SocksConstants;
 import com.google.code.jahath.common.socks.SocksDataInputStream;
 import com.google.code.jahath.common.socks.SocksDataOutputStream;
 
 public class SocksConnectionHandler implements ConnectionHandler {
+    private final ExecutorService executorService;
+    
+    public SocksConnectionHandler(ExecutorService executorService) {
+        this.executorService = executorService;
+    }
+
     public void handle(Connection connection) {
         try {
             SocksDataInputStream in = new SocksDataInputStream(connection.getInputStream());
@@ -39,6 +49,7 @@ public class SocksConnectionHandler implements ConnectionHandler {
             
             out.writeByte(SocksConstants.SOCKS_VERSION);
             out.writeByte(SocksConstants.AUTH_USERNAME_PASSWORD);
+            out.flush();
             
             if (in.readByte() != SocksConstants.USERNAME_PASSWORD_AUTH_VERSION) {
                 return; // TODO
@@ -48,6 +59,7 @@ public class SocksConnectionHandler implements ConnectionHandler {
             // TODO: authenticate
             out.writeByte(SocksConstants.USERNAME_PASSWORD_AUTH_VERSION);
             out.writeByte(0);
+            out.flush();
             
             if (in.readByte() != SocksConstants.SOCKS_VERSION) {
                 return; // TODO
@@ -58,6 +70,15 @@ public class SocksConnectionHandler implements ConnectionHandler {
             }
             InetSocketAddress destination = in.readSocketAddress();
             
+            Socket socket = new Socket(destination.getAddress(), destination.getPort());
+            
+            out.writeByte(SocksConstants.SOCKS_VERSION);
+            out.writeByte(SocksConstants.STATUS_OK);
+            out.writeByte(0);
+            out.writeSocketAddress(destination);
+            out.flush();
+            
+            new ConnectionRelay(executorService, connection, "socks", new SocketConnection(socket), destination.toString()).run();
         } catch (IOException ex) {
             ex.printStackTrace(); // TODO
         }

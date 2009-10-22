@@ -34,7 +34,7 @@ import org.mortbay.http.SocketListener;
 import org.mortbay.http.handler.AbstractHttpHandler;
 import org.mortbay.jetty.Server;
 
-import com.google.code.jahath.common.Relay;
+import com.google.code.jahath.common.StreamRelay;
 
 public class JahathServer {
     private static final Log log = LogFactory.getLog(JahathServer.class);
@@ -57,8 +57,8 @@ public class JahathServer {
                 int targetPort = request.getIntField("X-JHT-Remote-Port");
                 Socket socket = new Socket(targetHost, targetPort);
                 response.commit();
-                Future<?> f1 = executorService.submit(new Relay(remoteHost + " -> " + targetHost + ":" + targetPort, request.getInputStream(), socket.getOutputStream()));
-                Future<?> f2 = executorService.submit(new Relay(targetHost + ":" + targetPort + " -> " + remoteHost, socket.getInputStream(), response.getOutputStream()));
+                Future<?> f1 = executorService.submit(new StreamRelay(remoteHost + " -> " + targetHost + ":" + targetPort, request.getInputStream(), socket.getOutputStream()));
+                Future<?> f2 = executorService.submit(new StreamRelay(targetHost + ":" + targetPort + " -> " + remoteHost, socket.getInputStream(), response.getOutputStream()));
                 try {
                     f1.get();
                     f2.get();

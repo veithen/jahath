@@ -8,15 +8,15 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class Relay implements Runnable {
-    private static final Log log = LogFactory.getLog(Relay.class);
+public class StreamRelay implements Runnable {
+    private static final Log log = LogFactory.getLog(StreamRelay.class);
     
-    private final String tag;
+    private final String label;
     private final InputStream in;
     private final OutputStream out;
     
-    public Relay(String tag, InputStream in, OutputStream out) {
-        this.tag = tag;
+    public StreamRelay(String label, InputStream in, OutputStream out) {
+        this.label = label;
         this.in = in;
         this.out = out;
     }
@@ -27,7 +27,7 @@ public class Relay implements Runnable {
             int n;
             while ((n = in.read(buf)) != -1) {
                 if (log.isDebugEnabled()) {
-                    StringBuilder dump = new StringBuilder(tag);
+                    StringBuilder dump = new StringBuilder(label);
                     dump.append('\n');
                     hexDump(dump, buf, n);
                     log.debug(dump);
@@ -36,12 +36,12 @@ public class Relay implements Runnable {
                 out.flush();
             }
         } catch (IOException ex) {
-            log.error(tag, ex);
+            log.error(label, ex);
         } finally {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);
         }
-        log.info(tag + " closed");
+        log.info(label + " closed");
     }
 
     private static void hexDump(StringBuilder buffer, byte[] data, int length) {
