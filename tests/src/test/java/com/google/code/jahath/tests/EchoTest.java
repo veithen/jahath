@@ -24,12 +24,12 @@ import org.junit.Test;
 
 import com.google.code.jahath.client.JahathClient;
 import com.google.code.jahath.common.connection.Connection;
-import com.google.code.jahath.server.JahathServer2;
+import com.google.code.jahath.server.JahathServer;
 
 public class EchoTest {
     @Test
     public void test() throws Exception {
-        JahathServer2 server = new JahathServer2(5555, new EchoSessionHandler());
+        JahathServer server = new JahathServer(5555, new EchoSessionHandler());
         JahathClient client = new JahathClient("localhost", 5555, null);
         Connection connection = client.createConnection();
         OutputStream out = connection.getOutputStream();

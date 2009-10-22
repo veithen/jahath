@@ -28,13 +28,13 @@ import java.util.concurrent.TimeUnit;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.server.http.HttpServer;
 
-public class JahathServer2 {
+public class JahathServer {
     private final ConnectionHandler sessionHandler;
     private final ExecutorService executorService;
     private final HttpServer httpServer;
     private final Map<String,ConnectionImpl> connections = Collections.synchronizedMap(new HashMap<String,ConnectionImpl>());
     
-    public JahathServer2(int port, ConnectionHandler connectionHandler) throws IOException {
+    public JahathServer(int port, ConnectionHandler connectionHandler) throws IOException {
         this.sessionHandler = connectionHandler;
         executorService = new ThreadPoolExecutor(6, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
         httpServer = new HttpServer(port, executorService, new HttpRequestHandlerImpl(this));

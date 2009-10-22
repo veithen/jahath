@@ -23,9 +23,9 @@ import com.google.code.jahath.server.http.HttpRequestHandler;
 import com.google.code.jahath.server.http.HttpResponse;
 
 public class HttpRequestHandlerImpl implements HttpRequestHandler {
-    private final JahathServer2 server;
+    private final JahathServer server;
 
-    public HttpRequestHandlerImpl(JahathServer2 server) {
+    public HttpRequestHandlerImpl(JahathServer server) {
         this.server = server;
     }
 
