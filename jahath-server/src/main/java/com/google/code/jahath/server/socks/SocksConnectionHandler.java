@@ -18,7 +18,6 @@ package com.google.code.jahath.server.socks;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
 
 import com.google.code.jahath.common.ConnectionRelay;
 import com.google.code.jahath.common.connection.Connection;
@@ -30,12 +29,6 @@ import com.google.code.jahath.common.socks.SocksDataInputStream;
 import com.google.code.jahath.common.socks.SocksDataOutputStream;
 
 public class SocksConnectionHandler implements ConnectionHandler {
-    private final ExecutorService executorService;
-    
-    public SocksConnectionHandler(ExecutorService executorService) {
-        this.executorService = executorService;
-    }
-
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
             SocksDataInputStream in = new SocksDataInputStream(connection.getInputStream());
@@ -79,7 +72,7 @@ public class SocksConnectionHandler implements ConnectionHandler {
             out.writeSocketAddress(destination);
             out.flush();
             
-            new ConnectionRelay(executorService, connection, "socks", new SocketConnection(socket), destination.toString()).run();
+            new ConnectionRelay(env.getExecutorService(), connection, "socks", new SocketConnection(socket), destination.toString()).run();
         } catch (IOException ex) {
             ex.printStackTrace(); // TODO
         }

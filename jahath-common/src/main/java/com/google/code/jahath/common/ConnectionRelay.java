@@ -32,6 +32,7 @@ public class ConnectionRelay implements Runnable {
     private final Connection connection2;
     private final String label2;
 
+    // TODO: we should ExecutionEnvironment here
     public ConnectionRelay(ExecutorService executorService, Connection connection1, String label1,
             Connection connection2, String label2) {
         this.executorService = executorService;
