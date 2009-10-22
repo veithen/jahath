@@ -22,6 +22,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 public class JahathClient {
@@ -76,7 +77,7 @@ public class JahathClient {
         return httpRequest;
     }
 
-    public ConnectionImpl createConnection() throws IOException {
+    public Connection createConnection() throws IOException {
         HttpRequest request = createRequest(HttpRequest.Method.POST, "/");
         HttpResponse response = request.execute();
         String connectionId = response.getHeader("X-JHT-Connection-Id");
