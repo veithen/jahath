@@ -18,6 +18,8 @@ package com.google.code.jahath.common.socks;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 public class SocksDataInputStream extends DataInputStream {
     public SocksDataInputStream(InputStream in) {
@@ -29,5 +31,28 @@ public class SocksDataInputStream extends DataInputStream {
         byte[] b = new byte[len];
         readFully(b);
         return new String(b, "ascii");
+    }
+    
+    public InetAddress readAddress() throws IOException {
+    	switch (readByte()) {
+    		case SocksConstants.ADDRESS_IPV4: {
+    			byte[] addr = new byte[4];
+    			readFully(addr);
+    			return InetAddress.getByAddress(addr);
+    		}
+    		case SocksConstants.ADDRESS_DNS:
+    			return InetAddress.getByName(readASCII());
+    		case SocksConstants.ADDRESS_IPV6: {
+    			byte[] addr = new byte[16];
+    			readFully(addr);
+    			return InetAddress.getByAddress(addr);
+    		}
+    		default:
+    			return null; // TODO
+    	}
+    }
+    
+    public InetSocketAddress readSocketAddress() throws IOException {
+    	return new InetSocketAddress(readAddress(), readUnsignedShort());
     }
 }

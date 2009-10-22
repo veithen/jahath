@@ -25,4 +25,22 @@ public class SocksConstants {
     public static final byte AUTH_USERNAME_PASSWORD = 2;
     
     public static final byte USERNAME_PASSWORD_AUTH_VERSION = 1;
+
+    public static final byte REQUEST_TCP_CONNECTION = 1;
+    public static final byte REQUEST_TCP_PORT_BINDING = 2;
+    public static final byte REQUEST_UDP = 3;
+    
+    public static final byte ADDRESS_IPV4 = 1;
+    public static final byte ADDRESS_DNS = 3;
+    public static final byte ADDRESS_IPV6 = 4;
+    
+    public static final byte STATUS_REQUEST_GRANTED = 0;
+    public static final byte STATUS_GENERAL_FAILURE = 1;
+    public static final byte STATUS_CONNECTION_NOT_ALLOWED = 2; // connection not allowed by ruleset
+    public static final byte STATUS_NETWORK_UNREACHABLE = 3;
+    public static final byte STATUS_HOST_UNREACHABLE = 4;
+    public static final byte STATUS_CONNECTION_REFUSED = 5; // connection refused by destination host
+    public static final byte STATUS_TTL_EXPIRED = 6;
+    public static final byte STATUS_PROTOCOL_ERROR = 7; // command not supported / protocol error
+    public static final byte STATUS_ADDRESS_TYPE_NOT_SUPPORTED = 8;
 }

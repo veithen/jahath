@@ -16,6 +16,7 @@
 package com.google.code.jahath.server.socks;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 import com.google.code.jahath.common.socks.SocksConstants;
 import com.google.code.jahath.common.socks.SocksDataInputStream;
@@ -28,18 +29,18 @@ public class SocksSessionHandler implements SessionHandler {
         try {
             SocksDataInputStream in = new SocksDataInputStream(session.getInputStream());
             SocksDataOutputStream out = new SocksDataOutputStream(session.getOutputStream());
-            byte version = in.readByte();
-            if (version != SocksConstants.SOCKS_VERSION) {
+            if (in.readByte() != SocksConstants.SOCKS_VERSION) {
                 return; // TODO
             }
             int authMethodCount = in.readUnsignedByte();
             byte[] authMethods = new byte[authMethodCount];
             in.readFully(authMethods);
             // TODO: process proposed authentication methods
+            
             out.writeByte(SocksConstants.SOCKS_VERSION);
             out.writeByte(SocksConstants.AUTH_USERNAME_PASSWORD);
-            byte authVersion = in.readByte();
-            if (authVersion != SocksConstants.USERNAME_PASSWORD_AUTH_VERSION) {
+            
+            if (in.readByte() != SocksConstants.USERNAME_PASSWORD_AUTH_VERSION) {
                 return; // TODO
             }
             String username = in.readASCII();
@@ -47,6 +48,15 @@ public class SocksSessionHandler implements SessionHandler {
             // TODO: authenticate
             out.writeByte(SocksConstants.USERNAME_PASSWORD_AUTH_VERSION);
             out.writeByte(0);
+            
+            if (in.readByte() != SocksConstants.SOCKS_VERSION) {
+                return; // TODO
+            }
+            byte requestType = in.readByte();
+            if (in.readByte() != 0) {
+                return; // TODO
+            }
+            InetSocketAddress destination = in.readSocketAddress();
             
         } catch (IOException ex) {
             ex.printStackTrace(); // TODO
