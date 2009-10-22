@@ -23,7 +23,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.code.jahath.client.JahathClient;
-import com.google.code.jahath.client.Session;
+import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.server.JahathServer2;
 
 public class EchoTest {
@@ -31,9 +31,9 @@ public class EchoTest {
     public void test() throws Exception {
         JahathServer2 server = new JahathServer2(5555, new EchoSessionHandler());
         JahathClient client = new JahathClient("localhost", 5555, null);
-        Session session = client.createSession();
-        OutputStream out = session.getOutputStream();
-        InputStream in = session.getInputStream();
+        Connection connection = client.createConnection();
+        OutputStream out = connection.getOutputStream();
+        InputStream in = connection.getInputStream();
         Random random = new Random();
         byte[] buffer1 = new byte[512];
         byte[] buffer2 = new byte[512];

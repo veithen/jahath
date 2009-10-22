@@ -25,16 +25,17 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.server.http.HttpServer;
 
 public class JahathServer2 {
-    private final SessionHandler sessionHandler;
+    private final ConnectionHandler sessionHandler;
     private final ExecutorService executorService;
     private final HttpServer httpServer;
-    private final Map<String,Session> sessions = Collections.synchronizedMap(new HashMap<String,Session>());
+    private final Map<String,ConnectionImpl> connections = Collections.synchronizedMap(new HashMap<String,ConnectionImpl>());
     
-    public JahathServer2(int port, SessionHandler sessionHandler) throws IOException {
-        this.sessionHandler = sessionHandler;
+    public JahathServer2(int port, ConnectionHandler connectionHandler) throws IOException {
+        this.sessionHandler = connectionHandler;
         executorService = new ThreadPoolExecutor(6, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
         httpServer = new HttpServer(port, executorService, new HttpRequestHandlerImpl(this));
     }
@@ -43,21 +44,21 @@ public class JahathServer2 {
         return executorService;
     }
 
-    Session createSession() throws IOException {
+    ConnectionImpl createConnection() throws IOException {
         String id = UUID.randomUUID().toString();
-        final SessionHandler sessionHandler = this.sessionHandler;
-        final Session session = new Session(id);
-        sessions.put(id, session);
+        final ConnectionHandler connectionHandler = this.sessionHandler;
+        final ConnectionImpl session = new ConnectionImpl(id);
+        connections.put(id, session);
         executorService.execute(new Runnable() {
             public void run() {
-                sessionHandler.handle(session);
+                connectionHandler.handle(session);
             }
         });
         return session;
     }
     
-    Session getSession(String id) {
-        return sessions.get(id);
+    ConnectionImpl getConnection(String id) {
+        return connections.get(id);
     }
     
     public final void stop() {

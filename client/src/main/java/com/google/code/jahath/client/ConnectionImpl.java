@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class Session {
+import com.google.code.jahath.common.connection.Connection;
+
+class ConnectionImpl implements Connection {
     class SessionOutputStream extends OutputStream {
         private HttpRequest request;
         private OutputStream out;
@@ -81,7 +83,7 @@ public class Session {
     private final OutputStream out;
     private final InputStream in;
     
-    public Session(JahathClient client, String sessionId) {
+    public ConnectionImpl(JahathClient client, String sessionId) {
         this.client = client;
         this.sessionId = sessionId;
         out = new SessionOutputStream();

@@ -32,27 +32,27 @@ public class HttpRequestHandlerImpl implements HttpRequestHandler {
     public void handle(HttpRequest request, HttpResponse response) throws IOException {
         String path = request.getPath();
         if (path.equals("/")) {
-        	handleConnect(server.createSession(), request, response);
+        	handleConnect(server.createConnection(), request, response);
         } else {
-            String sessionId = path.substring(1);
-            Session session = server.getSession(sessionId);
+            String connectionId = path.substring(1);
+            ConnectionImpl connection = server.getConnection(connectionId);
             if (request.getHeader("Content-Type") != null) {
-            	handleSend(session, request, response);
+            	handleSend(connection, request, response);
             } else {
-            	handleReceive(session, request, response);
+            	handleReceive(connection, request, response);
             }
         }
     }
     
-    private void handleConnect(Session session, HttpRequest request, HttpResponse response) throws IOException {
+    private void handleConnect(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws IOException {
         response.setStatus(200);
-        response.addHeader("X-JHT-Session-Id", session.getId());
+        response.addHeader("X-JHT-Connection-Id", connection.getId());
         response.commit();
     }
     
-    private void handleSend(Session session, HttpRequest request, HttpResponse response) throws IOException {
+    private void handleSend(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws IOException {
         try {
-            session.consume(request.getInputStream());
+            connection.consume(request.getInputStream());
         } catch (InterruptedException ex) {
             // TODO: check what to do here
             Thread.currentThread().interrupt();
@@ -61,11 +61,11 @@ public class HttpRequestHandlerImpl implements HttpRequestHandler {
         response.commit();
     }
     
-    private void handleReceive(Session session, HttpRequest request, HttpResponse response) throws IOException {
+    private void handleReceive(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws IOException {
         response.setStatus(200);
         OutputStream out = response.getOutputStream("application/octet-stream");
         try {
-            session.produce(out);
+            connection.produce(out);
         } catch (InterruptedException ex) {
             // TODO: check what to do here
             Thread.currentThread().interrupt();

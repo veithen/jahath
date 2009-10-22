@@ -23,7 +23,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 public class JahathClient {
@@ -78,11 +77,11 @@ public class JahathClient {
         return httpRequest;
     }
 
-    public Session createSession() throws IOException {
+    public ConnectionImpl createConnection() throws IOException {
         HttpRequest request = createRequest(HttpRequest.Method.POST, "/");
         HttpResponse response = request.execute();
-        String sessionId = response.getHeader("X-JHT-Session-Id");
-        return new Session(this, sessionId);
+        String connectionId = response.getHeader("X-JHT-Connection-Id");
+        return new ConnectionImpl(this, connectionId);
     }
 
     public Tunnel createTunnel(int port, String remoteHost, int remotePort) throws IOException {

@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server;
+package com.google.code.jahath.common.connection;
 
-public interface SessionHandler {
-    void handle(Session session);
+public interface ConnectionHandler {
+    void handle(Connection connection);
 }

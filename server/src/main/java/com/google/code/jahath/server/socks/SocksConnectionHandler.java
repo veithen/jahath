@@ -18,17 +18,17 @@ package com.google.code.jahath.server.socks;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+import com.google.code.jahath.common.connection.Connection;
+import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.socks.SocksConstants;
 import com.google.code.jahath.common.socks.SocksDataInputStream;
 import com.google.code.jahath.common.socks.SocksDataOutputStream;
-import com.google.code.jahath.server.Session;
-import com.google.code.jahath.server.SessionHandler;
 
-public class SocksSessionHandler implements SessionHandler {
-    public void handle(Session session) {
+public class SocksConnectionHandler implements ConnectionHandler {
+    public void handle(Connection connection) {
         try {
-            SocksDataInputStream in = new SocksDataInputStream(session.getInputStream());
-            SocksDataOutputStream out = new SocksDataOutputStream(session.getOutputStream());
+            SocksDataInputStream in = new SocksDataInputStream(connection.getInputStream());
+            SocksDataOutputStream out = new SocksDataOutputStream(connection.getOutputStream());
             if (in.readByte() != SocksConstants.SOCKS_VERSION) {
                 return; // TODO
             }

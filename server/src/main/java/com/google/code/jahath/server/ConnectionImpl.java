@@ -20,7 +20,9 @@ import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
 
-public class Session {
+import com.google.code.jahath.common.connection.Connection;
+
+class ConnectionImpl implements Connection {
     static class SessionInputStream extends InputStream {
         InputStream parent;
 
@@ -99,7 +101,7 @@ public class Session {
     private final SessionInputStream sessionInputStream = new SessionInputStream();
     private final SessionOutputStream sessionOutputStream = new SessionOutputStream();
     
-    Session(String id) {
+    ConnectionImpl(String id) {
         this.id = id;
     }
 

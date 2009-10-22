@@ -13,27 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.tests;
+package com.google.code.jahath.common.connection;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Socket;
 
-import com.google.code.jahath.common.connection.Connection;
-import com.google.code.jahath.common.connection.ConnectionHandler;
+/**
+ * Adapts a {@link Socket} to the {@link Connection} interface.
+ * 
+ * @author Andreas Veithen
+ */
+public class SocketConnection implements Connection {
+    private final Socket socket;
 
-public class EchoSessionHandler implements ConnectionHandler {
-    public void handle(Connection connection) {
-        try {
-            byte[] buffer = new byte[4096];
-            InputStream in = connection.getInputStream();
-            OutputStream out = connection.getOutputStream();
-            int c;
-            while ((c = in.read(buffer)) != -1) {
-                out.write(buffer, 0, c);
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    public SocketConnection(Socket socket) {
+        this.socket = socket;
+    }
+
+    public InputStream getInputStream() throws IOException {
+        return socket.getInputStream();
+    }
+
+    public OutputStream getOutputStream() throws IOException {
+        return socket.getOutputStream();
     }
 }
