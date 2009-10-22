@@ -55,9 +55,10 @@
     </scm>
     
     <modules>
-        <module>jahath-common</module>
         <module>jahath-client</module>
+        <module>jahath-common</module>
         <module>jahath-server</module>
+        <module>jahath-test-utils</module>
         <module>jahath-tests</module>
     </modules>
 
