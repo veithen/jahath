@@ -16,7 +16,6 @@
 package com.google.code.jahath.client;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -82,15 +81,6 @@ public class JahathClient {
         HttpResponse response = request.execute();
         String connectionId = response.getHeader("X-JHT-Connection-Id");
         return new ConnectionImpl(this, connectionId);
-    }
-
-    public Tunnel createTunnel(int port, String remoteHost, int remotePort) throws IOException {
-        ServerSocket ss = new ServerSocket(port);
-        Tunnel tunnel = new Tunnel(this, remoteHost, remotePort);
-        Acceptor acceptor = new Acceptor(ss, tunnel);
-        tunnel.setAcceptor(acceptor);
-        executorService.execute(acceptor);
-        return tunnel;
     }
 
     public void shutdown() {

@@ -31,7 +31,6 @@ import org.junit.Test;
 
 import com.google.code.jahath.client.JahathClient;
 import com.google.code.jahath.client.ProxyConfiguration;
-import com.google.code.jahath.client.Tunnel;
 import com.google.code.jahath.server.JahathServer;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
