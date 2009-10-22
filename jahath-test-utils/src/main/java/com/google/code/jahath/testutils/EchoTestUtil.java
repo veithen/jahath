@@ -13,29 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.tests;
+package com.google.code.jahath.testutils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Random;
+
+import org.junit.Assert;
 
 import com.google.code.jahath.common.connection.Connection;
-import com.google.code.jahath.common.connection.ConnectionHandler;
-import com.google.code.jahath.common.connection.ExecutionEnvironment;
 
-public class EchoSessionHandler implements ConnectionHandler {
-    public void handle(ExecutionEnvironment env, Connection connection) {
-        try {
-            byte[] buffer = new byte[4096];
-            InputStream in = connection.getInputStream();
-            OutputStream out = connection.getOutputStream();
-            int c;
-            while ((c = in.read(buffer)) != -1) {
-                out.write(buffer, 0, c);
-                out.flush();
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+public class EchoTestUtil {
+    private EchoTestUtil() {}
+    
+    public static void testEcho(Connection connection) throws IOException {
+        OutputStream out = connection.getOutputStream();
+        InputStream in = connection.getInputStream();
+        Random random = new Random();
+        byte[] buffer1 = new byte[512];
+        byte[] buffer2 = new byte[512];
+        for (int i=0; i<100; i++) {
+            random.nextBytes(buffer1);
+            out.write(buffer1);
+            out.flush();
+            // TODO: not entirely correct
+            Assert.assertEquals(buffer2.length, in.read(buffer2));
+            Assert.assertArrayEquals(buffer1, buffer2);
         }
     }
 }

@@ -15,36 +15,21 @@
  */
 package com.google.code.jahath.tests;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Random;
-
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.code.jahath.client.JahathClient;
 import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.server.JahathServer;
+import com.google.code.jahath.testutils.EchoConnectionHandler;
+import com.google.code.jahath.testutils.EchoTestUtil;
 
 public class EchoTest {
     @Test
     public void test() throws Exception {
-        JahathServer server = new JahathServer(5555, new EchoSessionHandler());
+        JahathServer server = new JahathServer(5555, new EchoConnectionHandler());
         JahathClient client = new JahathClient("localhost", 5555, null);
         Connection connection = client.createConnection();
-        OutputStream out = connection.getOutputStream();
-        InputStream in = connection.getInputStream();
-        Random random = new Random();
-        byte[] buffer1 = new byte[512];
-        byte[] buffer2 = new byte[512];
-        for (int i=0; i<100; i++) {
-            random.nextBytes(buffer1);
-            out.write(buffer1);
-            out.flush();
-            // TODO: not entirely correct
-            Assert.assertEquals(buffer2.length, in.read(buffer2));
-            Assert.assertArrayEquals(buffer1, buffer2);
-        }
+        EchoTestUtil.testEcho(connection);
         client.shutdown();
         server.stop();
     }
