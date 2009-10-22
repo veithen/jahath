@@ -21,9 +21,10 @@ import java.io.OutputStream;
 
 import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.ExecutionEnvironment;
 
 public class EchoSessionHandler implements ConnectionHandler {
-    public void handle(Connection connection) {
+    public void handle(ExecutionEnvironment env, Connection connection) {
         try {
             byte[] buffer = new byte[4096];
             InputStream in = connection.getInputStream();

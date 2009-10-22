@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 import com.google.code.jahath.common.ConnectionRelay;
 import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.ExecutionEnvironment;
 import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.common.socks.SocksConstants;
 import com.google.code.jahath.common.socks.SocksDataInputStream;
@@ -35,7 +36,7 @@ public class SocksConnectionHandler implements ConnectionHandler {
         this.executorService = executorService;
     }
 
-    public void handle(Connection connection) {
+    public void handle(ExecutionEnvironment env, Connection connection) {
         try {
             SocksDataInputStream in = new SocksDataInputStream(connection.getInputStream());
             SocksDataOutputStream out = new SocksDataOutputStream(connection.getOutputStream());

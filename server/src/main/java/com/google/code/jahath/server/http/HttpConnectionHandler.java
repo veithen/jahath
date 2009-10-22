@@ -16,23 +16,23 @@
 package com.google.code.jahath.server.http;
 
 import java.io.IOException;
-import java.net.Socket;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.code.jahath.common.connection.Connection;
+import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.ExecutionEnvironment;
 import com.google.code.jahath.common.http.HttpHeadersProvider;
 import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
-class HttpConnectionHandler implements Runnable, HttpHeadersProvider {
+class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
     private static final Log log = LogFactory.getLog(HttpConnectionHandler.class);
     
-    private final Socket socket;
     private final HttpRequestHandler requestHandler;
 
-    public HttpConnectionHandler(Socket socket, HttpRequestHandler requestHandler) {
-        this.socket = socket;
+    public HttpConnectionHandler(HttpRequestHandler requestHandler) {
         this.requestHandler = requestHandler;
     }
 
@@ -40,15 +40,16 @@ class HttpConnectionHandler implements Runnable, HttpHeadersProvider {
         message.addHeader("Connection", "keep-alive");
     }
 
-    public void run() {
+    public void handle(ExecutionEnvironment env, Connection connection) {
         try {
             // TODO: should wrapping the stream as an HttpOutputStream be done here or in HttpRequest??
-            HttpOutputStream response = new HttpOutputStream(socket.getOutputStream());
-            HttpRequest httpRequest = new HttpRequest(socket.getInputStream());
+            HttpOutputStream response = new HttpOutputStream(connection.getOutputStream());
+            HttpRequest httpRequest = new HttpRequest(connection.getInputStream());
             HttpResponse httpResponse = new HttpResponse(response, this);
-            requestHandler.handle(httpRequest, httpResponse);
+            requestHandler.handle(env, httpRequest, httpResponse);
             response.flush();
-            socket.close();
+            // TODO: equivalent for Connection
+//            socket.close();
         } catch (Exception ex) {
             log.error("", ex);
         }

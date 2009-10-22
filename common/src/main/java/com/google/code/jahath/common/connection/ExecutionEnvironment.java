@@ -13,26 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server.http;
+package com.google.code.jahath.common.connection;
 
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-import com.google.code.jahath.common.AbstractAcceptor;
-
-class Acceptor extends AbstractAcceptor {
+public class ExecutionEnvironment {
     private final ExecutorService executorService;
-    private final HttpRequestHandler requestHandler;
 
-    public Acceptor(ServerSocket serverSocket, ExecutorService executorService, HttpRequestHandler requestHandler) {
-        super(serverSocket);
+    public ExecutionEnvironment(ExecutorService executorService) {
         this.executorService = executorService;
-        this.requestHandler = requestHandler;
+    }
+    
+    public ExecutionEnvironment() {
+        this(new ThreadPoolExecutor(6, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>()));
     }
 
-    @Override
-    protected void handleConnection(Socket socket) {
-        executorService.execute(new HttpConnectionHandler(socket, requestHandler));
+    public final ExecutorService getExecutorService() {
+        return executorService;
+    }
+
+    public final void shutdown() {
+        executorService.shutdown();
     }
 }

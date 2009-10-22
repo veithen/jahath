@@ -16,18 +16,11 @@
 package com.google.code.jahath.server.http;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.util.concurrent.ExecutorService;
 
-public class HttpServer {
-    private final Acceptor acceptor;
-    
-    public HttpServer(int port, ExecutorService executorService, HttpRequestHandler requestHandler) throws IOException {
-        acceptor = new Acceptor(new ServerSocket(port), executorService, requestHandler);
-        executorService.execute(acceptor);
-    }
+import com.google.code.jahath.common.server.Server;
 
-    public final void stop() {
-        acceptor.stop();
+public class HttpServer extends Server {
+    public HttpServer(int port, HttpRequestHandler requestHandler) throws IOException {
+        super(port, new HttpConnectionHandler(requestHandler));
     }
 }

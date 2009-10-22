@@ -17,25 +17,49 @@ package com.google.code.jahath.server;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
+import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.ExecutionEnvironment;
 import com.google.code.jahath.server.http.HttpRequest;
 import com.google.code.jahath.server.http.HttpRequestHandler;
 import com.google.code.jahath.server.http.HttpResponse;
 
-public class HttpRequestHandlerImpl implements HttpRequestHandler {
-    private final JahathServer server;
+class HttpRequestHandlerImpl implements HttpRequestHandler {
+    private final ConnectionHandler connectionHandler;
+    private final Map<String,ConnectionImpl> connections = Collections.synchronizedMap(new HashMap<String,ConnectionImpl>());
 
-    public HttpRequestHandlerImpl(JahathServer server) {
-        this.server = server;
+    public HttpRequestHandlerImpl(ConnectionHandler connectionHandler) {
+        this.connectionHandler = connectionHandler;
     }
 
-    public void handle(HttpRequest request, HttpResponse response) throws IOException {
+    private ConnectionImpl createConnection(final ExecutionEnvironment env) throws IOException {
+        String id = UUID.randomUUID().toString();
+        final ConnectionHandler connectionHandler = this.connectionHandler;
+        final ConnectionImpl session = new ConnectionImpl(id);
+        connections.put(id, session);
+        env.getExecutorService().execute(new Runnable() {
+            public void run() {
+                connectionHandler.handle(env, session);
+            }
+        });
+        return session;
+    }
+    
+    private ConnectionImpl getConnection(String id) {
+        return connections.get(id);
+    }
+    
+    public void handle(ExecutionEnvironment env, HttpRequest request, HttpResponse response) throws IOException {
         String path = request.getPath();
         if (path.equals("/")) {
-        	handleConnect(server.createConnection(), request, response);
+        	handleConnect(createConnection(env), request, response);
         } else {
             String connectionId = path.substring(1);
-            ConnectionImpl connection = server.getConnection(connectionId);
+            ConnectionImpl connection = getConnection(connectionId);
             if (request.getHeader("Content-Type") != null) {
             	handleSend(connection, request, response);
             } else {

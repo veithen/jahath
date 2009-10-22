@@ -13,12 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server.http;
+package com.google.code.jahath.common.server;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 
+import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.connection.ExecutionEnvironment;
 
-public interface HttpRequestHandler {
-    void handle(ExecutionEnvironment env, HttpRequest request, HttpResponse response) throws IOException;
+public class Server {
+    private final ExecutionEnvironment env;
+    private final Acceptor acceptor;
+    
+    public Server(int port, ConnectionHandler connectionHandler) throws IOException {
+        env = new ExecutionEnvironment();
+        acceptor = new Acceptor(new ServerSocket(port), env, connectionHandler);
+        env.getExecutorService().execute(acceptor);
+    }
+
+    public final void stop() {
+        acceptor.stop();
+        env.shutdown();
+    }
 }

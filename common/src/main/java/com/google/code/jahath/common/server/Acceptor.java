@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common;
+package com.google.code.jahath.common.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -22,19 +22,32 @@ import java.net.Socket;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public abstract class AbstractAcceptor implements Runnable {
-    private static final Log log = LogFactory.getLog(AbstractAcceptor.class);
+import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.ExecutionEnvironment;
+import com.google.code.jahath.common.connection.SocketConnection;
+
+class Acceptor implements Runnable {
+    private static final Log log = LogFactory.getLog(Acceptor.class);
 
     private final ServerSocket serverSocket;
+    final ExecutionEnvironment env;
+    final ConnectionHandler connectionHandler;
 
-    public AbstractAcceptor(ServerSocket serverSocket) {
+    public Acceptor(ServerSocket serverSocket, ExecutionEnvironment env, ConnectionHandler connectionHandler) {
         this.serverSocket = serverSocket;
+        this.env = env;
+        this.connectionHandler = connectionHandler;
     }
     
     public final void run() {
         try {
             while (true) {
-                handleConnection(serverSocket.accept());
+                final Socket socket = serverSocket.accept();
+                env.getExecutorService().execute(new Runnable() {
+                    public void run() {
+                        connectionHandler.handle(env, new SocketConnection(socket));
+                    }
+                });
             }
         } catch (IOException ex) {
             if (!serverSocket.isClosed()) {
@@ -43,8 +56,6 @@ public abstract class AbstractAcceptor implements Runnable {
         }
     }
     
-    protected abstract void handleConnection(Socket socket);
-
     public final void stop() {
         try {
             serverSocket.close();
