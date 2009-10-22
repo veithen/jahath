@@ -31,6 +31,7 @@ public class EchoSessionHandler implements ConnectionHandler {
             int c;
             while ((c = in.read(buffer)) != -1) {
                 out.write(buffer, 0, c);
+                out.flush();
             }
         } catch (IOException ex) {
             ex.printStackTrace();
