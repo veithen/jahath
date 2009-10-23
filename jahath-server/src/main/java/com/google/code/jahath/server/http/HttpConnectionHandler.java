@@ -42,6 +42,7 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
 
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
+            log.debug("New request");
             // TODO: should wrapping the stream as an HttpOutputStream be done here or in HttpRequest??
             HttpOutputStream response = new HttpOutputStream(connection.getOutputStream());
             HttpRequest httpRequest = new HttpRequest(connection.getInputStream());

@@ -15,6 +15,7 @@
  */
 package com.google.code.jahath.tests;
 
+import java.net.InetSocketAddress;
 import java.util.Properties;
 
 import javax.mail.Folder;
@@ -31,7 +32,9 @@ import org.junit.Test;
 
 import com.google.code.jahath.client.JahathClient;
 import com.google.code.jahath.client.ProxyConfiguration;
+import com.google.code.jahath.client.tunnel.Tunnel;
 import com.google.code.jahath.server.JahathServer;
+import com.google.code.jahath.server.socks.SocksConnectionHandler;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
 
@@ -43,9 +46,6 @@ public class MailTest {
     private final int imapTunnelPort = 9005;
     private final int proxyPort = 9006;
     
-    @Test public void test() {}
-    
-/*    
     private void test(boolean useProxy) throws Exception {
         GreenMail greenMail = new GreenMail(new ServerSetup[] {
                 new ServerSetup(smtpPort, "127.0.0.1", ServerSetup.PROTOCOL_SMTP),
@@ -53,7 +53,7 @@ public class MailTest {
         greenMail.setUser("user@localhost", "user", "password");
         greenMail.start();
         
-        JahathServer server = new JahathServer(serverPort);
+        JahathServer server = new JahathServer(serverPort, new SocksConnectionHandler());
         
         ProxyServer proxy;
         ProxyConfiguration proxyConfiguration;
@@ -66,8 +66,8 @@ public class MailTest {
         }
         
         JahathClient client = new JahathClient("localhost", serverPort, proxyConfiguration);
-        Tunnel smtpTunnel = client.createTunnel(smtpTunnelPort, "localhost", smtpPort);
-        Tunnel imapTunnel = client.createTunnel(imapTunnelPort, "localhost", imapPort);
+        Tunnel smtpTunnel = new Tunnel(smtpTunnelPort, client, new InetSocketAddress("localhost", smtpPort));
+        Tunnel imapTunnel = new Tunnel(imapTunnelPort, client, new InetSocketAddress("localhost", imapPort));
         
         Properties props = new Properties();
         props.put("mail.smtp.host", "localhost");
@@ -119,5 +119,4 @@ public class MailTest {
     public void testWithProxy() throws Exception {
         test(true);
     }
-*/
 }

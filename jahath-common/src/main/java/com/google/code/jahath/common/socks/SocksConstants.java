@@ -16,6 +16,8 @@
 package com.google.code.jahath.common.socks;
 
 public class SocksConstants {
+    private static final String[] authProtocolDescriptions = { "None", "GSSAPI", "Username/Password" };
+    
     private SocksConstants() {}
     
     public static final byte SOCKS_VERSION = 5;
@@ -43,4 +45,8 @@ public class SocksConstants {
     public static final byte STATUS_TTL_EXPIRED = 6;
     public static final byte STATUS_PROTOCOL_ERROR = 7; // command not supported / protocol error
     public static final byte STATUS_ADDRESS_TYPE_NOT_SUPPORTED = 8;
+    
+    public static String getAuthProtocolDescription(byte protocol) {
+        return protocol < 0 || protocol > 2 ? "unknown" : authProtocolDescriptions[protocol];
+    }
 }

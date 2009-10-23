@@ -28,8 +28,14 @@ public class HttpOutputStream extends ProxyOutputStream {
     }
     
     public void writeLine(String s) throws IOException {
-        write(s.getBytes("ascii"));
-        write(CRLF);
+        int len = s.length();
+        byte[] bytes = new byte[len+2];
+        for (int i=0; i<len; i++) {
+            bytes[i] = (byte)s.charAt(i);
+        }
+        bytes[len] = '\r';
+        bytes[len+1] = '\n';
+        write(bytes);
     }
 
     public void writeHeader(String name, String value) throws IOException {

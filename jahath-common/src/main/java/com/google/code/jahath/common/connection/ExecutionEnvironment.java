@@ -16,7 +16,7 @@
 package com.google.code.jahath.common.connection;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +28,7 @@ public class ExecutionEnvironment {
     }
     
     public ExecutionEnvironment() {
-        this(new ThreadPoolExecutor(6, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>()));
+        this(new ThreadPoolExecutor(20, 100, 30, TimeUnit.SECONDS, new SynchronousQueue<Runnable>()));
     }
 
     public final ExecutorService getExecutorService() {

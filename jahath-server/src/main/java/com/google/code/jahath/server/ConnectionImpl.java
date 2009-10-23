@@ -20,6 +20,11 @@ import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.google.code.jahath.common.LoggingInputStream;
+import com.google.code.jahath.common.LoggingOutputStream;
 import com.google.code.jahath.common.connection.Connection;
 
 class ConnectionImpl implements Connection {
@@ -65,11 +70,14 @@ class ConnectionImpl implements Connection {
         }
     }
     
-    static class SessionOutputStream extends OutputStream {
+    class SessionOutputStream extends OutputStream {
         OutputStream parent;
 
         private void awaitParent() throws InterruptedIOException {
             while (parent == null) {
+                if (log.isDebugEnabled()) {
+                    log.debug(id +": Waiting for new output stream");
+                }
                 try {
                     wait();
                 } catch (InterruptedException ex) {
@@ -93,11 +101,16 @@ class ConnectionImpl implements Connection {
         @Override
         public synchronized void flush() throws IOException {
             parent = null;
+            if (log.isDebugEnabled()) {
+                log.debug(id +": Output stream flushed");
+            }
             notifyAll();
         }
     }
     
-    private final String id;
+    static final Log log = LogFactory.getLog(ConnectionImpl.class);
+    
+    final String id;
     private final SessionInputStream sessionInputStream = new SessionInputStream();
     private final SessionOutputStream sessionOutputStream = new SessionOutputStream();
     
@@ -112,12 +125,24 @@ class ConnectionImpl implements Connection {
     void consume(InputStream in) throws InterruptedException {
         synchronized (sessionInputStream) {
             while (sessionInputStream.parent != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug(id + ": Waiting for connection to be ready to accept new input stream");
+                }
                 sessionInputStream.wait();
             }
             sessionInputStream.parent = in;
+            if (log.isDebugEnabled()) {
+                log.debug(id + ": Input stream connected");
+            }
             sessionInputStream.notifyAll();
             while (sessionInputStream.parent != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug(id + ": Waiting for connection to disconnect output stream");
+                }
                 sessionInputStream.wait();
+            }
+            if (log.isDebugEnabled()) {
+                log.debug(id + ": Input stream disconnected");
             }
         }
     }
@@ -125,21 +150,35 @@ class ConnectionImpl implements Connection {
     void produce(OutputStream out) throws InterruptedException {
         synchronized (sessionOutputStream) {
             while (sessionOutputStream.parent != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug(id + ": Waiting for connection to be ready to accept new output stream");
+                }
                 sessionOutputStream.wait();
             }
             sessionOutputStream.parent = out;
+            if (log.isDebugEnabled()) {
+                log.debug(id + ": Output stream connected");
+            }
             sessionOutputStream.notifyAll();
             while (sessionOutputStream.parent != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug(id + ": Waiting for connection to disconnect output stream");
+                }
                 sessionOutputStream.wait();
+            }
+            if (log.isDebugEnabled()) {
+                log.debug(id + ": Output stream disconnected");
             }
         }
     }
     
     public InputStream getInputStream() {
-        return sessionInputStream;
+        // TODO: handle logging properly
+        return new LoggingInputStream(sessionInputStream, log, "in");
     }
     
     public OutputStream getOutputStream() {
-        return sessionOutputStream;
+        // TODO: handle logging properly
+        return new LoggingOutputStream(sessionOutputStream, log, "out");
     }
 }

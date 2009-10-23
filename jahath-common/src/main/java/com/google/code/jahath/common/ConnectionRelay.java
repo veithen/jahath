@@ -19,13 +19,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import com.google.code.jahath.common.connection.Connection;
 
 public class ConnectionRelay implements Runnable {
-    private static final Log log = LogFactory.getLog(ConnectionRelay.class);
-    
+    private final Log log;
     private final ExecutorService executorService;
     private final Connection connection1;
     private final String label1;
@@ -33,8 +31,9 @@ public class ConnectionRelay implements Runnable {
     private final String label2;
 
     // TODO: we should ExecutionEnvironment here
-    public ConnectionRelay(ExecutorService executorService, Connection connection1, String label1,
+    public ConnectionRelay(Log log, ExecutorService executorService, Connection connection1, String label1,
             Connection connection2, String label2) {
+        this.log = log;
         this.executorService = executorService;
         this.connection1 = connection1;
         this.label1 = label1;
@@ -44,8 +43,8 @@ public class ConnectionRelay implements Runnable {
 
     public void run() {
         try {
-            Future<?> f1 = executorService.submit(new StreamRelay(label1 + " -> " + label2, connection1.getInputStream(), connection2.getOutputStream()));
-            Future<?> f2 = executorService.submit(new StreamRelay(label2 + " -> " + label1, connection2.getInputStream(), connection1.getOutputStream()));
+            Future<?> f1 = executorService.submit(new StreamRelay(log, label1 + " -> " + label2, connection1.getInputStream(), connection2.getOutputStream()));
+            Future<?> f2 = executorService.submit(new StreamRelay(log, label2 + " -> " + label1, connection2.getInputStream(), connection1.getOutputStream()));
             f1.get();
             f2.get();
         } catch (Exception ex) {
