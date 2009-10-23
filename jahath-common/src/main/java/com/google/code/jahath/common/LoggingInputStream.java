@@ -17,15 +17,15 @@ package com.google.code.jahath.common;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.apache.commons.logging.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoggingInputStream extends InputStream{
     private final InputStream parent;
-    private final Log log;
+    private final Logger log;
     private final String label;
     
-    public LoggingInputStream(InputStream parent, Log log, String label) {
+    public LoggingInputStream(InputStream parent, Logger log, String label) {
         this.parent = parent;
         this.log = log;
         this.label = label;
@@ -39,9 +39,9 @@ public class LoggingInputStream extends InputStream{
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
         int c = parent.read(b, off, len);
-        if (log.isDebugEnabled()) {
+        if (log.isLoggable(Level.FINE)) {
             if (c == -1) {
-                log.debug(label + " - end of stream");
+                log.fine(label + " - end of stream");
             } else {
                 HexDump.log(log, label, b, off, c);
             }

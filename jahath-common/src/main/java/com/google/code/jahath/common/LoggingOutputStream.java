@@ -17,15 +17,15 @@ package com.google.code.jahath.common;
 
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.apache.commons.logging.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoggingOutputStream extends OutputStream {
     private final OutputStream parent;
-    private final Log log;
+    private final Logger log;
     private final String label;
 
-    public LoggingOutputStream(OutputStream parent, Log log, String label) {
+    public LoggingOutputStream(OutputStream parent, Logger log, String label) {
         this.parent = parent;
         this.log = log;
         this.label = label;
@@ -33,7 +33,7 @@ public class LoggingOutputStream extends OutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        if (log.isDebugEnabled()) {
+        if (log.isLoggable(Level.FINE)) {
             HexDump.log(log, label, b, off, len);
         }
         parent.write(b, off, len);
@@ -41,7 +41,7 @@ public class LoggingOutputStream extends OutputStream {
 
     @Override
     public void write(byte[] b) throws IOException {
-        if (log.isDebugEnabled()) {
+        if (log.isLoggable(Level.FINE)) {
             HexDump.log(log, label, b, 0, b.length);
         }
         parent.write(b);
@@ -49,24 +49,24 @@ public class LoggingOutputStream extends OutputStream {
 
     @Override
     public void write(int b) throws IOException {
-        if (log.isDebugEnabled()) {
-            log.debug(label + " - writing single byte " + b);
+        if (log.isLoggable(Level.FINE)) {
+            log.fine(label + " - writing single byte " + b);
         }
         parent.write(b);
     }
 
     @Override
     public void flush() throws IOException {
-        if (log.isDebugEnabled()) {
-            log.debug(label + " - flushing");
+        if (log.isLoggable(Level.FINE)) {
+            log.fine(label + " - flushing");
         }
         parent.flush();
     }
 
     @Override
     public void close() throws IOException {
-        if (log.isDebugEnabled()) {
-            log.debug(label + " - closing");
+        if (log.isLoggable(Level.FINE)) {
+            log.fine(label + " - closing");
         }
         parent.close();
     }

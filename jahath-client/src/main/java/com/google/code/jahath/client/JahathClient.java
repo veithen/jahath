@@ -21,9 +21,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 import com.google.code.jahath.common.LoggingInputStream;
 import com.google.code.jahath.common.LoggingOutputStream;
@@ -31,7 +29,7 @@ import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 public class JahathClient {
-    private static final Log log = LogFactory.getLog(JahathClient.class);
+    private static final Logger log = Logger.getLogger(JahathClient.class.getName());
     
     private final String serverHost;
     private final int serverPort;

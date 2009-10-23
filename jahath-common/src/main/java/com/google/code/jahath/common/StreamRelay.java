@@ -18,17 +18,18 @@ package com.google.code.jahath.common;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
 
 public class StreamRelay implements Runnable {
-    private final Log log;
+    private final Logger log;
     private final String label;
     private final InputStream in;
     private final OutputStream out;
     
-    public StreamRelay(Log log, String label, InputStream in, OutputStream out) {
+    public StreamRelay(Logger log, String label, InputStream in, OutputStream out) {
         this.log = log;
         this.label = label;
         this.in = in;
@@ -40,14 +41,14 @@ public class StreamRelay implements Runnable {
         try {
             int n;
             while ((n = in.read(buf)) != -1) {
-                if (log.isDebugEnabled()) {
+                if (log.isLoggable(Level.FINE)) {
                     HexDump.log(log, label, buf, 0, n);
                 }
                 out.write(buf, 0, n);
                 out.flush();
             }
         } catch (IOException ex) {
-            log.error(label, ex);
+            log.log(Level.SEVERE, label, ex);
         } finally {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);

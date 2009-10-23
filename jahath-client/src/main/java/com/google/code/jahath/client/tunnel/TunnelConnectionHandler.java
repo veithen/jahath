@@ -18,9 +18,8 @@ package com.google.code.jahath.client.tunnel;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.code.jahath.client.JahathClient;
 import com.google.code.jahath.common.ConnectionRelay;
@@ -32,7 +31,7 @@ import com.google.code.jahath.common.socks.SocksDataInputStream;
 import com.google.code.jahath.common.socks.SocksDataOutputStream;
 
 class TunnelConnectionHandler implements ConnectionHandler {
-    private static final Log log = LogFactory.getLog(TunnelConnectionHandler.class);
+    private static final Logger log = Logger.getLogger(TunnelConnectionHandler.class.getName());
     
     private final JahathClient client;
     private final InetSocketAddress target;
@@ -59,8 +58,8 @@ class TunnelConnectionHandler implements ConnectionHandler {
             }
             byte authProtocol = in.readByte();
             
-            if (log.isDebugEnabled()) {
-                log.debug("Authenticating using protocol: " + SocksConstants.getAuthProtocolDescription(authProtocol));
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("Authenticating using protocol: " + SocksConstants.getAuthProtocolDescription(authProtocol));
             }
             switch (authProtocol) {
                 case SocksConstants.AUTH_NONE:
@@ -99,8 +98,8 @@ class TunnelConnectionHandler implements ConnectionHandler {
                 return; // TODO
             }
             InetSocketAddress target2 = in.readSocketAddress();
-            if (log.isDebugEnabled()) {
-                log.debug("SOCKS server connected to " + target2);
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("SOCKS server connected to " + target2);
             }
             
             // TODO: generate proper labels

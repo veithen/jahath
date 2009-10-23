@@ -19,9 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.code.jahath.common.LoggingInputStream;
 import com.google.code.jahath.common.LoggingOutputStream;
@@ -75,8 +74,8 @@ class ConnectionImpl implements Connection {
 
         private void awaitParent() throws InterruptedIOException {
             while (parent == null) {
-                if (log.isDebugEnabled()) {
-                    log.debug(id +": Waiting for new output stream");
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine(id +": Waiting for new output stream");
                 }
                 try {
                     wait();
@@ -101,14 +100,14 @@ class ConnectionImpl implements Connection {
         @Override
         public synchronized void flush() throws IOException {
             parent = null;
-            if (log.isDebugEnabled()) {
-                log.debug(id +": Output stream flushed");
+            if (log.isLoggable(Level.FINE)) {
+                log.fine(id +": Output stream flushed");
             }
             notifyAll();
         }
     }
     
-    static final Log log = LogFactory.getLog(ConnectionImpl.class);
+    static final Logger log = Logger.getLogger(ConnectionImpl.class.getName());
     
     final String id;
     private final SessionInputStream sessionInputStream = new SessionInputStream();
@@ -125,24 +124,24 @@ class ConnectionImpl implements Connection {
     void consume(InputStream in) throws InterruptedException {
         synchronized (sessionInputStream) {
             while (sessionInputStream.parent != null) {
-                if (log.isDebugEnabled()) {
-                    log.debug(id + ": Waiting for connection to be ready to accept new input stream");
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine(id + ": Waiting for connection to be ready to accept new input stream");
                 }
                 sessionInputStream.wait();
             }
             sessionInputStream.parent = in;
-            if (log.isDebugEnabled()) {
-                log.debug(id + ": Input stream connected");
+            if (log.isLoggable(Level.FINE)) {
+                log.fine(id + ": Input stream connected");
             }
             sessionInputStream.notifyAll();
             while (sessionInputStream.parent != null) {
-                if (log.isDebugEnabled()) {
-                    log.debug(id + ": Waiting for connection to disconnect output stream");
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine(id + ": Waiting for connection to disconnect output stream");
                 }
                 sessionInputStream.wait();
             }
-            if (log.isDebugEnabled()) {
-                log.debug(id + ": Input stream disconnected");
+            if (log.isLoggable(Level.FINE)) {
+                log.fine(id + ": Input stream disconnected");
             }
         }
     }
@@ -150,24 +149,24 @@ class ConnectionImpl implements Connection {
     void produce(OutputStream out) throws InterruptedException {
         synchronized (sessionOutputStream) {
             while (sessionOutputStream.parent != null) {
-                if (log.isDebugEnabled()) {
-                    log.debug(id + ": Waiting for connection to be ready to accept new output stream");
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine(id + ": Waiting for connection to be ready to accept new output stream");
                 }
                 sessionOutputStream.wait();
             }
             sessionOutputStream.parent = out;
-            if (log.isDebugEnabled()) {
-                log.debug(id + ": Output stream connected");
+            if (log.isLoggable(Level.FINE)) {
+                log.fine(id + ": Output stream connected");
             }
             sessionOutputStream.notifyAll();
             while (sessionOutputStream.parent != null) {
-                if (log.isDebugEnabled()) {
-                    log.debug(id + ": Waiting for connection to disconnect output stream");
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine(id + ": Waiting for connection to disconnect output stream");
                 }
                 sessionOutputStream.wait();
             }
-            if (log.isDebugEnabled()) {
-                log.debug(id + ": Output stream disconnected");
+            if (log.isLoggable(Level.FINE)) {
+                log.fine(id + ": Output stream disconnected");
             }
         }
     }

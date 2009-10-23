@@ -18,16 +18,15 @@ package com.google.code.jahath.common.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.connection.ExecutionEnvironment;
 import com.google.code.jahath.common.connection.SocketConnection;
 
 class Acceptor implements Runnable {
-    private static final Log log = LogFactory.getLog(Acceptor.class);
+    private static final Logger log = Logger.getLogger(Acceptor.class.getName());
 
     private final ServerSocket serverSocket;
     final ExecutionEnvironment env;
@@ -51,7 +50,7 @@ class Acceptor implements Runnable {
             }
         } catch (IOException ex) {
             if (!serverSocket.isClosed()) {
-                log.error("Unexpected I/O error in accept loop", ex);
+                log.log(Level.SEVERE, "Unexpected I/O error in accept loop", ex);
             }
         }
     }
@@ -60,7 +59,7 @@ class Acceptor implements Runnable {
         try {
             serverSocket.close();
         } catch (IOException ex) {
-            log.error("Error closing server socket", ex);
+            log.log(Level.SEVERE, "Error closing server socket", ex);
         }
     }
 }

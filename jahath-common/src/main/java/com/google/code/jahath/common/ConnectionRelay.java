@@ -17,13 +17,13 @@ package com.google.code.jahath.common;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-
-import org.apache.commons.logging.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.code.jahath.common.connection.Connection;
 
 public class ConnectionRelay implements Runnable {
-    private final Log log;
+    private final Logger log;
     private final ExecutorService executorService;
     private final Connection connection1;
     private final String label1;
@@ -31,7 +31,7 @@ public class ConnectionRelay implements Runnable {
     private final String label2;
 
     // TODO: we should ExecutionEnvironment here
-    public ConnectionRelay(Log log, ExecutorService executorService, Connection connection1, String label1,
+    public ConnectionRelay(Logger log, ExecutorService executorService, Connection connection1, String label1,
             Connection connection2, String label2) {
         this.log = log;
         this.executorService = executorService;
@@ -49,7 +49,7 @@ public class ConnectionRelay implements Runnable {
             f2.get();
         } catch (Exception ex) {
             // TODO: handle exceptions properly!
-            log.error("", ex);
+            log.log(Level.SEVERE, "", ex);
         }
     }
 }

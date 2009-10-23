@@ -19,9 +19,8 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.code.jahath.common.ConnectionRelay;
 import com.google.code.jahath.common.connection.Connection;
@@ -33,14 +32,18 @@ import com.google.code.jahath.common.socks.SocksDataInputStream;
 import com.google.code.jahath.common.socks.SocksDataOutputStream;
 
 public class SocksConnectionHandler implements ConnectionHandler {
-    private static final Log log = LogFactory.getLog(SocksConnectionHandler.class);
+    private static final Logger log = Logger.getLogger(SocksConnectionHandler.class.getName());
     
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
+            boolean fineEnabled = log.isLoggable(Level.FINE);
+            
             SocksDataInputStream in = new SocksDataInputStream(connection.getInputStream());
             SocksDataOutputStream out = new SocksDataOutputStream(new BufferedOutputStream(connection.getOutputStream(), 64));
             
-            log.debug("Start processing SOCKS request");
+            if (fineEnabled) {
+                log.fine("Start processing SOCKS request");
+            }
             if (in.readByte() != SocksConstants.SOCKS_VERSION) {
                 return; // TODO
             }
@@ -73,8 +76,8 @@ public class SocksConnectionHandler implements ConnectionHandler {
             InetSocketAddress destination = in.readSocketAddress();
             
             Socket socket = new Socket(destination.getAddress(), destination.getPort());
-            if (log.isDebugEnabled()) {
-                log.debug("Connected to " + destination);
+            if (fineEnabled) {
+                log.fine("Connected to " + destination);
             }
             
             out.writeByte(SocksConstants.SOCKS_VERSION);
@@ -82,7 +85,9 @@ public class SocksConnectionHandler implements ConnectionHandler {
             out.writeByte(0);
             out.writeSocketAddress(destination);
             out.flush();
-            log.debug("End processing SOCKS request");
+            if (fineEnabled) {
+                log.fine("End processing SOCKS request");
+            }
             
             new ConnectionRelay(log, env.getExecutorService(), connection, "socks", new SocketConnection(socket), destination.toString()).run();
         } catch (IOException ex) {

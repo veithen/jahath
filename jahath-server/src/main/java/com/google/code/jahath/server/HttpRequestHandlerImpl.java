@@ -21,9 +21,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.connection.ExecutionEnvironment;
@@ -32,7 +31,7 @@ import com.google.code.jahath.server.http.HttpRequestHandler;
 import com.google.code.jahath.server.http.HttpResponse;
 
 class HttpRequestHandlerImpl implements HttpRequestHandler {
-    private static final Log log = LogFactory.getLog(HttpRequestHandlerImpl.class);
+    private static final Logger log = Logger.getLogger(HttpRequestHandlerImpl.class.getName());
     
     private final ConnectionHandler connectionHandler;
     private final Map<String,ConnectionImpl> connections = Collections.synchronizedMap(new HashMap<String,ConnectionImpl>());
@@ -60,8 +59,8 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
     
     public void handle(ExecutionEnvironment env, HttpRequest request, HttpResponse response) throws IOException {
         String path = request.getPath();
-        if (log.isDebugEnabled()) {
-            log.debug("Processing request for path " + path);
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("Processing request for path " + path);
         }
         if (path.equals("/")) {
         	handleConnect(createConnection(env), request, response);

@@ -16,9 +16,8 @@
 package com.google.code.jahath.server.http;
 
 import java.io.IOException;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
@@ -28,7 +27,7 @@ import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
-    private static final Log log = LogFactory.getLog(HttpConnectionHandler.class);
+    private static final Logger log = Logger.getLogger(HttpConnectionHandler.class.getName());
     
     private final HttpRequestHandler requestHandler;
 
@@ -42,7 +41,7 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
 
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
-            log.debug("New request");
+            log.fine("New request");
             // TODO: should wrapping the stream as an HttpOutputStream be done here or in HttpRequest??
             HttpOutputStream response = new HttpOutputStream(connection.getOutputStream());
             HttpRequest httpRequest = new HttpRequest(connection.getInputStream());
@@ -52,7 +51,7 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
             // TODO: equivalent for Connection
 //            socket.close();
         } catch (Exception ex) {
-            log.error("", ex);
+            log.log(Level.SEVERE, "", ex);
         }
     }
 }
