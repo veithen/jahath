@@ -31,7 +31,7 @@ import com.google.code.jahath.server.http.HttpRequestHandler;
 import com.google.code.jahath.server.http.HttpResponse;
 
 class HttpRequestHandlerImpl implements HttpRequestHandler {
-    private static final Logger log = Logger.getLogger(HttpRequestHandlerImpl.class.getName());
+    static final Logger log = Logger.getLogger(HttpRequestHandlerImpl.class.getName());
     
     private final ConnectionHandler connectionHandler;
     private final Map<String,ConnectionImpl> connections = Collections.synchronizedMap(new HashMap<String,ConnectionImpl>());
@@ -41,12 +41,18 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
     }
 
     private ConnectionImpl createConnection(final ExecutionEnvironment env) throws IOException {
-        String id = UUID.randomUUID().toString();
+        final String id = UUID.randomUUID().toString();
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("Setting up new connection " + id);
+        }
         final ConnectionHandler connectionHandler = this.connectionHandler;
         final ConnectionImpl connection = new ConnectionImpl(id);
         connections.put(id, connection);
         env.execute(new Runnable() {
             public void run() {
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("Running " + connectionHandler.getClass().getName() + " on connection " + id);
+                }
                 connectionHandler.handle(env, connection);
             }
         });
@@ -76,7 +82,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
     }
     
     private void handleConnect(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws IOException {
-        response.setStatus(200);
+        response.setStatus(204);
         response.addHeader("X-JHT-Connection-Id", connection.getId());
         response.commit();
     }
@@ -88,7 +94,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
             // TODO: check what to do here
             Thread.currentThread().interrupt();
         }
-        response.setStatus(200);
+        response.setStatus(202);
         response.commit();
     }
     

@@ -17,10 +17,14 @@ package com.google.code.jahath.common.http;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.output.ProxyOutputStream;
 
 public class HttpOutputStream extends ProxyOutputStream {
+    private static final Logger log = Logger.getLogger(HttpOutputStream.class.getName());
+    
     private static final byte[] CRLF = new byte[] { '\r', '\n' };
     
     public HttpOutputStream(OutputStream proxy) {
@@ -28,6 +32,9 @@ public class HttpOutputStream extends ProxyOutputStream {
     }
     
     public void writeLine(String s) throws IOException {
+        if (log.isLoggable(Level.FINE)) {
+            log.fine(s);
+        }
         int len = s.length();
         byte[] bytes = new byte[len+2];
         for (int i=0; i<len; i++) {

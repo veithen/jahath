@@ -54,10 +54,11 @@ public class ChunkedOutputStream extends OutputStream {
     public void close() throws IOException {
         sizeBytes[7] = '0';
         parent.write(sizeBytes, 7, 3);
+        parent.flush();
     }
 
     @Override
     public void flush() throws IOException {
-        super.flush();
+        parent.flush();
     }
 }

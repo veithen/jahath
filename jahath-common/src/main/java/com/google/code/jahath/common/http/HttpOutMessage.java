@@ -51,6 +51,10 @@ public class HttpOutMessage {
     }
 
     protected void commit() throws IOException {
+        if (headersProvider != null) {
+            headersProvider.writeHeaders(this);
+        }
+        request.writeHeader("Content-Length", "0");
         request.writeLine("");
         request.flush();
     }

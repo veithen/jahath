@@ -41,13 +41,16 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
 
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
-            log.fine("New request");
-            // TODO: should wrapping the stream as an HttpOutputStream be done here or in HttpRequest??
-            HttpOutputStream response = new HttpOutputStream(connection.getOutputStream());
-            HttpRequest httpRequest = new HttpRequest(connection.getInputStream());
-            HttpResponse httpResponse = new HttpResponse(response, this);
-            requestHandler.handle(env, httpRequest, httpResponse);
-            response.flush();
+            log.fine("New connection");
+            while (true) {
+                // TODO: should wrapping the stream as an HttpOutputStream be done here or in HttpRequest??
+                HttpOutputStream response = new HttpOutputStream(connection.getOutputStream());
+                HttpRequest httpRequest = new HttpRequest(connection.getInputStream());
+                HttpResponse httpResponse = new HttpResponse(response, this);
+                requestHandler.handle(env, httpRequest, httpResponse);
+                response.flush();
+                log.fine("Finished processing request");
+            }
             // TODO: equivalent for Connection
 //            socket.close();
         } catch (Exception ex) {

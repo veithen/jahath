@@ -16,12 +16,21 @@
 package com.google.code.jahath.common.container;
 
 import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ContainerFactory {
-    public static Container createContainer() {
-        return new RootContainer(new ThreadPoolExecutor(20, 100, 30, TimeUnit.SECONDS, new SynchronousQueue<Runnable>()));
+    public static Container createContainer(final String name) {
+        ThreadFactory threadFactory = new ThreadFactory() {
+            private final AtomicInteger sequence = new AtomicInteger(0);
+            
+            public Thread newThread(Runnable r) {
+                return new Thread(r, name + "-" + sequence.incrementAndGet());
+            }
+        };
+        return new RootContainer(new ThreadPoolExecutor(20, 100, 30, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), threadFactory));
     }
     
     public static Container createContainer(ExecutionEnvironment env) {

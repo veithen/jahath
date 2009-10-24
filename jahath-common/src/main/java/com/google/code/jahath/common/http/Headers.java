@@ -48,4 +48,9 @@ public class Headers {
         // TODO: do this properly
         return Integer.parseInt(headers.get(name));
     }
+
+    @Override
+    public String toString() {
+        return headers.toString();
+    }
 }

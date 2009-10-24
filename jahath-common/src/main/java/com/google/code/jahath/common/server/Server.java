@@ -28,7 +28,7 @@ public class Server {
     private final Acceptor acceptor;
     
     public Server(int port, ConnectionHandler connectionHandler) throws IOException {
-        container = ContainerFactory.createContainer();
+        container = ContainerFactory.createContainer("Server:" + port);
         ExecutionEnvironment env = container.getExecutionEnvironment();
         acceptor = new Acceptor(new ServerSocket(port), env, connectionHandler);
         env.execute(acceptor);

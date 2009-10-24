@@ -17,10 +17,14 @@ package com.google.code.jahath.common.http;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.code.jahath.common.CRLFInputStream;
 
 public abstract class HttpInMessage {
+    private static final Logger log = Logger.getLogger(HttpInMessage.class.getName());
+    
     private final CRLFInputStream in;
     private Headers headers;
     private InputStream contentStream;
@@ -35,6 +39,9 @@ public abstract class HttpInMessage {
         if (headers == null) {
             processFirstLine(in.readLine());
             headers = new Headers(in);
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("HTTP headers: " + headers);
+            }
             // TODO: this is of course not exhaustive...
             if ("chunked".equals(headers.getHeader("Transfer-Encoding"))) {
                 contentStream = new ChunkedInputStream(in);
