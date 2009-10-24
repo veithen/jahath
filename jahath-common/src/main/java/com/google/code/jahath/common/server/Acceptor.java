@@ -42,7 +42,7 @@ class Acceptor implements Runnable {
         try {
             while (true) {
                 final Socket socket = serverSocket.accept();
-                env.getExecutorService().execute(new Runnable() {
+                env.execute(new Runnable() {
                     public void run() {
                         connectionHandler.handle(env, new SocketConnection(socket));
                     }

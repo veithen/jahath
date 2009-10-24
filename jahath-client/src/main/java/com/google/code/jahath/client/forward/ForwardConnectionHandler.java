@@ -36,7 +36,7 @@ class ForwardConnectionHandler implements ConnectionHandler {
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
             // TODO: generate proper labels
-            new ConnectionRelay(log, env.getExecutorService(), connection, "???", client.createConnection(), "jahath-server");
+            new ConnectionRelay(log, env, connection, "???", client.createConnection(), "jahath-server");
         } catch (IOException ex) {
             // TODO
             ex.printStackTrace();

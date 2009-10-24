@@ -89,7 +89,7 @@ public class SocksConnectionHandler implements ConnectionHandler {
                 log.fine("End processing SOCKS request");
             }
             
-            new ConnectionRelay(log, env.getExecutorService(), connection, "socks", new SocketConnection(socket), destination.toString()).run();
+            new ConnectionRelay(log, env, connection, "socks", new SocketConnection(socket), destination.toString()).run();
         } catch (IOException ex) {
             ex.printStackTrace(); // TODO
         }

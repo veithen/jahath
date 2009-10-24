@@ -21,20 +21,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.common.connection.Connection;
+import com.google.code.jahath.common.connection.ExecutionEnvironment;
 
 public class ConnectionRelay implements Runnable {
     private final Logger log;
-    private final ExecutorService executorService;
+    private final ExecutionEnvironment env;
     private final Connection connection1;
     private final String label1;
     private final Connection connection2;
     private final String label2;
 
     // TODO: we should ExecutionEnvironment here
-    public ConnectionRelay(Logger log, ExecutorService executorService, Connection connection1, String label1,
+    public ConnectionRelay(Logger log, ExecutionEnvironment env, Connection connection1, String label1,
             Connection connection2, String label2) {
         this.log = log;
-        this.executorService = executorService;
+        this.env = env;
         this.connection1 = connection1;
         this.label1 = label1;
         this.connection2 = connection2;
@@ -43,8 +44,8 @@ public class ConnectionRelay implements Runnable {
 
     public void run() {
         try {
-            Future<?> f1 = executorService.submit(new StreamRelay(log, label1 + " -> " + label2, connection1.getInputStream(), connection2.getOutputStream()));
-            Future<?> f2 = executorService.submit(new StreamRelay(log, label2 + " -> " + label1, connection2.getInputStream(), connection1.getOutputStream()));
+            Future<?> f1 = env.submit(new StreamRelay(log, label1 + " -> " + label2, connection1.getInputStream(), connection2.getOutputStream()));
+            Future<?> f2 = env.submit(new StreamRelay(log, label2 + " -> " + label1, connection2.getInputStream(), connection1.getOutputStream()));
             f1.get();
             f2.get();
         } catch (Exception ex) {

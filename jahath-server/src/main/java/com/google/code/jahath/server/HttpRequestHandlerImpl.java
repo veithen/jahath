@@ -45,7 +45,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         final ConnectionHandler connectionHandler = this.connectionHandler;
         final ConnectionImpl session = new ConnectionImpl(id);
         connections.put(id, session);
-        env.getExecutorService().execute(new Runnable() {
+        env.execute(new Runnable() {
             public void run() {
                 connectionHandler.handle(env, session);
             }

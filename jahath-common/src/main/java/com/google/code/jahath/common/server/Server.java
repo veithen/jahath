@@ -28,7 +28,7 @@ public class Server {
     public Server(int port, ConnectionHandler connectionHandler) throws IOException {
         env = new ExecutionEnvironment();
         acceptor = new Acceptor(new ServerSocket(port), env, connectionHandler);
-        env.getExecutorService().execute(acceptor);
+        env.execute(acceptor);
     }
 
     public final void stop() {

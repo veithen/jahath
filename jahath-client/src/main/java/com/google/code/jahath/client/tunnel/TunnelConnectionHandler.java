@@ -103,7 +103,7 @@ class TunnelConnectionHandler implements ConnectionHandler {
             }
             
             // TODO: generate proper labels
-            new ConnectionRelay(log, env.getExecutorService(), inConnection, "???", outConnection, "jahath-server").run();
+            new ConnectionRelay(log, env, inConnection, "???", outConnection, "jahath-server").run();
         } catch (IOException ex) {
             // TODO
             ex.printStackTrace();

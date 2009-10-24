@@ -16,6 +16,7 @@
 package com.google.code.jahath.common.connection;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -31,8 +32,12 @@ public class ExecutionEnvironment {
         this(new ThreadPoolExecutor(20, 100, 30, TimeUnit.SECONDS, new SynchronousQueue<Runnable>()));
     }
 
-    public final ExecutorService getExecutorService() {
-        return executorService;
+    public final void execute(Runnable command) {
+        executorService.execute(command);
+    }
+
+    public final Future<?> submit(Runnable task) {
+        return executorService.submit(task);
     }
 
     public final void shutdown() {
