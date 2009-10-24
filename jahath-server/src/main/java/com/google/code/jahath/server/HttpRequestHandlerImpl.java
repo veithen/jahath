@@ -25,7 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.common.connection.ConnectionHandler;
-import com.google.code.jahath.common.connection.ExecutionEnvironment;
+import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.server.http.HttpRequest;
 import com.google.code.jahath.server.http.HttpRequestHandler;
 import com.google.code.jahath.server.http.HttpResponse;

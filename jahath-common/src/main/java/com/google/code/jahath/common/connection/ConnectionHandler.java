@@ -15,6 +15,8 @@
  */
 package com.google.code.jahath.common.connection;
 
+import com.google.code.jahath.common.container.ExecutionEnvironment;
+
 public interface ConnectionHandler {
     void handle(ExecutionEnvironment env, Connection connection);
 }

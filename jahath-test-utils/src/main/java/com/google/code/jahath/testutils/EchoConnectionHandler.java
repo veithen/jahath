@@ -21,7 +21,7 @@ import java.io.OutputStream;
 
 import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
-import com.google.code.jahath.common.connection.ExecutionEnvironment;
+import com.google.code.jahath.common.container.ExecutionEnvironment;
 
 public class EchoConnectionHandler implements ConnectionHandler {
     public void handle(ExecutionEnvironment env, Connection connection) {

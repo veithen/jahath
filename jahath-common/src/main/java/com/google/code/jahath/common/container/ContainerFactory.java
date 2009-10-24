@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server.http;
+package com.google.code.jahath.common.container;
 
-import java.io.IOException;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-import com.google.code.jahath.common.container.ExecutionEnvironment;
-
-public interface HttpRequestHandler {
-    void handle(ExecutionEnvironment env, HttpRequest request, HttpResponse response) throws IOException;
+public class ContainerFactory {
+    public static Container createContainer() {
+        return new RootContainer(new ThreadPoolExecutor(20, 100, 30, TimeUnit.SECONDS, new SynchronousQueue<Runnable>()));
+    }
+    
+    public static Container createContainer(ExecutionEnvironment env) {
+        return new ChildContainer(env);
+    }
 }

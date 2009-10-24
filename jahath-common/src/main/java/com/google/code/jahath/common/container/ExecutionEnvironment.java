@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server.http;
+package com.google.code.jahath.common.container;
 
-import java.io.IOException;
+import java.util.concurrent.Future;
 
-import com.google.code.jahath.common.container.ExecutionEnvironment;
-
-public interface HttpRequestHandler {
-    void handle(ExecutionEnvironment env, HttpRequest request, HttpResponse response) throws IOException;
+public interface ExecutionEnvironment {
+    void execute(Runnable command);
+    Future<?> submit(Runnable task);
 }

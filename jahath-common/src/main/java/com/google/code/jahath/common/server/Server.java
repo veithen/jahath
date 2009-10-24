@@ -19,20 +19,23 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 import com.google.code.jahath.common.connection.ConnectionHandler;
-import com.google.code.jahath.common.connection.ExecutionEnvironment;
+import com.google.code.jahath.common.container.Container;
+import com.google.code.jahath.common.container.ContainerFactory;
+import com.google.code.jahath.common.container.ExecutionEnvironment;
 
 public class Server {
-    private final ExecutionEnvironment env;
+    private final Container container;
     private final Acceptor acceptor;
     
     public Server(int port, ConnectionHandler connectionHandler) throws IOException {
-        env = new ExecutionEnvironment();
+        container = ContainerFactory.createContainer();
+        ExecutionEnvironment env = container.getExecutionEnvironment();
         acceptor = new Acceptor(new ServerSocket(port), env, connectionHandler);
         env.execute(acceptor);
     }
 
     public final void stop() {
         acceptor.stop();
-        env.shutdown();
+        container.shutdown();
     }
 }

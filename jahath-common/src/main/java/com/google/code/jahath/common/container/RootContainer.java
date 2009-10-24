@@ -13,34 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common.connection;
+package com.google.code.jahath.common.container;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-public class ExecutionEnvironment {
-    private final ExecutorService executorService;
+class RootContainer implements Container {
+    class ExecutionEnvironmentImpl implements ExecutionEnvironment {
+        public final void execute(Runnable command) {
+            executorService.execute(command);
+        }
 
-    public ExecutionEnvironment(ExecutorService executorService) {
-        this.executorService = executorService;
+        public final Future<?> submit(Runnable task) {
+            return executorService.submit(task);
+        }
     }
     
-    public ExecutionEnvironment() {
-        this(new ThreadPoolExecutor(20, 100, 30, TimeUnit.SECONDS, new SynchronousQueue<Runnable>()));
+    final ExecutorService executorService;
+    private final ExecutionEnvironment env;
+
+    public RootContainer(ExecutorService executorService) {
+        this.executorService = executorService;
+        env = new ExecutionEnvironmentImpl();
     }
 
-    public final void execute(Runnable command) {
-        executorService.execute(command);
+    public ExecutionEnvironment getExecutionEnvironment() {
+        return env;
     }
 
-    public final Future<?> submit(Runnable task) {
-        return executorService.submit(task);
-    }
-
-    public final void shutdown() {
+    public void shutdown() {
         executorService.shutdown();
     }
 }

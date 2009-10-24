@@ -21,7 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.common.connection.Connection;
-import com.google.code.jahath.common.connection.ExecutionEnvironment;
+import com.google.code.jahath.common.container.ExecutionEnvironment;
 
 public class ConnectionRelay implements Runnable {
     private final Logger log;

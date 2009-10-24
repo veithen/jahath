@@ -22,7 +22,7 @@ import com.google.code.jahath.client.JahathClient;
 import com.google.code.jahath.common.ConnectionRelay;
 import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
-import com.google.code.jahath.common.connection.ExecutionEnvironment;
+import com.google.code.jahath.common.container.ExecutionEnvironment;
 
 class ForwardConnectionHandler implements ConnectionHandler {
     private static final Logger log = Logger.getLogger(ForwardConnectionHandler.class.getName());
