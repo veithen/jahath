@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<context>
+    <scope name="My Project" type="Project">
+        <workspace>
+            <element name="jahath-client/src/main/java" type="JavaRootDirectory"/>
+            <element name="jahath-client/target/classes" type="JavaRootDirectory"/>
+            <element name="jahath-common/src/main/java" type="JavaRootDirectory"/>
+            <element name="jahath-common/target/classes" type="JavaRootDirectory"/>
+            <element name="jahath-server/src/main/java" type="JavaRootDirectory"/>
+            <element name="jahath-server/target/classes" type="JavaRootDirectory"/>
+        </workspace>
+    </scope>
+    <scope name="External" type="External">
+        <element name="Filter" type="TypeFilter">
+            <element name="**" type="IncludeTypePattern"/>
+        </element>
+    </scope>
+    <scope name="Global" type="Global">
+        <element name="Configuration" type="Configuration">
+            <element name="CycleAnalysisAsymmetrical" type="ConfigurationSwitchDisabled"/>
+            <element name="CycleAnalysisDepthSourceFile" type="ConfigurationSwitchDisabled"/>
+        </element>
+        <element name="Filter" type="TypeFilter">
+            <element name="**" type="IncludeTypePattern"/>
+        </element>
+    </scope>
+</context>
