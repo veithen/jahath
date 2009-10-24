@@ -15,7 +15,6 @@
  */
 package com.google.code.jahath.server.socks;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
@@ -29,7 +28,7 @@ import com.google.code.jahath.testutils.EchoTestUtil;
 
 public class SocksTest {
     @Test
-    public void test() throws IOException {
+    public void test() throws Exception {
         Server socksServer = new Server(9000, new SocksConnectionHandler());
         Server echoServer = new Server(9001, new EchoConnectionHandler());
         Socket socket = new Socket(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("localhost", 9000)));

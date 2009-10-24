@@ -17,6 +17,7 @@ package com.google.code.jahath.common.container;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 class RootContainer implements Container {
     class ExecutionEnvironmentImpl implements ExecutionEnvironment {
@@ -41,7 +42,9 @@ class RootContainer implements Container {
         return env;
     }
 
-    public void shutdown() {
+    public void shutdown() throws InterruptedException {
         executorService.shutdown();
+        // TODO
+//        executorService.awaitTermination(60, TimeUnit.SECONDS);
     }
 }

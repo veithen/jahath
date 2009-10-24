@@ -97,4 +97,8 @@ class ConnectionImpl implements Connection {
     public InputStream getInputStream() {
         return in;
     }
+
+    public void close() throws IOException {
+        // TODO
+    }
 }

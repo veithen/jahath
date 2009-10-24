@@ -17,5 +17,5 @@ package com.google.code.jahath.common.container;
 
 public interface Container {
     ExecutionEnvironment getExecutionEnvironment();
-    void shutdown();
+    void shutdown() throws InterruptedException;
 }

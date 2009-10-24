@@ -34,7 +34,7 @@ public class Server {
         env.execute(acceptor);
     }
 
-    public final void stop() {
+    public final void stop() throws InterruptedException {
         acceptor.stop();
         container.shutdown();
     }

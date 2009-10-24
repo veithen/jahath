@@ -29,7 +29,7 @@ public class JahathServer {
         httpServer = new HttpServer(port, new HttpRequestHandlerImpl(connectionHandler));
     }
 
-    public final void stop() {
+    public final void stop() throws InterruptedException {
         httpServer.stop();
     }
 }

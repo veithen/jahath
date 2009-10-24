@@ -45,4 +45,11 @@ public interface Connection {
      * @throws IOException 
      */
     OutputStream getOutputStream() throws IOException;
+    
+    /**
+     * Close this connection.
+     * 
+     * @throws IOException
+     */
+    void close() throws IOException;
 }

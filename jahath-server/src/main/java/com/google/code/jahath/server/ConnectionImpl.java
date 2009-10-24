@@ -29,6 +29,7 @@ import com.google.code.jahath.common.connection.Connection;
 class ConnectionImpl implements Connection {
     static class SessionInputStream extends InputStream {
         InputStream parent;
+        private boolean closed;
 
         private void awaitParent() throws InterruptedIOException {
             while (parent == null) {
@@ -66,6 +67,11 @@ class ConnectionImpl implements Connection {
                     return c;
                 }
             }
+        }
+
+        @Override
+        public synchronized void close() throws IOException {
+            closed = true;
         }
     }
     
@@ -179,5 +185,9 @@ class ConnectionImpl implements Connection {
     public OutputStream getOutputStream() {
         // TODO: handle logging properly
         return new LoggingOutputStream(sessionOutputStream, log, "out");
+    }
+
+    public void close() throws IOException {
+        // TODO
     }
 }
