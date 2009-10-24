@@ -43,14 +43,14 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
     private ConnectionImpl createConnection(final ExecutionEnvironment env) throws IOException {
         String id = UUID.randomUUID().toString();
         final ConnectionHandler connectionHandler = this.connectionHandler;
-        final ConnectionImpl session = new ConnectionImpl(id);
-        connections.put(id, session);
+        final ConnectionImpl connection = new ConnectionImpl(id);
+        connections.put(id, connection);
         env.execute(new Runnable() {
             public void run() {
-                connectionHandler.handle(env, session);
+                connectionHandler.handle(env, connection);
             }
         });
-        return session;
+        return connection;
     }
     
     private ConnectionImpl getConnection(String id) {
