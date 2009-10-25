@@ -17,10 +17,13 @@ package com.google.code.jahath.common.http;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 import com.google.code.jahath.common.CRLFInputStream;
 
 public class ChunkedInputStream extends InputStream {
+    private static final Logger log = Logger.getLogger(ChunkedInputStream.class.getName());
+    
     private final CRLFInputStream parent;
     
     /**
@@ -47,6 +50,9 @@ public class ChunkedInputStream extends InputStream {
                 throw new IOException("Invalid chunk size");
             }
             if (remaining == 0) {
+                while ((s = parent.readLine()).length() > 0) {
+                    log.warning("Not interpreting trailer in chunked encoding: " + s);
+                }
                 remaining = -2;
             }
         }

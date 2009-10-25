@@ -31,8 +31,7 @@ import org.mortbay.jetty.handler.AbstractHandler;
 import com.google.code.jahath.common.CRLFInputStream;
 
 public class ChunkedInputStreamTest {
-    @Test
-    public void test() throws Exception {
+    private void test(int requestCount) throws Exception {
         Server server = new Server(5555);
         final CRC expectedCRC = new CRC();
         server.setHandler(new AbstractHandler() {
@@ -48,21 +47,35 @@ public class ChunkedInputStreamTest {
             Socket socket = new Socket("localhost", 5555);
             try {
                 HttpOutputStream out = new HttpOutputStream(socket.getOutputStream());
-                out.writeLine("GET / HTTP/1.1");
-                out.writeHeader("Host", "localhost");
-                out.writeHeader("Connection", "keep-alive");
-                out.flushHeaders();
                 CRLFInputStream in = new CRLFInputStream(socket.getInputStream());
-                Util.consumeHeaders(in);
-                ChunkedInputStream chunked = new ChunkedInputStream(in);
-                CRC actualCRC = new CRC();
-                actualCRC.update(chunked);
-                Assert.assertEquals(expectedCRC.getValue(), actualCRC.getValue());
+                for (int i=0; i<requestCount; i++) {
+                    out.writeLine("GET / HTTP/1.1");
+                    out.writeHeader("Host", "localhost");
+                    out.writeHeader("Connection", "keep-alive");
+                    out.flushHeaders();
+                    Util.consumeHeaders(in);
+                    ChunkedInputStream chunked = new ChunkedInputStream(in);
+                    CRC actualCRC = new CRC();
+                    actualCRC.update(chunked);
+                    Assert.assertEquals(expectedCRC.getValue(), actualCRC.getValue());
+                    expectedCRC.reset();
+                    actualCRC.reset();
+                }
             } finally {
                 socket.close();
             }
         } finally {
             server.stop();
         }
+    }
+
+    @Test
+    public void testWithoutKeepAlive() throws Exception {
+        test(1);
+    }
+
+    @Test
+    public void testWithKeepAlive() throws Exception {
+        test(4);
     }
 }
