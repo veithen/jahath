@@ -54,6 +54,8 @@ public class ChunkedOutputStream extends OutputStream {
     public void close() throws IOException {
         sizeBytes[7] = '0';
         parent.write(sizeBytes, 7, 3);
+        // <-- Trailer would be written here
+        parent.write(sizeBytes, 8, 2);
         parent.flush();
     }
 

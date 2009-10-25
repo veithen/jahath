@@ -19,19 +19,19 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class CRC {
-    int value;
+    private int value;
     
-    public void update(byte[] b, int off, int len) {
+    public synchronized void update(byte[] b, int off, int len) {
         for (int i=0; i<len; i++) {
             value += b[off+i] & 0xFF;
         }
     }
     
-    public void update(byte[] b) {
+    public synchronized void update(byte[] b) {
         update(b, 0, b.length);
     }
 
-    public void update(InputStream in) throws IOException {
+    public synchronized void update(InputStream in) throws IOException {
         byte[] buffer = new byte[2048];
         int c;
         while ((c = in.read(buffer)) != -1) {
@@ -39,7 +39,11 @@ public class CRC {
         }
     }
 
-    public int getValue() {
+    public synchronized int getValue() {
         return value;
+    }
+    
+    public synchronized void reset() {
+        value = 0;
     }
 }

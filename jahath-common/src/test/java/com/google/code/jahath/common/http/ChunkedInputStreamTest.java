@@ -16,9 +16,7 @@
 package com.google.code.jahath.common.http;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +29,6 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.AbstractHandler;
 
 import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.http.ChunkedInputStream;
-import com.google.code.jahath.common.http.HttpOutputStream;
 
 public class ChunkedInputStreamTest {
     @Test
@@ -42,17 +38,8 @@ public class ChunkedInputStreamTest {
         server.setHandler(new AbstractHandler() {
             public void handle(String target, HttpServletRequest request, HttpServletResponse response,
                     int dispatch) throws IOException, ServletException {
-                Random random = new Random();
                 response.setContentType("application/octet-stream");
-                OutputStream out = response.getOutputStream();
-                for (int i=0; i<100; i++) {
-                    int len = 16 + random.nextInt(4080);
-                    byte[] buffer = new byte[len];
-                    random.nextBytes(buffer);
-                    out.write(buffer);
-                    out.flush();
-                    expectedCRC.update(buffer);
-                }
+                Util.writeRandomData(response.getOutputStream(), expectedCRC);
                 ((Request)request).setHandled(true);
             }
         });
@@ -66,12 +53,7 @@ public class ChunkedInputStreamTest {
                 out.writeHeader("Connection", "keep-alive");
                 out.flushHeaders();
                 CRLFInputStream in = new CRLFInputStream(socket.getInputStream());
-                while (true) {
-                    String line = in.readLine();
-                    if (line.length() == 0) {
-                        break;
-                    }
-                }
+                Util.consumeHeaders(in);
                 ChunkedInputStream chunked = new ChunkedInputStream(in);
                 CRC actualCRC = new CRC();
                 actualCRC.update(chunked);
