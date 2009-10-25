@@ -17,6 +17,21 @@ package com.google.code.jahath.common.http;
 
 import java.io.IOException;
 
+/**
+ * Provider of headers to be added to an {@link HttpOutMessage}. HTTP requests and responses contain
+ * two categories of headers:
+ * <ul>
+ * <li>Headers related to the request or response entity, such as <tt>Content-Type</tt>.
+ * <li>Headers used for connection management, such as <tt>Connection</tt> and
+ * <tt>Proxy-Connection</tt>.
+ * </ul>
+ * These two types of headers are managed at different levels in the client or server
+ * implementation. This interface allows the code responsible for connection management to inject
+ * headers as necessary. It may also be used to add headers such as <tt>User-Agent</tt> that should
+ * be added to all requests or responses.
+ * 
+ * @author Andreas Veithen
+ */
 public interface HttpHeadersProvider {
     void writeHeaders(HttpOutMessage message) throws IOException;
 }
