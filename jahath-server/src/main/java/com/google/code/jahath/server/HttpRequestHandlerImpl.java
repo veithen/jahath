@@ -16,6 +16,7 @@
 package com.google.code.jahath.server;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.HashMap;
@@ -93,13 +94,19 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
     }
     
     private void handleSend(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws IOException {
-        try {
-            connection.consume(request.getInputStream());
-        } catch (InterruptedException ex) {
-            // TODO: check what to do here
-            Thread.currentThread().interrupt();
+        InputStream data = request.getInputStream();
+        if (data == null) {
+            log.info("Protocol error: request didn't contain data");
+            response.setStatus(400);
+        } else {
+            try {
+                connection.consume(request.getInputStream());
+            } catch (InterruptedException ex) {
+                // TODO: check what to do here
+                Thread.currentThread().interrupt();
+            }
+            response.setStatus(202);
         }
-        response.setStatus(202);
         response.commit();
     }
     
