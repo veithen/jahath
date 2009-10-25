@@ -35,7 +35,7 @@ public class Server {
     }
 
     public final void stop() throws InterruptedException {
-        acceptor.stop();
+        acceptor.stop(); // TODO: should no longer be necessary because it will be invoked during container shutdown
         container.shutdown();
     }
 }

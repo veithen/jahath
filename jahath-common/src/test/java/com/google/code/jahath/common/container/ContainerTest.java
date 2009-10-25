@@ -15,9 +15,17 @@
  */
 package com.google.code.jahath.common.container;
 
-import java.util.concurrent.Future;
+import org.junit.Assert;
+import org.junit.Test;
 
-public interface ExecutionEnvironment {
-    void execute(Task task);
-    Future<?> submit(Task task);
+public class ContainerTest {
+    @Test
+    public void test() throws Exception {
+        Container container = ContainerFactory.createContainer("Test");
+        ExecutionEnvironment env = container.getExecutionEnvironment();
+        StoppableTask task = new StoppableTask();
+        env.execute(task);
+        container.shutdown();
+        Assert.assertTrue(task.isStoppedCleanly());
+    }
 }

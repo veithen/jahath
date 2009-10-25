@@ -15,9 +15,27 @@
  */
 package com.google.code.jahath.common.container;
 
-import java.util.concurrent.Future;
+public class StoppableTask implements Task {
+    private boolean running = true;
+    private boolean stoppedCleanly;
+    
+    public synchronized void run() {
+        try {
+            while (running) {
+                wait();
+            }
+            stoppedCleanly = true;
+        } catch (InterruptedException ex) {
+            // Just exit
+        }
+    }
 
-public interface ExecutionEnvironment {
-    void execute(Task task);
-    Future<?> submit(Task task);
+    public synchronized void stop() {
+        running = false;
+        notifyAll();
+    }
+
+    public synchronized boolean isStoppedCleanly() {
+        return stoppedCleanly;
+    }
 }

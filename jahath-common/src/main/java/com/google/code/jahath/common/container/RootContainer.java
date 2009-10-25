@@ -15,23 +15,27 @@
  */
 package com.google.code.jahath.common.container;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 class RootContainer implements Container {
     class ExecutionEnvironmentImpl implements ExecutionEnvironment {
-        public final void execute(Runnable command) {
-            executorService.execute(command);
+        public final void execute(Task task) {
+            executorService.execute(wrapTask(task));
         }
 
-        public final Future<?> submit(Runnable task) {
-            return executorService.submit(task);
+        public final Future<?> submit(Task task) {
+            // TODO not entirely correct: if the task is canceled it will still be in the activeTasks collection!
+            return executorService.submit(wrapTask(task));
         }
     }
     
     final ExecutorService executorService;
     private final ExecutionEnvironment env;
+    final Collection<Task> activeTasks = new HashSet<Task>();
 
     public RootContainer(ExecutorService executorService) {
         this.executorService = executorService;
@@ -42,9 +46,30 @@ class RootContainer implements Container {
         return env;
     }
 
+    Runnable wrapTask(final Task task) {
+        synchronized (activeTasks) {
+            activeTasks.add(task);
+        }
+        return new Runnable() {
+            public void run() {
+                try {
+                    task.run();
+                } finally {
+                    synchronized (activeTasks) {
+                        activeTasks.remove(task);
+                    }
+                }
+            }
+        };
+    }
+    
     public void shutdown() throws InterruptedException {
         executorService.shutdown();
-        // TODO
-//        executorService.awaitTermination(60, TimeUnit.SECONDS);
+        synchronized (activeTasks) {
+            for (Task task : activeTasks) {
+                task.stop();
+            }
+        }
+        executorService.awaitTermination(5, TimeUnit.SECONDS);
     }
 }

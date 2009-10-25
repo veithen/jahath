@@ -19,11 +19,11 @@ import java.util.concurrent.Future;
 
 class ChildContainer implements Container {
     class ExecutionEnvironmentImpl implements ExecutionEnvironment {
-        public void execute(Runnable command) {
-            parentEnv.execute(command);
+        public void execute(Task task) {
+            parentEnv.execute(task);
         }
 
-        public Future<?> submit(Runnable task) {
+        public Future<?> submit(Task task) {
             return parentEnv.submit(task);
         }
     }

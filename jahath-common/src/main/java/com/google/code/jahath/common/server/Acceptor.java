@@ -24,9 +24,10 @@ import java.util.logging.Logger;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.google.code.jahath.common.container.Task;
 
-class Acceptor implements Runnable {
-    private static final Logger log = Logger.getLogger(Acceptor.class.getName());
+class Acceptor implements Task {
+    static final Logger log = Logger.getLogger(Acceptor.class.getName());
 
     private final ServerSocket serverSocket;
     final ExecutionEnvironment env;
@@ -42,9 +43,19 @@ class Acceptor implements Runnable {
         try {
             while (true) {
                 final Socket socket = serverSocket.accept();
-                env.execute(new Runnable() {
+                env.execute(new Task() {
                     public void run() {
                         connectionHandler.handle(env, new SocketConnection(socket));
+                    }
+
+                    public void stop() {
+                        if (!socket.isClosed()) {
+                            try {
+                                socket.close();
+                            } catch (IOException ex) {
+                                log.log(Level.SEVERE, "Error closing socket", ex);
+                            }
+                        }
                     }
                 });
             }

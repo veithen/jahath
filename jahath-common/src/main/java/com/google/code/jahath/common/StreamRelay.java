@@ -23,7 +23,9 @@ import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
 
-public class StreamRelay implements Runnable {
+import com.google.code.jahath.common.container.Task;
+
+public class StreamRelay implements Task {
     private final Logger log;
     private final String label;
     private final InputStream in;
@@ -54,5 +56,9 @@ public class StreamRelay implements Runnable {
             IOUtils.closeQuietly(out);
         }
         log.info(label + " closed");
+    }
+
+    public void stop() {
+        // TODO
     }
 }

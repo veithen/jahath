@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.google.code.jahath.common.container.Task;
 import com.google.code.jahath.server.http.HttpRequest;
 import com.google.code.jahath.server.http.HttpRequestHandler;
 import com.google.code.jahath.server.http.HttpResponse;
@@ -48,12 +49,16 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         final ConnectionHandler connectionHandler = this.connectionHandler;
         final ConnectionImpl connection = new ConnectionImpl(id);
         connections.put(id, connection);
-        env.execute(new Runnable() {
+        env.execute(new Task() {
             public void run() {
                 if (log.isLoggable(Level.FINE)) {
                     log.fine("Running " + connectionHandler.getClass().getName() + " on connection " + id);
                 }
                 connectionHandler.handle(env, connection);
+            }
+
+            public void stop() {
+                // TODO
             }
         });
         return connection;

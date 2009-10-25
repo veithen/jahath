@@ -130,8 +130,7 @@ public class ChunkedOutputStreamTest {
         testServer(1);
     }
 
-    // TODO: this test doesn't work properly yet because the previous test fails to close the connection and java.net.URL happily reuses this connection
-//    @Test
+    @Test
     public void testServerWithKeepAlive() throws Exception {
         testServer(4);
     }
