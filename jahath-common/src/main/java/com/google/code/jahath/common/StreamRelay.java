@@ -41,8 +41,8 @@ public class StreamRelay implements Runnable {
         try {
             int n;
             while ((n = in.read(buf)) != -1) {
-                if (log.isLoggable(Level.FINE)) {
-                    HexDump.log(log, label, buf, 0, n);
+                if (log.isLoggable(Level.FINER)) {
+                    HexDump.log(log, Level.FINER, label, buf, 0, n);
                 }
                 out.write(buf, 0, n);
                 out.flush();

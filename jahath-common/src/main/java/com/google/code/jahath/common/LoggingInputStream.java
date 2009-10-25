@@ -23,11 +23,13 @@ import java.util.logging.Logger;
 public class LoggingInputStream extends InputStream{
     private final InputStream parent;
     private final Logger log;
+    private final Level level;
     private final String label;
     
-    public LoggingInputStream(InputStream parent, Logger log, String label) {
+    LoggingInputStream(InputStream parent, Logger log, Level level, String label) {
         this.parent = parent;
         this.log = log;
+        this.level = level;
         this.label = label;
     }
 
@@ -39,12 +41,10 @@ public class LoggingInputStream extends InputStream{
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
         int c = parent.read(b, off, len);
-        if (log.isLoggable(Level.FINE)) {
-            if (c == -1) {
-                log.fine(label + " - end of stream");
-            } else {
-                HexDump.log(log, label, b, off, c);
-            }
+        if (c == -1) {
+            log.log(level, label + " - end of stream");
+        } else {
+            HexDump.log(log, level, label, b, off, c);
         }
         return c;
     }

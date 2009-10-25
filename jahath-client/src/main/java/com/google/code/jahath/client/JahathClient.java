@@ -21,10 +21,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.common.LoggingInputStream;
-import com.google.code.jahath.common.LoggingOutputStream;
+import com.google.code.jahath.common.LogUtil;
 import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
@@ -66,16 +66,14 @@ public class JahathClient {
         } else {
             socket = new Socket(proxyConfiguration.getHost(), proxyConfiguration.getPort());
         }
-        // TODO: only wrap in LoggingOutputStream if necessary
-        HttpOutputStream request = new HttpOutputStream(new LoggingOutputStream(socket.getOutputStream(), log, "HTTP request"));
+        HttpOutputStream request = new HttpOutputStream(LogUtil.log(socket.getOutputStream(), log, Level.FINER, "HTTP request"));
         String address = serverPort == 80 ? serverHost : serverHost + ":" + serverPort;
         if (proxyConfiguration == null) {
             request.writeLine(method + " " + path + " HTTP/1.1");
         } else {
             request.writeLine(method + " http://" + address + path + " HTTP/1.1");
         }
-        // TODO: only wrap in LoggingInputStream if necessary
-        HttpRequest httpRequest = new HttpRequest(request, new LoggingInputStream(socket.getInputStream(), log, "HTTP response"));
+        HttpRequest httpRequest = new HttpRequest(request, LogUtil.log(socket.getInputStream(), log, Level.FINER, "HTTP response"));
         httpRequest.addHeader("Host", address);
         httpRequest.addHeader("Connection", "keep-alive");
         if (proxyConfiguration != null) {

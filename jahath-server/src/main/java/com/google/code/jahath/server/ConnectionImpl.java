@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.code.jahath.common.LogUtil;
 import com.google.code.jahath.common.LoggingInputStream;
 import com.google.code.jahath.common.LoggingOutputStream;
 import com.google.code.jahath.common.connection.Connection;
@@ -178,13 +179,11 @@ class ConnectionImpl implements Connection {
     }
     
     public InputStream getInputStream() {
-        // TODO: handle logging properly
-        return new LoggingInputStream(sessionInputStream, log, "in");
+        return LogUtil.log(sessionInputStream, log, Level.FINER, "in");
     }
     
     public OutputStream getOutputStream() {
-        // TODO: handle logging properly
-        return new LoggingOutputStream(sessionOutputStream, log, "out");
+        return LogUtil.log(sessionOutputStream, log, Level.FINER, "out");
     }
 
     public void close() throws IOException {

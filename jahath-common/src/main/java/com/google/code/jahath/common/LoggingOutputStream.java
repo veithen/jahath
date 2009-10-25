@@ -23,51 +23,43 @@ import java.util.logging.Logger;
 public class LoggingOutputStream extends OutputStream {
     private final OutputStream parent;
     private final Logger log;
+    private final Level level;
     private final String label;
 
-    public LoggingOutputStream(OutputStream parent, Logger log, String label) {
+    LoggingOutputStream(OutputStream parent, Logger log, Level level, String label) {
         this.parent = parent;
         this.log = log;
+        this.level = level;
         this.label = label;
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        if (log.isLoggable(Level.FINE)) {
-            HexDump.log(log, label, b, off, len);
-        }
+        HexDump.log(log, level, label, b, off, len);
         parent.write(b, off, len);
     }
 
     @Override
     public void write(byte[] b) throws IOException {
-        if (log.isLoggable(Level.FINE)) {
-            HexDump.log(log, label, b, 0, b.length);
-        }
+        HexDump.log(log, level, label, b, 0, b.length);
         parent.write(b);
     }
 
     @Override
     public void write(int b) throws IOException {
-        if (log.isLoggable(Level.FINE)) {
-            log.fine(label + " - writing single byte " + b);
-        }
+        log.log(level, label + " - writing single byte " + b);
         parent.write(b);
     }
 
     @Override
     public void flush() throws IOException {
-        if (log.isLoggable(Level.FINE)) {
-            log.fine(label + " - flushing");
-        }
+        log.log(level, label + " - flushing");
         parent.flush();
     }
 
     @Override
     public void close() throws IOException {
-        if (log.isLoggable(Level.FINE)) {
-            log.fine(label + " - closing");
-        }
+        log.log(level, label + " - closing");
         parent.close();
     }
 }

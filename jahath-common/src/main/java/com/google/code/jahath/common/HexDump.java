@@ -15,6 +15,7 @@
  */
 package com.google.code.jahath.common;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class HexDump {
@@ -55,11 +56,10 @@ public class HexDump {
         }
     }
     
-    // TODO: we should be able to specify the log level here!
-    public static void log(Logger log, String label, byte[] data, int offset, int length) {
+    public static void log(Logger log, Level level, String label, byte[] data, int offset, int length) {
         StringBuilder dump = new StringBuilder(label);
         dump.append('\n');
         HexDump.hexDump(dump, data, offset, length);
-        log.fine(dump.toString());
+        log.log(level, dump.toString());
     }
 }
