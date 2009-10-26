@@ -42,8 +42,14 @@ public abstract class HttpInMessage {
             if (log.isLoggable(Level.FINE)) {
                 log.fine("HTTP headers: " + headers);
             }
-            // TODO: this is of course not exhaustive...
-            if ("chunked".equals(headers.getHeader("Transfer-Encoding"))) {
+            Integer contentLength = headers.getIntHeader("Content-Length");
+            if (contentLength != null) {
+                if (contentLength == 0) {
+                    contentStream = null;
+                } else {
+                    contentStream = new LengthLimitedInputStream(in, contentLength);
+                }
+            } else if ("chunked".equals(headers.getHeader("Transfer-Encoding"))) {
                 contentStream = new ChunkedInputStream(in);
             } else {
                 contentStream = null;

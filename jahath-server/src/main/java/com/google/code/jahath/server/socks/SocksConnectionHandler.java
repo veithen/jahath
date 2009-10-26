@@ -42,7 +42,7 @@ public class SocksConnectionHandler implements ConnectionHandler {
             SocksDataOutputStream out = new SocksDataOutputStream(new BufferedOutputStream(connection.getOutputStream(), 64));
             
             if (fineEnabled) {
-                log.fine("Start processing SOCKS request");
+                log.fine("Waiting for SOCKS request");
             }
             if (in.readByte() != SocksConstants.SOCKS_VERSION) {
                 return; // TODO
@@ -56,6 +56,9 @@ public class SocksConnectionHandler implements ConnectionHandler {
             out.writeByte(SocksConstants.AUTH_USERNAME_PASSWORD);
             out.flush();
             
+            if (fineEnabled) {
+                log.fine("Waiting for SOCKS authentication");
+            }
             if (in.readByte() != SocksConstants.USERNAME_PASSWORD_AUTH_VERSION) {
                 return; // TODO
             }
@@ -66,6 +69,9 @@ public class SocksConnectionHandler implements ConnectionHandler {
             out.writeByte(0);
             out.flush();
             
+            if (fineEnabled) {
+                log.fine("Waiting for SOCKS connection request");
+            }
             if (in.readByte() != SocksConstants.SOCKS_VERSION) {
                 return; // TODO
             }

@@ -23,23 +23,35 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.common.LogUtil;
-import com.google.code.jahath.common.LoggingInputStream;
-import com.google.code.jahath.common.LoggingOutputStream;
 import com.google.code.jahath.common.connection.Connection;
 
 class ConnectionImpl implements Connection {
-    static class SessionInputStream extends InputStream {
+    class SessionInputStream extends InputStream {
         InputStream parent;
         private boolean closed;
 
         private void awaitParent() throws InterruptedIOException {
             while (parent == null) {
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine(id +": Waiting for new input stream");
+                }
                 try {
                     wait();
                 } catch (InterruptedException ex) {
                     throw new InterruptedIOException();
                 }
             }
+            if (log.isLoggable(Level.FINE)) {
+                log.fine(id +": Got new input stream");
+            }
+        }
+        
+        private void consumed() {
+            parent = null;
+            if (log.isLoggable(Level.FINE)) {
+                log.fine(id +": Input stream consumed");
+            }
+            notifyAll();
         }
         
         @Override
@@ -48,8 +60,7 @@ class ConnectionImpl implements Connection {
                 awaitParent();
                 int b = parent.read();
                 if (b == -1) {
-                    parent = null;
-                    notifyAll();
+                    consumed();
                 } else {
                     return b;
                 }
@@ -62,8 +73,7 @@ class ConnectionImpl implements Connection {
                 awaitParent();
                 int c = parent.read(b, off, len);
                 if (c == -1) {
-                    parent = null;
-                    notifyAll();
+                    consumed();
                 } else {
                     return c;
                 }
@@ -89,6 +99,9 @@ class ConnectionImpl implements Connection {
                 } catch (InterruptedException ex) {
                     throw new InterruptedIOException();
                 }
+            }
+            if (log.isLoggable(Level.FINE)) {
+                log.fine(id +": Got new output stream");
             }
         }
         
@@ -143,7 +156,7 @@ class ConnectionImpl implements Connection {
             sessionInputStream.notifyAll();
             while (sessionInputStream.parent != null) {
                 if (log.isLoggable(Level.FINE)) {
-                    log.fine(id + ": Waiting for connection to disconnect output stream");
+                    log.fine(id + ": Waiting for connection to disconnect input stream");
                 }
                 sessionInputStream.wait();
             }

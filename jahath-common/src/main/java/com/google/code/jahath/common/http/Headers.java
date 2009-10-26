@@ -44,9 +44,9 @@ public class Headers {
         return headers.get(name);
     }
     
-    public int getIntHeader(String name) {
-        // TODO: do this properly
-        return Integer.parseInt(headers.get(name));
+    public Integer getIntHeader(String name) {
+        String value = headers.get(name);
+        return value == null ? null : Integer.valueOf(value);
     }
 
     @Override
