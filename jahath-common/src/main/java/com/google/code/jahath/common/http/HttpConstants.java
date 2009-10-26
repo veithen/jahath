@@ -15,7 +15,12 @@
  */
 package com.google.code.jahath.common.http;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class HttpConstants {
+    private static final Map<Integer,String> reasonPhrases = new HashMap<Integer,String>();
+    
     private HttpConstants() {}
     
     /**
@@ -548,4 +553,62 @@ public class HttpConstants {
      * supported and what other protocols are supported by that server.</blockquote>
      */
     public static final int SC_HTTP_VERSION_NOT_SUPPORTED = 505;
+
+    /**
+     * Get the reason phrase for a given status code.
+     * 
+     * @param code the status code
+     * @return the corresponding reason phrase
+     * @throws IllegalArgumentException if the status code is unknown
+     */
+    public static String getReasonPhrase(int code) {
+        String reasonPhrase = reasonPhrases.get(code);
+        if (reasonPhrase == null) {
+            throw new IllegalArgumentException("Unknown status code");
+        } else {
+            return reasonPhrase;
+        }
+    }
+    
+    static {
+        reasonPhrases.put(SC_CONTINUE, "Continue");
+        reasonPhrases.put(SC_SWITCHING_PROTOCOLS, "Switching Protocols");
+        reasonPhrases.put(SC_OK, "OK");
+        reasonPhrases.put(SC_CREATED, "Created");
+        reasonPhrases.put(SC_ACCEPTED, "Accepted");
+        reasonPhrases.put(SC_NON_AUTHORITATIVE_INFORMATION, "Non-Authoritative Information");
+        reasonPhrases.put(SC_NO_CONTENT, "No Content");
+        reasonPhrases.put(SC_RESET_CONTENT, "Reset Content");
+        reasonPhrases.put(SC_PARTIAL_CONTENT, "Partial Content");
+        reasonPhrases.put(SC_MULTIPLE_CHOICES, "Multiple Choices");
+        reasonPhrases.put(SC_MOVED_PERMANENTLY, "Moved Permanently");
+        reasonPhrases.put(SC_FOUND, "Found");
+        reasonPhrases.put(SC_SEE_OTHER, "See Other");
+        reasonPhrases.put(SC_NOT_MODIFIED, "Not Modified");
+        reasonPhrases.put(SC_USE_PROXY, "Use Proxy");
+        reasonPhrases.put(SC_TEMPORARY_REDIRECT, "Temporary Redirect");
+        reasonPhrases.put(SC_BAD_REQUEST, "Bad Request");
+        reasonPhrases.put(SC_UNAUTHORIZED, "Unauthorized");
+        reasonPhrases.put(SC_FORBIDDEN, "Forbidden");
+        reasonPhrases.put(SC_NOT_FOUND, "Not Found");
+        reasonPhrases.put(SC_METHOD_NOT_ALLOWED, "Method Not Allowed");
+        reasonPhrases.put(SC_NOT_ACCEPTABLE, "Not Acceptable");
+        reasonPhrases.put(SC_PROXY_AUTHENTICATION_REQUIRED, "Proxy Authentication Required");
+        reasonPhrases.put(SC_REQUEST_TIMEOUT, "Request Time-out");
+        reasonPhrases.put(SC_CONFLICT, "Conflict");
+        reasonPhrases.put(SC_GONE, "Gone");
+        reasonPhrases.put(SC_LENGTH_REQUIRED, "Length Required");
+        reasonPhrases.put(SC_PRECONDITION_FAILED, "Precondition Failed");
+        reasonPhrases.put(SC_REQUEST_ENTITY_TOO_LARGE, "Request Entity Too Large");
+        reasonPhrases.put(SC_REQUEST_URI_TOO_LONG, "Request-URI Too Long");
+        reasonPhrases.put(SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported Media Type");
+        reasonPhrases.put(SC_REQUESTED_RANGE_NOT_SATISFIABLE, "Requested range not satisfiable");
+        reasonPhrases.put(SC_EXPECTATION_FAILED, "Expectation Failed");
+        reasonPhrases.put(SC_INTERNAL_SERVER_ERROR, "Internal Server Error");
+        reasonPhrases.put(SC_NOT_IMPLEMENTED, "Not Implemented");
+        reasonPhrases.put(SC_BAD_GATEWAY, "Bad Gateway");
+        reasonPhrases.put(SC_SERVICE_UNAVAILABLE, "Service Unavailable");
+        reasonPhrases.put(SC_GATEWAY_TIMEOUT, "Gateway Time-out");
+        reasonPhrases.put(SC_HTTP_VERSION_NOT_SUPPORTED, "HTTP Version not supported");        
+    }
 }

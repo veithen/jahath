@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.container.Task;
+import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.server.http.HttpRequest;
 import com.google.code.jahath.server.http.HttpRequestHandler;
 import com.google.code.jahath.server.http.HttpResponse;
@@ -88,7 +89,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
     }
     
     private void handleConnect(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws IOException {
-        response.setStatus(204);
+        response.setStatus(HttpConstants.SC_NO_CONTENT);
         response.addHeader("X-JHT-Connection-Id", connection.getId());
         response.commit();
     }
@@ -97,7 +98,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         InputStream data = request.getInputStream();
         if (data == null) {
             log.info("Protocol error: request didn't contain data");
-            response.setStatus(400);
+            response.setStatus(HttpConstants.SC_BAD_REQUEST);
         } else {
             try {
                 connection.consume(request.getInputStream());
@@ -105,13 +106,13 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
                 // TODO: check what to do here
                 Thread.currentThread().interrupt();
             }
-            response.setStatus(202);
+            response.setStatus(HttpConstants.SC_ACCEPTED);
         }
         response.commit();
     }
     
     private void handleReceive(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws IOException {
-        response.setStatus(200);
+        response.setStatus(HttpConstants.SC_OK);
         OutputStream out = response.getOutputStream("application/octet-stream");
         try {
             connection.produce(out);
