@@ -18,6 +18,7 @@ package com.google.code.jahath.server;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,9 @@ import com.google.code.jahath.server.http.HttpResponse;
 class HttpRequestHandlerImpl implements HttpRequestHandler {
     static final Logger log = Logger.getLogger(HttpRequestHandlerImpl.class.getName());
     
+    private static final SecureRandom random = new SecureRandom();
+    private static String idChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!-";
+    
     private final ConnectionHandler connectionHandler;
     private final Map<String,ConnectionImpl> connections = Collections.synchronizedMap(new HashMap<String,ConnectionImpl>());
 
@@ -43,8 +47,18 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         this.connectionHandler = connectionHandler;
     }
 
+    private static String generateConnectionId() {
+        byte[] bytes = new byte[12];
+        random.nextBytes(bytes);
+        StringBuilder buffer = new StringBuilder(bytes.length);
+        for (int i=0; i<bytes.length; i++) {
+            buffer.append(idChars.charAt(bytes[i] & 63));
+        }
+        return buffer.toString();
+    }
+
     private ConnectionImpl createConnection(final ExecutionEnvironment env) throws IOException {
-        final String id = UUID.randomUUID().toString();
+        final String id = generateConnectionId();
         if (log.isLoggable(Level.FINE)) {
             log.fine("Setting up new connection " + id);
         }
