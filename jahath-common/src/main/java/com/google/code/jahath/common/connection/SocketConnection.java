@@ -25,7 +25,7 @@ import java.net.Socket;
  * 
  * @author Andreas Veithen
  */
-public class SocketConnection implements Connection {
+public class SocketConnection extends AbstractConnection {
     private final Socket socket;
 
     public SocketConnection(Socket socket) {
@@ -40,7 +40,8 @@ public class SocketConnection implements Connection {
         return socket.getOutputStream();
     }
 
-    public void close() throws IOException {
+    @Override
+    protected void doClose() throws IOException {
         socket.close();
     }
 }

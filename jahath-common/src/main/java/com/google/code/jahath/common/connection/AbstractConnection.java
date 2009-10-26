@@ -13,29 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server.http;
+package com.google.code.jahath.common.connection;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-import com.google.code.jahath.common.http.HttpInMessage;
+public abstract class AbstractConnection implements Connection {
+    private State state = State.OPEN;
 
-public class HttpRequest extends HttpInMessage {
-    private String path;
-    
-    HttpRequest(InputStream in) throws IOException {
-        super(in);
+    public final synchronized void close() throws IOException {
+        state = State.CLOSING;
+        doClose();
+        state = State.CLOSED;
     }
 
-    @Override
-    protected void processFirstLine(String line) {
-        // TODO: do this properly!
-        String[] parts = line.split(" ");
-        path = parts[1];
-    }
+    /**
+     * Perform the close operation for this connection.
+     * 
+     * @throws IOException
+     */
+    protected abstract void doClose() throws IOException;
 
-    public String getPath() throws IOException {
-        processHeaders();
-        return path;
+    public final synchronized State getState() {
+        return state;
     }
 }

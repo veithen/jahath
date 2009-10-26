@@ -22,10 +22,35 @@ import java.io.OutputStream;
 /**
  * Models a bidirectional stream oriented connection as seen by one of the endpoints. This interface
  * is a generalization of {@link java.net.Socket}.
+ * <p>
+ * Note that implementations should extend {@link AbstractConnection} instead of implementing this
+ * interface directly.
  * 
  * @author Andreas Veithen
  */
+// TODO: specify what should happen if close() is called on the InputStream or OutputStream returned by instances of this class
 public interface Connection {
+    public enum State {
+        /**
+         * The connection is open.
+         */
+        OPEN,
+        
+        /**
+         * The connection is being closed. This means that {@link Connection#close()} has been
+         * called, but that the connection has not yet been closed. This state is useful to
+         * distinguish exceptions that are thrown (by methods of the instances returned by
+         * {@link Connection#getInputStream()} and {@link Connection#getOutputStream()}) because the
+         * connection is being closed.
+         */
+        CLOSING,
+        
+        /**
+         * The connection has been closed.
+         */
+        CLOSED
+    }
+    
     /**
      * Get an input stream for this connection. The returned stream can be used to read data send by
      * the other end of the connection.
@@ -47,9 +72,18 @@ public interface Connection {
     OutputStream getOutputStream() throws IOException;
     
     /**
-     * Close this connection.
+     * Close this connection. This will first put the connection into state {@link State#CLOSING}
+     * and then attempt to close the connection. After successful completion of the close operation,
+     * the state will be {@link State#CLOSED}.
      * 
      * @throws IOException
      */
     void close() throws IOException;
+    
+    /**
+     * Get the state of this connection.
+     * 
+     * @return the state of the connection
+     */
+    State getState();
 }

@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.google.code.jahath.common.connection.Connection;
+import com.google.code.jahath.common.connection.AbstractConnection;
 
-class ConnectionImpl implements Connection {
+class ConnectionImpl extends AbstractConnection {
     class SessionOutputStream extends OutputStream {
         private HttpRequest request;
         private OutputStream out;
@@ -98,7 +98,8 @@ class ConnectionImpl implements Connection {
         return in;
     }
 
-    public void close() throws IOException {
+    @Override
+    protected void doClose() throws IOException {
         // TODO
     }
 }

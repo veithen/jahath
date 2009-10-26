@@ -35,7 +35,21 @@ public abstract class HttpInMessage {
 
     protected abstract void processFirstLine(String line);
     
-    public void await() throws IOException {
+    /**
+     * Block until data for this message is available, i.e until the start of the message has been
+     * received. Note that this method will not actually process any of the received data. Also a
+     * subsequent call to any other method of this class may still block, typically because not all
+     * headers have been received yet.
+     * 
+     * @return <code>true</code> if data is available, <code>false</code> if the end of the stream
+     *         has been reached (because the peer closed the connection)
+     * @throws IOException if an I/O error occurs
+     */
+    public boolean await() throws IOException {
+        return headers != null || in.awaitInput();
+    }
+    
+    protected void processHeaders() throws IOException {
         if (headers == null) {
             processFirstLine(in.readLine());
             headers = new Headers(in);
@@ -58,7 +72,7 @@ public abstract class HttpInMessage {
     }
     
     public String getHeader(String name) throws IOException {
-        await();
+        processHeaders();
         return headers.getHeader(name);
     }
     
@@ -70,7 +84,7 @@ public abstract class HttpInMessage {
      * @throws IOException 
      */
     public InputStream getInputStream() throws IOException {
-        await();
+        processHeaders();
         return contentStream;
     }
 }

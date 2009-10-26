@@ -43,9 +43,21 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
         try {
             log.fine("New connection");
             while (true) {
+                HttpRequest httpRequest = new HttpRequest(connection.getInputStream());
+                try {
+                    if (!httpRequest.await()) {
+                        break;
+                    }
+                } catch (IOException ex) {
+                    if (connection.getState() == Connection.State.CLOSING) {
+                        return;
+                    } else {
+                        throw ex;
+                    }
+                }
+                log.fine("Start processing new request");
                 // TODO: should wrapping the stream as an HttpOutputStream be done here or in HttpRequest??
                 HttpOutputStream response = new HttpOutputStream(connection.getOutputStream());
-                HttpRequest httpRequest = new HttpRequest(connection.getInputStream());
                 HttpResponse httpResponse = new HttpResponse(response, this);
                 requestHandler.handle(env, httpRequest, httpResponse);
                 response.flush();

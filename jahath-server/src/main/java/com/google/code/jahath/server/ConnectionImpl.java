@@ -23,26 +23,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.common.LogUtil;
-import com.google.code.jahath.common.connection.Connection;
+import com.google.code.jahath.common.connection.AbstractConnection;
 
-class ConnectionImpl implements Connection {
+class ConnectionImpl extends AbstractConnection {
     class SessionInputStream extends InputStream {
         InputStream parent;
         private boolean closed;
 
         private void awaitParent() throws InterruptedIOException {
-            while (parent == null) {
+            if (parent == null) {
                 if (log.isLoggable(Level.FINE)) {
                     log.fine(id +": Waiting for new input stream");
                 }
-                try {
-                    wait();
-                } catch (InterruptedException ex) {
-                    throw new InterruptedIOException();
+                while (parent == null) {
+                    try {
+                        wait();
+                    } catch (InterruptedException ex) {
+                        throw new InterruptedIOException();
+                    }
                 }
-            }
-            if (log.isLoggable(Level.FINE)) {
-                log.fine(id +": Got new input stream");
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine(id +": Got new input stream");
+                }
             }
         }
         
@@ -90,18 +92,20 @@ class ConnectionImpl implements Connection {
         OutputStream parent;
 
         private void awaitParent() throws InterruptedIOException {
-            while (parent == null) {
+            if (parent == null) {
                 if (log.isLoggable(Level.FINE)) {
                     log.fine(id +": Waiting for new output stream");
                 }
-                try {
-                    wait();
-                } catch (InterruptedException ex) {
-                    throw new InterruptedIOException();
+                while (parent == null) {
+                    try {
+                        wait();
+                    } catch (InterruptedException ex) {
+                        throw new InterruptedIOException();
+                    }
                 }
-            }
-            if (log.isLoggable(Level.FINE)) {
-                log.fine(id +": Got new output stream");
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine(id +": Got new output stream");
+                }
             }
         }
         
@@ -199,7 +203,8 @@ class ConnectionImpl implements Connection {
         return LogUtil.log(sessionOutputStream, log, Level.FINER, "out");
     }
 
-    public void close() throws IOException {
+    @Override
+    protected void doClose() throws IOException {
         // TODO
     }
 }

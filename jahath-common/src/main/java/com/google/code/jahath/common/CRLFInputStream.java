@@ -29,6 +29,30 @@ public class CRLFInputStream extends InputStream {
         this.parent = parent;
     }
 
+    private boolean fillBuffer() throws IOException {
+        int readOffset = (offset+len) % buffer.length;
+        int readLen = Math.min(buffer.length-len, buffer.length-readOffset);
+        int c = parent.read(buffer, readOffset, readLen);
+        if (c == -1) {
+            return false;
+        } else {
+            len += c;
+            return true;
+        }
+    }
+
+    /**
+     * Block until input is available.
+     * 
+     * @return <code>true</code> if input is available, <code>false</code> if the end of stream has
+     *         been reached an no input is available
+     * @throws IOException
+     *             if an I/O error occurred
+     */
+    public boolean awaitInput() throws IOException {
+        return len > 0 || fillBuffer();
+    }
+
     public String readLine() throws IOException {
         while (true) {
             for (int lineLen=0; lineLen<len-1; lineLen++) {
@@ -45,13 +69,9 @@ public class CRLFInputStream extends InputStream {
             if (len == buffer.length) {
                 throw new IOException("Maximum line length exceeded");
             }
-            int readOffset = (offset+len) % buffer.length;
-            int readLen = Math.min(buffer.length-len, buffer.length-readOffset);
-            int c = parent.read(buffer, readOffset, readLen);
-            if (c == -1) {
+            if (!fillBuffer()) {
                 throw new IOException("Unexpected end of stream");
             }
-            len += c;
         }
     }
 
