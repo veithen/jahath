@@ -15,6 +15,8 @@
  */
 package com.google.code.jahath.common.logging;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
@@ -42,8 +44,23 @@ public class DefaultFormatter extends Formatter {
         StringBuilder buffer = new StringBuilder();
         rpad(buffer, record.getLevel().getName(), 7);
         formatLong(buffer, record.getMillis()-startMillis, 6);
-        // TODO: convert to StringBuilder code
-        buffer.append(" [" + Thread.currentThread().getName() + "] " + record.getSourceClassName() + "#" + record.getSourceMethodName() + " :: " + formatMessage(record) + "\n");
+        buffer.append(" [");
+        buffer.append(Thread.currentThread().getName());
+        buffer.append("] ");
+        buffer.append(record.getSourceClassName());
+        buffer.append("#");
+        buffer.append(record.getSourceMethodName());
+        buffer.append(" :: ");
+        buffer.append(formatMessage(record));
+        buffer.append("\n");
+        Throwable thrown = record.getThrown();
+        if (thrown != null) {
+            StringWriter sw = new StringWriter();
+            PrintWriter out = new PrintWriter(sw, false);
+            record.getThrown().printStackTrace(out);
+            out.flush();
+            buffer.append(sw.toString());
+        }
         return buffer.toString();
     }
 }
