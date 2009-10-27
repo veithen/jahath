@@ -17,128 +17,26 @@ package com.google.code.jahath.server;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.common.LogUtil;
 import com.google.code.jahath.common.connection.AbstractConnection;
+import com.google.code.jahath.server.util.SwappableInputStream;
+import com.google.code.jahath.server.util.SwappableOutputStream;
 
 class ConnectionImpl extends AbstractConnection {
-    class SessionInputStream extends InputStream {
-        InputStream parent;
-        private boolean closed;
-
-        private void awaitParent() throws InterruptedIOException {
-            if (parent == null) {
-                if (log.isLoggable(Level.FINE)) {
-                    log.fine(id +": Waiting for new input stream");
-                }
-                while (parent == null) {
-                    try {
-                        wait();
-                    } catch (InterruptedException ex) {
-                        throw new InterruptedIOException();
-                    }
-                }
-                if (log.isLoggable(Level.FINE)) {
-                    log.fine(id +": Got new input stream");
-                }
-            }
-        }
-        
-        private void consumed() {
-            parent = null;
-            if (log.isLoggable(Level.FINE)) {
-                log.fine(id +": Input stream consumed");
-            }
-            notifyAll();
-        }
-        
-        @Override
-        public synchronized int read() throws IOException {
-            while (true) {
-                awaitParent();
-                int b = parent.read();
-                if (b == -1) {
-                    consumed();
-                } else {
-                    return b;
-                }
-            }
-        }
-
-        @Override
-        public synchronized int read(byte[] b, int off, int len) throws IOException {
-            while (true) {
-                awaitParent();
-                int c = parent.read(b, off, len);
-                if (c == -1) {
-                    consumed();
-                } else {
-                    return c;
-                }
-            }
-        }
-
-        @Override
-        public synchronized void close() throws IOException {
-            closed = true;
-        }
-    }
+    private static final Logger log = Logger.getLogger(ConnectionImpl.class.getName());
     
-    class SessionOutputStream extends OutputStream {
-        OutputStream parent;
-
-        private void awaitParent() throws InterruptedIOException {
-            if (parent == null) {
-                if (log.isLoggable(Level.FINE)) {
-                    log.fine(id +": Waiting for new output stream");
-                }
-                while (parent == null) {
-                    try {
-                        wait();
-                    } catch (InterruptedException ex) {
-                        throw new InterruptedIOException();
-                    }
-                }
-                if (log.isLoggable(Level.FINE)) {
-                    log.fine(id +": Got new output stream");
-                }
-            }
-        }
-        
-        @Override
-        public synchronized void write(byte[] b, int off, int len) throws IOException {
-            awaitParent();
-            parent.write(b, off, len);
-        }
-
-        @Override
-        public synchronized void write(int b) throws IOException {
-            awaitParent();
-            parent.write(b);
-        }
-
-        @Override
-        public synchronized void flush() throws IOException {
-            parent = null;
-            if (log.isLoggable(Level.FINE)) {
-                log.fine(id +": Output stream flushed");
-            }
-            notifyAll();
-        }
-    }
-    
-    static final Logger log = Logger.getLogger(ConnectionImpl.class.getName());
-    
-    final String id;
-    private final SessionInputStream sessionInputStream = new SessionInputStream();
-    private final SessionOutputStream sessionOutputStream = new SessionOutputStream();
+    private final String id;
+    private final SwappableInputStream inputStream;
+    private final SwappableOutputStream outputStream;
     
     ConnectionImpl(String id) {
         this.id = id;
+        inputStream = new SwappableInputStream(id);
+        outputStream = new SwappableOutputStream(id);
     }
 
     String getId() {
@@ -151,61 +49,19 @@ class ConnectionImpl extends AbstractConnection {
     }
 
     void consume(InputStream in) throws InterruptedException {
-        synchronized (sessionInputStream) {
-            while (sessionInputStream.parent != null) {
-                if (log.isLoggable(Level.FINE)) {
-                    log.fine(id + ": Waiting for connection to be ready to accept new input stream");
-                }
-                sessionInputStream.wait();
-            }
-            sessionInputStream.parent = in;
-            if (log.isLoggable(Level.FINE)) {
-                log.fine(id + ": Input stream connected");
-            }
-            sessionInputStream.notifyAll();
-            while (sessionInputStream.parent != null) {
-                if (log.isLoggable(Level.FINE)) {
-                    log.fine(id + ": Waiting for connection to disconnect input stream");
-                }
-                sessionInputStream.wait();
-            }
-            if (log.isLoggable(Level.FINE)) {
-                log.fine(id + ": Input stream disconnected");
-            }
-        }
+        inputStream.swap(in);
     }
     
     void produce(OutputStream out) throws InterruptedException {
-        synchronized (sessionOutputStream) {
-            while (sessionOutputStream.parent != null) {
-                if (log.isLoggable(Level.FINE)) {
-                    log.fine(id + ": Waiting for connection to be ready to accept new output stream");
-                }
-                sessionOutputStream.wait();
-            }
-            sessionOutputStream.parent = out;
-            if (log.isLoggable(Level.FINE)) {
-                log.fine(id + ": Output stream connected");
-            }
-            sessionOutputStream.notifyAll();
-            while (sessionOutputStream.parent != null) {
-                if (log.isLoggable(Level.FINE)) {
-                    log.fine(id + ": Waiting for connection to disconnect output stream");
-                }
-                sessionOutputStream.wait();
-            }
-            if (log.isLoggable(Level.FINE)) {
-                log.fine(id + ": Output stream disconnected");
-            }
-        }
+        outputStream.swap(out);
     }
     
     public InputStream getInputStream() {
-        return LogUtil.log(sessionInputStream, log, Level.FINER, "in");
+        return LogUtil.log(inputStream, log, Level.FINER, "in");
     }
     
     public OutputStream getOutputStream() {
-        return LogUtil.log(sessionOutputStream, log, Level.FINER, "out");
+        return LogUtil.log(outputStream, log, Level.FINER, "out");
     }
 
     @Override
