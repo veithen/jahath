@@ -33,6 +33,7 @@ public abstract class AbstractConnection implements Connection {
      */
     protected abstract void doClose() throws IOException;
 
+    // TODO: does this always give the right result for sockets? (what if connection is closed by peer?)
     public final synchronized State getState() {
         return state;
     }

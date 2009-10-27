@@ -17,6 +17,23 @@ package com.google.code.jahath.common.connection;
 
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 
+/**
+ * Blocking connection handler.
+ * 
+ * @author Andreas Veithen
+ */
 public interface ConnectionHandler {
+    /**
+     * Handle a given connection. The method will block until the connection is completely handled,
+     * i.e. until it is closed or ready to be closed. Note that the implementation may close the
+     * connection but is not required to do so. It is the responsibility of the caller to do any
+     * necessary cleanup.
+     * 
+     * @param env
+     *            the execution environment to use when acquiring any managed resource (threads,
+     *            etc.)
+     * @param connection
+     *            the connection to handle
+     */
     void handle(ExecutionEnvironment env, Connection connection);
 }

@@ -145,6 +145,11 @@ class ConnectionImpl extends AbstractConnection {
         return id;
     }
 
+    @Override
+    public String toString() {
+        return id;
+    }
+
     void consume(InputStream in) throws InterruptedException {
         synchronized (sessionInputStream) {
             while (sessionInputStream.parent != null) {

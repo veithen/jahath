@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.ConnectionHandlerTask;
 import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.container.Task;
@@ -43,21 +44,7 @@ class Acceptor implements Task {
         try {
             while (true) {
                 final Socket socket = serverSocket.accept();
-                env.execute(new Task() {
-                    public void run() {
-                        connectionHandler.handle(env, new SocketConnection(socket));
-                    }
-
-                    public void stop() {
-                        if (!socket.isClosed()) {
-                            try {
-                                socket.close();
-                            } catch (IOException ex) {
-                                log.log(Level.SEVERE, "Error closing socket", ex);
-                            }
-                        }
-                    }
-                });
+                env.execute(new ConnectionHandlerTask(connectionHandler, env, new SocketConnection(socket)));
             }
         } catch (IOException ex) {
             if (!serverSocket.isClosed()) {

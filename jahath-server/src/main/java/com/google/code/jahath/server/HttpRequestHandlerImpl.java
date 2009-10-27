@@ -22,13 +22,12 @@ import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.ConnectionHandlerTask;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
-import com.google.code.jahath.common.container.Task;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.server.http.HttpRequest;
 import com.google.code.jahath.server.http.HttpRequestHandler;
@@ -57,26 +56,14 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         return buffer.toString();
     }
 
-    private ConnectionImpl createConnection(final ExecutionEnvironment env) throws IOException {
-        final String id = generateConnectionId();
+    private ConnectionImpl createConnection(ExecutionEnvironment env) throws IOException {
+        String id = generateConnectionId();
         if (log.isLoggable(Level.FINE)) {
             log.fine("Setting up new connection " + id);
         }
-        final ConnectionHandler connectionHandler = this.connectionHandler;
-        final ConnectionImpl connection = new ConnectionImpl(id);
+        ConnectionImpl connection = new ConnectionImpl(id);
         connections.put(id, connection);
-        env.execute(new Task() {
-            public void run() {
-                if (log.isLoggable(Level.FINE)) {
-                    log.fine("Running " + connectionHandler.getClass().getName() + " on connection " + id);
-                }
-                connectionHandler.handle(env, connection);
-            }
-
-            public void stop() {
-                // TODO
-            }
-        });
+        env.execute(new ConnectionHandlerTask(connectionHandler, env, connection));
         return connection;
     }
     
