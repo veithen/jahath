@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common.http;
+package com.google.code.jahath.common.testutils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +31,10 @@ public class CRC {
         update(b, 0, b.length);
     }
 
+    public synchronized void update(byte b) {
+        value += b & 0xFF;
+    }
+    
     public synchronized void update(InputStream in) throws IOException {
         byte[] buffer = new byte[2048];
         int c;

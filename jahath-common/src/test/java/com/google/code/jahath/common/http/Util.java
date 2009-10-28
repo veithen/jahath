@@ -20,6 +20,7 @@ import java.io.OutputStream;
 import java.util.Random;
 
 import com.google.code.jahath.common.CRLFInputStream;
+import com.google.code.jahath.common.testutils.CRC;
 
 public class Util {
     private Util() {}

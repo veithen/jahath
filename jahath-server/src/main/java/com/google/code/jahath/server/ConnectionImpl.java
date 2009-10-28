@@ -23,8 +23,8 @@ import java.util.logging.Logger;
 
 import com.google.code.jahath.common.LogUtil;
 import com.google.code.jahath.common.connection.AbstractConnection;
-import com.google.code.jahath.server.util.SwappableInputStream;
-import com.google.code.jahath.server.util.SwappableOutputStream;
+import com.google.code.jahath.common.io.SwappableInputStream;
+import com.google.code.jahath.common.io.SwappableOutputStream;
 
 class ConnectionImpl extends AbstractConnection {
     private static final Logger log = Logger.getLogger(ConnectionImpl.class.getName());

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server.util;
+package com.google.code.jahath.common.io;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -41,12 +41,13 @@ public class SwappableOutputStream extends OutputStream {
     
     private final String label;
     private OutputStream parent;
+    private boolean closed;
 
     public SwappableOutputStream(String label) {
         this.label = label;
     }
 
-    public synchronized void swap(OutputStream out) throws InterruptedException {
+    public synchronized boolean swap(OutputStream out) throws InterruptedException {
         while (parent != null) {
             if (log.isLoggable(Level.FINE)) {
                 log.fine(label + ": Waiting for connection to be ready to accept new output stream");
@@ -67,6 +68,7 @@ public class SwappableOutputStream extends OutputStream {
         if (log.isLoggable(Level.FINE)) {
             log.fine(label + ": Output stream disconnected");
         }
+        return !closed;
     }
     
     private void awaitParent() throws InterruptedIOException {
@@ -104,6 +106,16 @@ public class SwappableOutputStream extends OutputStream {
         parent = null;
         if (log.isLoggable(Level.FINE)) {
             log.fine(label + ": Output stream flushed");
+        }
+        notifyAll();
+    }
+
+    @Override
+    public synchronized void close() throws IOException {
+        parent = null;
+        closed = true;
+        if (log.isLoggable(Level.FINE)) {
+            log.fine(label + ": Output stream closed");
         }
         notifyAll();
     }

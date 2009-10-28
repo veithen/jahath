@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server.util;
+package com.google.code.jahath.common.io;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,18 +34,20 @@ import java.util.logging.Logger;
  * 
  * @author Andreas Veithen
  */
+// TODO: isn't the synchronization code equivalent to usage of SynchronuousQueue?
 public class SwappableInputStream extends InputStream {
     private static final Logger log = Logger.getLogger(SwappableInputStream.class.getName());
     
     private final String label;
     private InputStream parent;
-    private boolean closed;
+    private boolean endOfStream;
 
     public SwappableInputStream(String label) {
         this.label = label;
     }
 
     public synchronized void swap(InputStream in) throws InterruptedException {
+        // TODO: should we really allow cases where swap is called concurrently by two different threads?
         while (parent != null) {
             if (log.isLoggable(Level.FINE)) {
                 log.fine(label + ": Waiting for connection to be ready to accept new input stream");
@@ -68,12 +70,21 @@ public class SwappableInputStream extends InputStream {
         }
     }
     
+    public synchronized void sendEndOfStream() {
+        // TODO: implement the same behavior in swap and sendEndOfStream
+        if (parent != null) {
+            throw new IllegalStateException();
+        }
+        endOfStream = true;
+        notifyAll();
+    }
+    
     private void awaitParent() throws InterruptedIOException {
         if (parent == null) {
             if (log.isLoggable(Level.FINE)) {
                 log.fine(label + ": Waiting for new input stream");
             }
-            while (parent == null) {
+            while (parent == null && !endOfStream) {
                 try {
                     wait();
                 } catch (InterruptedException ex) {
@@ -98,11 +109,15 @@ public class SwappableInputStream extends InputStream {
     public synchronized int read() throws IOException {
         while (true) {
             awaitParent();
-            int b = parent.read();
-            if (b == -1) {
-                consumed();
+            if (endOfStream) {
+                return -1;
             } else {
-                return b;
+                int b = parent.read();
+                if (b == -1) {
+                    consumed();
+                } else {
+                    return b;
+                }
             }
         }
     }
@@ -111,17 +126,21 @@ public class SwappableInputStream extends InputStream {
     public synchronized int read(byte[] b, int off, int len) throws IOException {
         while (true) {
             awaitParent();
-            int c = parent.read(b, off, len);
-            if (c == -1) {
-                consumed();
+            if (endOfStream) {
+                return -1;
             } else {
-                return c;
+                int c = parent.read(b, off, len);
+                if (c == -1) {
+                    consumed();
+                } else {
+                    return c;
+                }
             }
         }
     }
 
     @Override
     public synchronized void close() throws IOException {
-        closed = true;
+//        closed = true;
     }
 }
