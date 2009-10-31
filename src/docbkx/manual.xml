@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<book>
+    <bookinfo>
+        <title>Jahath Manual</title>
+        <releaseinfo>&version;</releaseinfo>
+        <legalnotice>
+            <para>
+                Copyright 2009 Andreas Veithen
+            </para>
+            <para>
+                Licensed under the Apache License, Version 2.0 (the "License");
+                you may not use this file except in compliance with the License.
+                You may obtain a copy of the License at
+            </para>
+            <para>
+                <ulink url="http://www.apache.org/licenses/LICENSE-2.0"/>
+            </para>
+            <para>
+                Unless required by applicable law or agreed to in writing, software
+                distributed under the License is distributed on an "AS IS" BASIS,
+                WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+                See the License for the specific language governing permissions and
+                limitations under the License.
+            </para>
+        </legalnotice>
+    </bookinfo>
+    
+    <toc/>
+    
+    <chapter>
+        <title>Protocol specification</title>
+        <section>
+            <title>Introduction</title>
+            <para>
+                VC/H (<firstterm>Virtual Circuit over HTTP</firstterm>) is a communication protocol
+                that establishes a virtual circuit over HTTP. More precisely it creates a virtual
+                two-way stream oriented communication channel similar to a TCP connection. Since
+                HTTP itself is based on TCP, the main purpose of VC/H is to tunnel TCP connections
+                over HTTP in situations where direct TCP connections between two hosts are prohibited.
+            </para>
+            <para>
+                The protocol is designed to support direct HTTP connections as well as HTTP connections
+                that are established through an HTTP proxy. In particular, it is interoperable with
+                proxies that buffer requests and/or responses (i.e. that do not forward data immediately
+                and only flush the buffered data when the request or response entity is complete) or
+                that require the client to transmit the entire request entity before starting to forward
+                the response entity.
+            </para>
+            <para>
+                VC/H relies on HTTP 1.1 specific features and doesn't support HTTP 1.0. Since the
+                protocol is usually implemented using HTTP clients and servers built specifically for
+                that purpose, this is only a restriction in scenarios where the connection has to go
+                through an HTTP proxy, because the user of the VC/H implementation in general has no
+                control over this proxy.
+            </para>
+            <para>
+                VC/H is specified by a set of request-response exchanges that define the
+                HTTP methods, request URIs and headers used by the protocol. Formally, the specification
+                closely resembles that of a RESTful service, though the nature of the interaction is
+                quite different. Note that VC/H only uses standard HTTP methods as defined by RFC2616
+                because some HTTP clients, proxies or servers may not support custom methods.
+            </para>
+        </section>
+        <section>
+            <title>Client-server architecture</title>
+            <para>
+                VC/H is a client-server protocol. In particular, connections requests are always
+                initiated by the client. Also, in general, a host or process implementing the
+                VC/H protocol will either always act as a client or always act as a server.
+                Scenarios where a host or process can act both as a client and server will be unusual.
+            </para>
+            <para>
+                A server implementing the VC/H protocol may host different endpoints accepting
+                connections from clients. These endpoints are called <firstterm>service
+                endpoints</firstterm> or simply <firstterm>services</firstterm>. In general,
+                services will differ by the application protocol they implement on top of
+                VC/H. Each service is identified by a name that must be unique for the given
+                VC/H server instance. In order to be able to connect to a service, a client
+                therefore needs to know (1) the host name or IP address of the server, (2) the
+                TCP port on which the HTTP server implementation listens and (3) the name of
+                the service to connect to.
+            </para>
+            <para>
+                As described above, a VC/H connection establishes a two-way stream oriented communication
+                channel between the client and the service endpoint. This connection is full-duplex, i.e.
+                data may flow in both directions simultaneously. Once a connection is established, either
+                the client or the server may start the conversation, or they may both start sending data.
+                Data submitted by the sender application (client or service endpoint) to the VC/H layer
+                is not guaranteed to be delivered immediately to the receiving side of the connection, but
+                may be buffered by the VC/H implementation or an HTTP proxy through which the connection
+                is established. The sender must flush the stream explicitly to push buffered data to the
+                receiver. While the flush operation logically divides the stream into individual
+                transmission units, VC/H makes no provisions to preserve this structure, i.e. the
+                receiver will not be able to detect the corresponding message boundaries.
+                Finally, connection shutdown may be initiated either by the client or the service
+                endpoint.
+            </para>
+            <para>
+                All these properties make the service provided by the VC/H layer similar to the
+                service provided by the TCP protocol. This is of course by design because the primary
+                use case of the VC/H protocol is to tunnel TCP connections over HTTP.
+            </para>
+        </section>
+    </chapter>
+</book>

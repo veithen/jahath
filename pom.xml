@@ -98,6 +98,26 @@
                     </systemProperties>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+                <version>2.0.8</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>manual-html</id>
+                        <goals>
+                            <goal>generate-html</goal>
+                        </goals>
+                        <phase>pre-site</phase>
+                        <configuration>
+                            <includes>manual.xml</includes>
+                            <chunkedOutput>false</chunkedOutput>
+                            <targetDirectory>target/site/manual</targetDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
  </project>
