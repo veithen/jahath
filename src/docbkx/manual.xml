@@ -102,5 +102,128 @@
                 use case of the VC/H protocol is to tunnel TCP connections over HTTP.
             </para>
         </section>
+        <section>
+            <title>Detailed protocol specification</title>
+            <section>
+                <title>Connection request</title>
+                <variablelist>
+                    <varlistentry>
+                        <term>Method</term>
+                        <listitem>
+                            <synopsis>POST</synopsis>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Request URI</term>
+                        <listitem>
+                            <synopsis>/services/<replaceable>service-name</replaceable></synopsis>
+                            <para>
+                                <replaceable>service-name</replaceable> is the name of the service endpoint
+                                to which the connection request is addressed. Service names are case sensitive and must match the
+                                <link linkend="service.name">ServiceName</link> production.
+                            </para>
+                            <productionset>
+                                <title>Service endpoint names</title>
+                                <production id="service.name">
+                                    <lhs>ServiceName</lhs>
+                                    <rhs>(<nonterminal def="#service.name.char">ServiceNameChar</nonterminal>)+</rhs>
+                                </production>
+                                <production id="service.name.char">
+                                    <lhs>ServiceNameChar</lhs>
+                                    <rhs><nonterminal def="#alpha">Alpha</nonterminal> | <nonterminal def="#digit">Digit</nonterminal> | <literal>'-'</literal> | <literal>'.'</literal> | <literal>'_'</literal> | <literal>':'</literal></rhs>
+                                </production>
+                                <production id="alpha">
+                                    <lhs>Alpha</lhs>
+                                    <rhs>[<literal>'A'</literal>-<literal>'Z'</literal>] | [<literal>'a'</literal>-<literal>'z'</literal>]</rhs>
+                                </production>
+                                <production id="digit">
+                                    <lhs>Digit</lhs>
+                                    <rhs>[<literal>'0'</literal>-<literal>'9'</literal>]</rhs>
+                                </production>
+                            </productionset>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Request headers</term>
+                        <listitem>
+                            <variablelist>
+                                <varlistentry>
+                                    <term><literal>X-VCH-Version</literal> (mandatory)</term>
+                                    <listitem>
+                                        <para>Specifies the version of the VC/H protocol that the client wishes to use. This must be <literal>1.0</literal>.</para>
+                                    </listitem>
+                                </varlistentry>
+                            </variablelist>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Response codes</term>
+                        <listitem>
+                            <variablelist>
+                                <varlistentry>
+                                    <term>201 Created</term>
+                                    <listitem>
+                                        <para>
+                                            Indicates that the connection has been succesfully created. The <literal>Location</literal>
+                                            header contains a URI that identifies the connection (see below).
+                                        </para>
+                                    </listitem>
+                                </varlistentry>
+                                <varlistentry>
+                                    <term>404 Not Found</term>
+                                    <listitem>
+                                        <para>
+                                            Indicates that no service is registered for the service name provided by the client.
+                                        </para>
+                                    </listitem>
+                                </varlistentry>
+                            </variablelist>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Response headers</term>
+                        <listitem>
+                            <variablelist>
+                                <varlistentry>
+                                    <term><literal>X-VCH-Version</literal> (mandatory for 201)</term>
+                                    <listitem>
+                                        <para>Specifies the version of the VC/H protocol that the server expects. This must be <literal>1.0</literal>.</para>
+                                    </listitem>
+                                </varlistentry>
+                                <varlistentry>
+                                    <term><literal>Location</literal> (mandatory for 201)</term>
+                                    <listitem>
+                                        <para>
+                                            A URI that identifies the newly created connection. It must be of the following form:
+                                        </para>
+                                        <synopsis>http(s)://<replaceable>host-part</replaceable>/connections/<replaceable>connection-id</replaceable></synopsis>
+                                    </listitem>
+                                </varlistentry>
+                            </variablelist>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Processing requirements</term>
+                        <listitem>
+                            <itemizedlist>
+                                <listitem>
+                                    <para>
+                                        The server must choose a connection ID that is sufficiently random in order to
+                                        prevent an attacker from guessing connection IDs.
+                                    </para>
+                                </listitem>
+                                <listitem>
+                                    <para>
+                                        The client may either store the URI returned in the <literal>Location</literal> header
+                                        and use this URI in subsequent requests, or it may parse the URI to extract the
+                                        connection ID and construct the URIs for subsequent requests from this connection ID.
+                                    </para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+            </section>
+        </section>
     </chapter>
 </book>
