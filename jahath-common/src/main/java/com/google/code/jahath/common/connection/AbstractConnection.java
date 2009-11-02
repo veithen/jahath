@@ -37,4 +37,9 @@ public abstract class AbstractConnection implements Connection {
     public final synchronized State getState() {
         return state;
     }
+
+    // Default implementation returning false
+    public boolean isSecure() {
+        return false;
+    }
 }

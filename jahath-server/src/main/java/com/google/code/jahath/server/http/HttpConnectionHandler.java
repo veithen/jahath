@@ -43,7 +43,7 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
         try {
             log.fine("New connection");
             while (true) {
-                HttpRequest httpRequest = new HttpRequest(connection.getInputStream());
+                HttpRequest httpRequest = new HttpRequest(connection.getInputStream(), connection.isSecure());
                 try {
                     if (!httpRequest.await()) {
                         break;

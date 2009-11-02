@@ -86,4 +86,11 @@ public interface Connection {
      * @return the state of the connection
      */
     State getState();
+    
+    /**
+     * Determine if this connection has been established using a secure channel (such as SSL).
+     * 
+     * @return
+     */
+    boolean isSecure();
 }

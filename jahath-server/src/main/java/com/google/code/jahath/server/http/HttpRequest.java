@@ -21,10 +21,12 @@ import java.io.InputStream;
 import com.google.code.jahath.common.http.HttpInMessage;
 
 public class HttpRequest extends HttpInMessage {
+    private final boolean secure;
     private String path;
     
-    HttpRequest(InputStream in) throws IOException {
+    HttpRequest(InputStream in, boolean secure) throws IOException {
         super(in);
+        this.secure = secure;
     }
 
     @Override
@@ -37,5 +39,18 @@ public class HttpRequest extends HttpInMessage {
     public String getPath() throws IOException {
         processHeaders();
         return path;
+    }
+    
+    public String makeAbsoluteURI(String path) throws IOException {
+        StringBuilder buffer = new StringBuilder(secure ? "https" : "http");
+        buffer.append("://");
+        String host = getHeader("Host");
+        // TODO: check if Host header is actually present
+        buffer.append(host);
+        if (!path.startsWith("/")) {
+            buffer.append('/');
+        }
+        buffer.append(path);
+        return buffer.toString();
     }
 }
