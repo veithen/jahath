@@ -25,7 +25,6 @@ import com.google.code.jahath.client.http.HttpClient;
 import com.google.code.jahath.client.http.HttpRequest;
 import com.google.code.jahath.client.http.HttpResponse;
 import com.google.code.jahath.client.http.ProxyConfiguration;
-import com.google.code.jahath.client.http.HttpRequest.Method;
 import com.google.code.jahath.common.connection.Connection;
 
 public class VCHClient {
@@ -41,15 +40,11 @@ public class VCHClient {
         return executorService;
     }
     
-    HttpRequest createRequest(Method method, String path) throws IOException {
-        return httpClient.createRequest(method, path);
-    }
-
     public Connection createConnection() throws IOException {
-        HttpRequest request = createRequest(HttpRequest.Method.POST, "/");
+        HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/");
         HttpResponse response = request.execute();
         String connectionId = response.getHeader("X-JHT-Connection-Id");
-        return new ConnectionImpl(this, connectionId);
+        return new ConnectionImpl(httpClient, connectionId);
     }
 
     public void shutdown() {
