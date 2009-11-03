@@ -17,17 +17,17 @@ package com.google.code.jahath.tests;
 
 import org.junit.Test;
 
-import com.google.code.jahath.client.JahathClient;
+import com.google.code.jahath.client.VCHClient;
 import com.google.code.jahath.common.connection.Connection;
-import com.google.code.jahath.server.JahathServer;
+import com.google.code.jahath.server.VCHServer;
 import com.google.code.jahath.testutils.EchoConnectionHandler;
 import com.google.code.jahath.testutils.EchoTestUtil;
 
 public class EchoTest {
     @Test
     public void test() throws Exception {
-        JahathServer server = new JahathServer(5555, new EchoConnectionHandler());
-        JahathClient client = new JahathClient("localhost", 5555, null);
+        VCHServer server = new VCHServer(5555, new EchoConnectionHandler());
+        VCHClient client = new VCHClient("localhost", 5555, null);
         Connection connection = client.createConnection();
         EchoTestUtil.testEcho(connection);
         client.shutdown();

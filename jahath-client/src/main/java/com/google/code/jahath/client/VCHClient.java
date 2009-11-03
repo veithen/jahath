@@ -29,15 +29,15 @@ import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
-public class JahathClient {
-    private static final Logger log = Logger.getLogger(JahathClient.class.getName());
+public class VCHClient {
+    private static final Logger log = Logger.getLogger(VCHClient.class.getName());
     
     private final String serverHost;
     private final int serverPort;
     private final ProxyConfiguration proxyConfiguration;
     private final ExecutorService executorService;
     
-    public JahathClient(String serverHost, int serverPort, ProxyConfiguration proxyConfiguration) {
+    public VCHClient(String serverHost, int serverPort, ProxyConfiguration proxyConfiguration) {
         this.serverHost = serverHost;
         this.serverPort = serverPort;
         this.proxyConfiguration = proxyConfiguration;

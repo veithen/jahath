@@ -30,10 +30,10 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.code.jahath.client.JahathClient;
+import com.google.code.jahath.client.VCHClient;
 import com.google.code.jahath.client.ProxyConfiguration;
 import com.google.code.jahath.client.tunnel.Tunnel;
-import com.google.code.jahath.server.JahathServer;
+import com.google.code.jahath.server.VCHServer;
 import com.google.code.jahath.server.socks.SocksConnectionHandler;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
@@ -53,7 +53,7 @@ public class MailTest {
         greenMail.setUser("user@localhost", "user", "password");
         greenMail.start();
         
-        JahathServer server = new JahathServer(serverPort, new SocksConnectionHandler());
+        VCHServer server = new VCHServer(serverPort, new SocksConnectionHandler());
         
         ProxyServer proxy;
         ProxyConfiguration proxyConfiguration;
@@ -65,7 +65,7 @@ public class MailTest {
             proxyConfiguration = null;
         }
         
-        JahathClient client = new JahathClient("localhost", serverPort, proxyConfiguration);
+        VCHClient client = new VCHClient("localhost", serverPort, proxyConfiguration);
         Tunnel smtpTunnel = new Tunnel(smtpTunnelPort, client, new InetSocketAddress("localhost", smtpPort));
         Tunnel imapTunnel = new Tunnel(imapTunnelPort, client, new InetSocketAddress("localhost", imapPort));
         

@@ -17,7 +17,7 @@ package com.google.code.jahath.client.forward;
 
 import java.io.IOException;
 
-import com.google.code.jahath.client.JahathClient;
+import com.google.code.jahath.client.VCHClient;
 import com.google.code.jahath.common.server.Server;
 
 /**
@@ -26,7 +26,7 @@ import com.google.code.jahath.common.server.Server;
  * @author Andreas Veithen
  */
 public class Forwarder extends Server {
-    public Forwarder(int port, JahathClient client) throws IOException {
+    public Forwarder(int port, VCHClient client) throws IOException {
         super(port, new ForwardConnectionHandler(client));
     }
 }

@@ -18,11 +18,11 @@ package com.google.code.jahath.client.tunnel;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import com.google.code.jahath.client.JahathClient;
+import com.google.code.jahath.client.VCHClient;
 import com.google.code.jahath.common.server.Server;
 
 public class Tunnel extends Server {
-    public Tunnel(int port, JahathClient client, InetSocketAddress target) throws IOException {
+    public Tunnel(int port, VCHClient client, InetSocketAddress target) throws IOException {
         super(port, new TunnelConnectionHandler(client, target));
     }
 }

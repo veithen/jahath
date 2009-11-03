@@ -78,12 +78,12 @@ class ConnectionImpl extends AbstractConnection {
         }
     }
     
-    final JahathClient client;
+    final VCHClient client;
     final String sessionId;
     private final OutputStream out;
     private final InputStream in;
     
-    public ConnectionImpl(JahathClient client, String sessionId) {
+    public ConnectionImpl(VCHClient client, String sessionId) {
         this.client = client;
         this.sessionId = sessionId;
         out = new SessionOutputStream();

@@ -21,7 +21,7 @@ import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.client.JahathClient;
+import com.google.code.jahath.client.VCHClient;
 import com.google.code.jahath.common.ConnectionRelay;
 import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
@@ -33,10 +33,10 @@ import com.google.code.jahath.common.socks.SocksDataOutputStream;
 class TunnelConnectionHandler implements ConnectionHandler {
     private static final Logger log = Logger.getLogger(TunnelConnectionHandler.class.getName());
     
-    private final JahathClient client;
+    private final VCHClient client;
     private final InetSocketAddress target;
     
-    public TunnelConnectionHandler(JahathClient client, InetSocketAddress target) {
+    public TunnelConnectionHandler(VCHClient client, InetSocketAddress target) {
         this.client = client;
         this.target = target;
     }

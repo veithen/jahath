@@ -18,7 +18,7 @@ package com.google.code.jahath.client.forward;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.client.JahathClient;
+import com.google.code.jahath.client.VCHClient;
 import com.google.code.jahath.common.ConnectionRelay;
 import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
@@ -27,9 +27,9 @@ import com.google.code.jahath.common.container.ExecutionEnvironment;
 class ForwardConnectionHandler implements ConnectionHandler {
     private static final Logger log = Logger.getLogger(ForwardConnectionHandler.class.getName());
     
-    private final JahathClient client;
+    private final VCHClient client;
     
-    public ForwardConnectionHandler(JahathClient client) {
+    public ForwardConnectionHandler(VCHClient client) {
         this.client = client;
     }
 

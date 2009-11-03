@@ -20,11 +20,11 @@ import java.io.IOException;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.server.http.HttpServer;
 
-public class JahathServer {
+public class VCHServer {
     private final ConnectionHandler connectionHandler;
     private final HttpServer httpServer;
     
-    public JahathServer(int port, ConnectionHandler connectionHandler) throws IOException {
+    public VCHServer(int port, ConnectionHandler connectionHandler) throws IOException {
         this.connectionHandler = connectionHandler;
         httpServer = new HttpServer(port, new HttpRequestHandlerImpl(connectionHandler));
     }
