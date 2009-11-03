@@ -30,11 +30,11 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.code.jahath.client.VCHClient;
 import com.google.code.jahath.client.http.ProxyConfiguration;
 import com.google.code.jahath.client.tunnel.Tunnel;
-import com.google.code.jahath.server.VCHServer;
+import com.google.code.jahath.client.vch.VCHClient;
 import com.google.code.jahath.server.socks.SocksConnectionHandler;
+import com.google.code.jahath.server.vch.VCHServer;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
 

@@ -17,7 +17,7 @@ package com.google.code.jahath.client.forward;
 
 import java.io.IOException;
 
-import com.google.code.jahath.client.VCHClient;
+import com.google.code.jahath.client.vch.VCHClient;
 import com.google.code.jahath.common.server.Server;
 
 /**

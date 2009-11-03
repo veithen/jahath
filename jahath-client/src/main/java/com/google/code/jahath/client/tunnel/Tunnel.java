@@ -18,7 +18,7 @@ package com.google.code.jahath.client.tunnel;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import com.google.code.jahath.client.VCHClient;
+import com.google.code.jahath.client.vch.VCHClient;
 import com.google.code.jahath.common.server.Server;
 
 public class Tunnel extends Server {
