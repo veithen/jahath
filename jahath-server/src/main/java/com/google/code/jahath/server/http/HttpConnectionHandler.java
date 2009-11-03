@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpHeadersProvider;
 import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
@@ -36,7 +37,7 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
     }
 
     public void writeHeaders(HttpOutMessage message) throws IOException {
-        message.addHeader("Connection", "keep-alive");
+        message.addHeader(HttpConstants.H_CONNECTION, "keep-alive");
     }
 
     public void handle(ExecutionEnvironment env, Connection connection) {

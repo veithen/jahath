@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import com.google.code.jahath.common.LogUtil;
 import com.google.code.jahath.common.connection.Connection;
+import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 public class JahathClient {
@@ -74,10 +75,10 @@ public class JahathClient {
             request.writeLine(method + " http://" + address + path + " HTTP/1.1");
         }
         HttpRequest httpRequest = new HttpRequest(request, LogUtil.log(socket.getInputStream(), log, Level.FINER, "HTTP response"));
-        httpRequest.addHeader("Host", address);
-        httpRequest.addHeader("Connection", "keep-alive");
+        httpRequest.addHeader(HttpConstants.H_HOST, address);
+        httpRequest.addHeader(HttpConstants.H_CONNECTION, "keep-alive");
         if (proxyConfiguration != null) {
-            httpRequest.addHeader("Proxy-Connection", "keep-alive");
+            httpRequest.addHeader(HttpConstants.H_PROXY_CONNECTION, "keep-alive");
         }
         return httpRequest;
     }

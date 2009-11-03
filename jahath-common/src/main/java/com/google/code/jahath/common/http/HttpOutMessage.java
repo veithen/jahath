@@ -43,8 +43,8 @@ public class HttpOutMessage {
         if (headersProvider != null) {
             headersProvider.writeHeaders(this);
         }
-        request.writeHeader("Content-Type", contentType);
-        request.writeHeader("Transfer-Encoding", "chunked");
+        request.writeHeader(HttpConstants.H_CONTENT_TYPE, contentType);
+        request.writeHeader(HttpConstants.H_TRANSFER_ENCODING, "chunked");
         request.flushHeaders();
         request.flush(); // TODO: remove this when no longer necessary
         return new ChunkedOutputStream(request);
@@ -54,7 +54,7 @@ public class HttpOutMessage {
         if (headersProvider != null) {
             headersProvider.writeHeaders(this);
         }
-        request.writeHeader("Content-Length", "0");
+        request.writeHeader(HttpConstants.H_CONTENT_LENGTH, "0");
         request.writeLine("");
         request.flush();
     }

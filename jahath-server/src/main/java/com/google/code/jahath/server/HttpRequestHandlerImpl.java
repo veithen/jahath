@@ -81,7 +81,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         } else {
             String connectionId = path.substring(1);
             ConnectionImpl connection = getConnection(connectionId);
-            if (request.getHeader("Content-Type") != null) {
+            if (request.getHeader(HttpConstants.H_CONTENT_TYPE) != null) {
             	handleSend(connection, request, response);
             } else {
             	handleReceive(connection, request, response);
@@ -92,7 +92,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
     private void handleConnect(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws IOException {
         response.setStatus(HttpConstants.SC_NO_CONTENT);
         response.addHeader("X-JHT-Connection-Id", connection.getId());
-        response.addHeader("Location", request.makeAbsoluteURI("/connections/" + connection.getId()));
+        response.addHeader(HttpConstants.H_LOCATION, request.makeAbsoluteURI("/connections/" + connection.getId()));
         response.commit();
     }
     

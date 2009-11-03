@@ -18,6 +18,7 @@ package com.google.code.jahath.server.http;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpInMessage;
 
 public class HttpRequest extends HttpInMessage {
@@ -44,7 +45,7 @@ public class HttpRequest extends HttpInMessage {
     public String makeAbsoluteURI(String path) throws IOException {
         StringBuilder buffer = new StringBuilder(secure ? "https" : "http");
         buffer.append("://");
-        String host = getHeader("Host");
+        String host = getHeader(HttpConstants.H_HOST);
         // TODO: check if Host header is actually present
         buffer.append(host);
         if (!path.startsWith("/")) {

@@ -56,14 +56,14 @@ public abstract class HttpInMessage {
             if (log.isLoggable(Level.FINE)) {
                 log.fine("HTTP headers: " + headers);
             }
-            Integer contentLength = headers.getIntHeader("Content-Length");
+            Integer contentLength = headers.getIntHeader(HttpConstants.H_CONTENT_LENGTH);
             if (contentLength != null) {
                 if (contentLength == 0) {
                     contentStream = null;
                 } else {
                     contentStream = new LengthLimitedInputStream(in, contentLength);
                 }
-            } else if ("chunked".equals(headers.getHeader("Transfer-Encoding"))) {
+            } else if ("chunked".equals(headers.getHeader(HttpConstants.H_TRANSFER_ENCODING))) {
                 contentStream = new ChunkedInputStream(in);
             } else {
                 contentStream = null;

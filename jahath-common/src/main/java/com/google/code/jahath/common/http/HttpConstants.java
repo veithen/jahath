@@ -554,6 +554,20 @@ public class HttpConstants {
      */
     public static final int SC_HTTP_VERSION_NOT_SUPPORTED = 505;
 
+    public static final String H_CONNECTION = "Connection";
+    
+    public static final String H_CONTENT_LENGTH = "Content-Length";
+
+    public static final String H_CONTENT_TYPE = "Content-Type";
+
+    public static final String H_HOST = "Host";
+    
+    public static final String H_LOCATION = "Location";
+    
+    public static final String H_PROXY_CONNECTION = "Proxy-Connection";
+    
+    public static final String H_TRANSFER_ENCODING = "Transfer-Encoding";
+    
     /**
      * Get the reason phrase for a given status code.
      * 
