@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.google.code.jahath.client.http.HttpRequest;
+import com.google.code.jahath.client.http.HttpResponse;
 import com.google.code.jahath.common.connection.AbstractConnection;
 
 class ConnectionImpl extends AbstractConnection {

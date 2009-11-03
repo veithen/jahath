@@ -31,7 +31,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.code.jahath.client.VCHClient;
-import com.google.code.jahath.client.ProxyConfiguration;
+import com.google.code.jahath.client.http.ProxyConfiguration;
 import com.google.code.jahath.client.tunnel.Tunnel;
 import com.google.code.jahath.server.VCHServer;
 import com.google.code.jahath.server.socks.SocksConnectionHandler;

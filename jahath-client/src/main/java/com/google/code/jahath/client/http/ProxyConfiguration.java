@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client;
+package com.google.code.jahath.client.http;
 
 public class ProxyConfiguration {
     private final String host;

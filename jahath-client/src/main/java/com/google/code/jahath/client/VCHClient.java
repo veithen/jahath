@@ -16,71 +16,33 @@
 package com.google.code.jahath.client;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import com.google.code.jahath.common.LogUtil;
+import com.google.code.jahath.client.http.HttpClient;
+import com.google.code.jahath.client.http.HttpRequest;
+import com.google.code.jahath.client.http.HttpResponse;
+import com.google.code.jahath.client.http.ProxyConfiguration;
+import com.google.code.jahath.client.http.HttpRequest.Method;
 import com.google.code.jahath.common.connection.Connection;
-import com.google.code.jahath.common.http.HttpConstants;
-import com.google.code.jahath.common.http.HttpOutputStream;
 
 public class VCHClient {
-    private static final Logger log = Logger.getLogger(VCHClient.class.getName());
-    
-    private final String serverHost;
-    private final int serverPort;
-    private final ProxyConfiguration proxyConfiguration;
+    private final HttpClient httpClient;
     private final ExecutorService executorService;
     
     public VCHClient(String serverHost, int serverPort, ProxyConfiguration proxyConfiguration) {
-        this.serverHost = serverHost;
-        this.serverPort = serverPort;
-        this.proxyConfiguration = proxyConfiguration;
+        httpClient = new HttpClient(serverHost, serverPort, proxyConfiguration);
         executorService = new ThreadPoolExecutor(6, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
     }
     
-    public String getServerHost() {
-        return serverHost;
-    }
-
-    public int getServerPort() {
-        return serverPort;
-    }
-
-    ProxyConfiguration getProxyConfiguration() {
-        return proxyConfiguration;
-    }
-
     ExecutorService getExecutorService() {
         return executorService;
     }
     
-    HttpRequest createRequest(HttpRequest.Method method, String path) throws IOException {
-        Socket socket;
-        if (proxyConfiguration == null) {
-            socket = new Socket(serverHost, serverPort);
-        } else {
-            socket = new Socket(proxyConfiguration.getHost(), proxyConfiguration.getPort());
-        }
-        HttpOutputStream request = new HttpOutputStream(LogUtil.log(socket.getOutputStream(), log, Level.FINER, "HTTP request"));
-        String address = serverPort == 80 ? serverHost : serverHost + ":" + serverPort;
-        if (proxyConfiguration == null) {
-            request.writeLine(method + " " + path + " HTTP/1.1");
-        } else {
-            request.writeLine(method + " http://" + address + path + " HTTP/1.1");
-        }
-        HttpRequest httpRequest = new HttpRequest(request, LogUtil.log(socket.getInputStream(), log, Level.FINER, "HTTP response"));
-        httpRequest.addHeader(HttpConstants.H_HOST, address);
-        httpRequest.addHeader(HttpConstants.H_CONNECTION, "keep-alive");
-        if (proxyConfiguration != null) {
-            httpRequest.addHeader(HttpConstants.H_PROXY_CONNECTION, "keep-alive");
-        }
-        return httpRequest;
+    HttpRequest createRequest(Method method, String path) throws IOException {
+        return httpClient.createRequest(method, path);
     }
 
     public Connection createConnection() throws IOException {

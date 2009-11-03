@@ -13,30 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client;
+package com.google.code.jahath.client.http;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.google.code.jahath.common.http.HttpOutMessage;
-import com.google.code.jahath.common.http.HttpOutputStream;
+import com.google.code.jahath.common.http.HttpInMessage;
 
-class HttpRequest extends HttpOutMessage {
-    public enum Method { GET, POST };
-    
-    private final InputStream response;
-    
-    public HttpRequest(HttpOutputStream request, InputStream response) {
-        super(request, null);
-        this.response = response;
+public class HttpResponse extends HttpInMessage {
+    HttpResponse(InputStream in) throws IOException {
+        super(in);
     }
-    
-    public HttpResponse getResponse() throws IOException {
-        return new HttpResponse(response);
-    }
-    
-    public HttpResponse execute() throws IOException {
-        commit();
-        return getResponse();
+
+    @Override
+    protected void processFirstLine(String line) {
+        // TODO: process status line
     }
 }
