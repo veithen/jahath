@@ -16,10 +16,6 @@
 package com.google.code.jahath.client.vch;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import com.google.code.jahath.client.http.HttpClient;
 import com.google.code.jahath.client.http.HttpRequest;
@@ -29,15 +25,9 @@ import com.google.code.jahath.common.connection.Connection;
 
 public class VCHClient {
     private final HttpClient httpClient;
-    private final ExecutorService executorService;
     
     public VCHClient(String serverHost, int serverPort, ProxyConfiguration proxyConfiguration) {
         httpClient = new HttpClient(serverHost, serverPort, proxyConfiguration);
-        executorService = new ThreadPoolExecutor(6, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-    }
-    
-    ExecutorService getExecutorService() {
-        return executorService;
     }
     
     public Connection createConnection() throws IOException {
@@ -48,6 +38,6 @@ public class VCHClient {
     }
 
     public void shutdown() {
-        executorService.shutdown();
+        // TODO: probably the HttpClient class will have a shutdown method that needs to be called here
     }
 }
