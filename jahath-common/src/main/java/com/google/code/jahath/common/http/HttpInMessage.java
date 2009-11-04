@@ -29,11 +29,11 @@ public abstract class HttpInMessage {
     private Headers headers;
     private InputStream contentStream;
 
-    public HttpInMessage(InputStream in) throws IOException {
+    public HttpInMessage(InputStream in) {
         this.in = new CRLFInputStream(in);
     }
 
-    protected abstract void processFirstLine(String line);
+    protected abstract void processFirstLine(String line) throws HttpProtocolException;
     
     /**
      * Block until data for this message is available, i.e until the start of the message has been
@@ -49,29 +49,33 @@ public abstract class HttpInMessage {
         return headers != null || in.awaitInput();
     }
     
-    protected void processHeaders() throws IOException {
+    protected void processHeaders() throws HttpException {
         if (headers == null) {
-            processFirstLine(in.readLine());
-            headers = new Headers(in);
-            if (log.isLoggable(Level.FINE)) {
-                log.fine("HTTP headers: " + headers);
-            }
-            Integer contentLength = headers.getIntHeader(HttpConstants.H_CONTENT_LENGTH);
-            if (contentLength != null) {
-                if (contentLength == 0) {
-                    contentStream = null;
-                } else {
-                    contentStream = new LengthLimitedInputStream(in, contentLength);
+            try {
+                processFirstLine(in.readLine());
+                headers = new Headers(in);
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("HTTP headers: " + headers);
                 }
-            } else if ("chunked".equals(headers.getHeader(HttpConstants.H_TRANSFER_ENCODING))) {
-                contentStream = new ChunkedInputStream(in);
-            } else {
-                contentStream = null;
+                Integer contentLength = headers.getIntHeader(HttpConstants.H_CONTENT_LENGTH);
+                if (contentLength != null) {
+                    if (contentLength == 0) {
+                        contentStream = null;
+                    } else {
+                        contentStream = new LengthLimitedInputStream(in, contentLength);
+                    }
+                } else if ("chunked".equals(headers.getHeader(HttpConstants.H_TRANSFER_ENCODING))) {
+                    contentStream = new ChunkedInputStream(in);
+                } else {
+                    contentStream = null;
+                }
+            } catch (IOException ex) {
+                throw new HttpConnectionException(ex);
             }
         }
     }
     
-    public String getHeader(String name) throws IOException {
+    public String getHeader(String name) throws HttpException {
         processHeaders();
         return headers.getHeader(name);
     }
@@ -83,7 +87,7 @@ public abstract class HttpInMessage {
      *         no content
      * @throws IOException 
      */
-    public InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() throws HttpException {
         processHeaders();
         return contentStream;
     }

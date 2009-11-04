@@ -15,13 +15,12 @@
  */
 package com.google.code.jahath.client.vch;
 
-import java.io.IOException;
-
 import com.google.code.jahath.client.http.HttpClient;
 import com.google.code.jahath.client.http.HttpRequest;
 import com.google.code.jahath.client.http.HttpResponse;
 import com.google.code.jahath.client.http.ProxyConfiguration;
 import com.google.code.jahath.common.connection.Connection;
+import com.google.code.jahath.common.http.HttpException;
 
 public class VCHClient {
     private final HttpClient httpClient;
@@ -30,11 +29,15 @@ public class VCHClient {
         httpClient = new HttpClient(serverHost, serverPort, proxyConfiguration);
     }
     
-    public Connection createConnection() throws IOException {
-        HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/");
-        HttpResponse response = request.execute();
-        String connectionId = response.getHeader("X-JHT-Connection-Id");
-        return new ConnectionImpl(httpClient, connectionId);
+    public Connection createConnection() throws VCHConnectionException {
+        try {
+            HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/");
+            HttpResponse response = request.execute();
+            String connectionId = response.getHeader("X-JHT-Connection-Id");
+            return new ConnectionImpl(httpClient, connectionId);
+        } catch (HttpException ex) {
+            throw new VCHConnectionException(ex);
+        }
     }
 
     public void shutdown() {

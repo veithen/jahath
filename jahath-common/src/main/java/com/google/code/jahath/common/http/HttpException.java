@@ -13,20 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client.http;
+package com.google.code.jahath.common.http;
 
-import java.io.InputStream;
+public abstract class HttpException extends Exception {
+    private static final long serialVersionUID = -1895056508014371903L;
 
-import com.google.code.jahath.common.http.HttpInMessage;
-import com.google.code.jahath.common.http.HttpProtocolException;
-
-public class HttpResponse extends HttpInMessage {
-    HttpResponse(InputStream in) {
-        super(in);
+    public HttpException() {
     }
 
-    @Override
-    protected void processFirstLine(String line) throws HttpProtocolException {
-        // TODO: process status line
+    public HttpException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public HttpException(String message) {
+        super(message);
+    }
+
+    public HttpException(Throwable cause) {
+        super(cause);
     }
 }

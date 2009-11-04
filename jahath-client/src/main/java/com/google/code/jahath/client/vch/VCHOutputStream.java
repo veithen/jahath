@@ -20,6 +20,7 @@ import java.io.OutputStream;
 
 import com.google.code.jahath.client.http.HttpClient;
 import com.google.code.jahath.client.http.HttpRequest;
+import com.google.code.jahath.common.http.HttpException;
 
 class VCHOutputStream extends OutputStream {
     private final HttpClient httpClient;
@@ -35,8 +36,12 @@ class VCHOutputStream extends OutputStream {
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
         if (request == null) {
-            request = httpClient.createRequest(HttpRequest.Method.POST, "/" + connectionId);
-            out = request.getOutputStream("application/octet-stream");
+            try {
+                request = httpClient.createRequest(HttpRequest.Method.POST, "/" + connectionId);
+                out = request.getOutputStream("application/octet-stream");
+            } catch (HttpException ex) {
+                throw new VCHConnectionException(ex);
+            }
         }
         out.write(b, off, len);
     }
@@ -50,7 +55,11 @@ class VCHOutputStream extends OutputStream {
     public void flush() throws IOException {
         out.close();
         // TODO: we need to consume the response somewhere!
-        request.getResponse();
+        try {
+            request.getResponse();
+        } catch (HttpException ex) {
+            throw new VCHConnectionException(ex);
+        }
         request = null;
         out = null;
     }

@@ -28,7 +28,9 @@ import java.util.logging.Logger;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.connection.ConnectionHandlerTask;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.google.code.jahath.common.http.HttpConnectionException;
 import com.google.code.jahath.common.http.HttpConstants;
+import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.server.http.HttpRequest;
 import com.google.code.jahath.server.http.HttpRequestHandler;
 import com.google.code.jahath.server.http.HttpResponse;
@@ -56,7 +58,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         return buffer.toString();
     }
 
-    private ConnectionImpl createConnection(ExecutionEnvironment env) throws IOException {
+    private ConnectionImpl createConnection(ExecutionEnvironment env) {
         String id = generateConnectionId();
         if (log.isLoggable(Level.FINE)) {
             log.fine("Setting up new connection " + id);
@@ -71,7 +73,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         return connections.get(id);
     }
     
-    public void handle(ExecutionEnvironment env, HttpRequest request, HttpResponse response) throws IOException {
+    public void handle(ExecutionEnvironment env, HttpRequest request, HttpResponse response) throws HttpException {
         String path = request.getPath();
         if (log.isLoggable(Level.FINE)) {
             log.fine("Processing request for path " + path);
@@ -89,14 +91,14 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         }
     }
     
-    private void handleConnect(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws IOException {
+    private void handleConnect(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws HttpException {
         response.setStatus(HttpConstants.SC_NO_CONTENT);
         response.addHeader("X-JHT-Connection-Id", connection.getId());
         response.addHeader(HttpConstants.H_LOCATION, request.makeAbsoluteURI("/connections/" + connection.getId()));
         response.commit();
     }
     
-    private void handleSend(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws IOException {
+    private void handleSend(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws HttpException {
         InputStream data = request.getInputStream();
         if (data == null) {
             log.info("Protocol error: request didn't contain data");
@@ -113,7 +115,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         response.commit();
     }
     
-    private void handleReceive(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws IOException {
+    private void handleReceive(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws HttpException {
         response.setStatus(HttpConstants.SC_OK);
         OutputStream out = response.getOutputStream("application/octet-stream");
         try {
@@ -122,6 +124,10 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
             // TODO: check what to do here
             Thread.currentThread().interrupt();
         }
-        out.close();
+        try {
+            out.close();
+        } catch (IOException ex) {
+            throw new HttpConnectionException(ex); // TODO: verify this
+        }
     }
 }

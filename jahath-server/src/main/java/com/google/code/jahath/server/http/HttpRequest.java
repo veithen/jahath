@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.google.code.jahath.common.http.HttpConstants;
+import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.common.http.HttpInMessage;
+import com.google.code.jahath.common.http.HttpProtocolException;
 
 public class HttpRequest extends HttpInMessage {
     private final boolean secure;
@@ -31,18 +33,18 @@ public class HttpRequest extends HttpInMessage {
     }
 
     @Override
-    protected void processFirstLine(String line) {
+    protected void processFirstLine(String line) throws HttpProtocolException {
         // TODO: do this properly!
         String[] parts = line.split(" ");
         path = parts[1];
     }
 
-    public String getPath() throws IOException {
+    public String getPath() throws HttpException {
         processHeaders();
         return path;
     }
     
-    public String makeAbsoluteURI(String path) throws IOException {
+    public String makeAbsoluteURI(String path) throws HttpException {
         StringBuilder buffer = new StringBuilder(secure ? "https" : "http");
         buffer.append("://");
         String host = getHeader(HttpConstants.H_HOST);

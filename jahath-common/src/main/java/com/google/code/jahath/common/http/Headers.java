@@ -24,12 +24,12 @@ import com.google.code.jahath.common.CRLFInputStream;
 public class Headers {
     private final Map<String,String> headers = new HashMap<String,String>();
     
-    public Headers(CRLFInputStream in) throws IOException {
+    public Headers(CRLFInputStream in) throws IOException, HttpProtocolException {
         String line;
         while ((line = in.readLine()).length() > 0) {
             int i = line.indexOf(':');
             if (i == -1) {
-                throw new IOException("Invalid header");
+                throw new HttpProtocolException("Invalid header");
             }
             int j = i+1;
             // TODO: potential ArrayIndexOutOfBoundsException here!

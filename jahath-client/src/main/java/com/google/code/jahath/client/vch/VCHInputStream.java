@@ -21,6 +21,7 @@ import java.io.InputStream;
 import com.google.code.jahath.client.http.HttpClient;
 import com.google.code.jahath.client.http.HttpRequest;
 import com.google.code.jahath.client.http.HttpResponse;
+import com.google.code.jahath.common.http.HttpException;
 
 class VCHInputStream extends InputStream {
     private final HttpClient httpClient;
@@ -36,9 +37,13 @@ class VCHInputStream extends InputStream {
     public int read(byte[] b, int off, int len) throws IOException {
         while (true) {
             if (in == null) {
-                HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/" + connectionId);
-                HttpResponse response = request.execute();
-                in = response.getInputStream();
+                try {
+                    HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/" + connectionId);
+                    HttpResponse response = request.execute();
+                    in = response.getInputStream();
+                } catch (HttpException ex) {
+                    throw new VCHConnectionException(ex);
+                }
             }
             int c = in.read(b, off, len);
             if (c == -1) {

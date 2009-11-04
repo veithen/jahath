@@ -15,9 +15,8 @@
  */
 package com.google.code.jahath.server.http;
 
-import java.io.IOException;
-
 import com.google.code.jahath.common.http.HttpConstants;
+import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.common.http.HttpHeadersProvider;
 import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
@@ -27,13 +26,13 @@ public class HttpResponse extends HttpOutMessage {
         super(out, headersProvider);
     }
 
-    public void setStatus(int statusCode) throws IOException {
+    public void setStatus(int statusCode) throws HttpException {
         writeLine("HTTP/1.1 " + statusCode + " " + HttpConstants.getReasonPhrase(statusCode));
     }
     
     // TODO: this is only to increase visibility; shall we keep it like this?
     @Override
-    public void commit() throws IOException {
+    public void commit() throws HttpException {
         super.commit();
     }
 }

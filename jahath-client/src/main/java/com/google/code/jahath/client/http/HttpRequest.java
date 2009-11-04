@@ -15,9 +15,9 @@
  */
 package com.google.code.jahath.client.http;
 
-import java.io.IOException;
 import java.io.InputStream;
 
+import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
@@ -31,11 +31,11 @@ public class HttpRequest extends HttpOutMessage {
         this.response = response;
     }
     
-    public HttpResponse getResponse() throws IOException {
+    public HttpResponse getResponse() throws HttpException {
         return new HttpResponse(response);
     }
     
-    public HttpResponse execute() throws IOException {
+    public HttpResponse execute() throws HttpException {
         commit();
         return getResponse();
     }

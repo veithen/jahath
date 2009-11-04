@@ -27,35 +27,55 @@ public class HttpOutMessage {
         this.headersProvider = headersProvider;
     }
 
-    protected void writeLine(String s) throws IOException {
-        request.writeLine(s);
+    protected void writeLine(String s) throws HttpException {
+        try {
+            request.writeLine(s);
+        } catch (IOException ex) {
+            throw new HttpConnectionException(ex);
+        }
     }
 
-    public void addHeader(String name, String value) throws IOException {
-        request.writeHeader(name, value);
+    public void addHeader(String name, String value) throws HttpException {
+        try {
+            request.writeHeader(name, value);
+        } catch (IOException ex) {
+            throw new HttpConnectionException(ex);
+        }
     }
     
-    public void addIntHeader(String name, int value) throws IOException {
-        request.writeIntHeader(name, value);
+    public void addIntHeader(String name, int value) throws HttpException {
+        try {
+            request.writeIntHeader(name, value);
+        } catch (IOException ex) {
+            throw new HttpConnectionException(ex);
+        }
     }
     
-    public OutputStream getOutputStream(String contentType) throws IOException {
+    public OutputStream getOutputStream(String contentType) throws HttpException {
+        try {
+            if (headersProvider != null) {
+                headersProvider.writeHeaders(this);
+            }
+            request.writeHeader(HttpConstants.H_CONTENT_TYPE, contentType);
+            request.writeHeader(HttpConstants.H_TRANSFER_ENCODING, "chunked");
+            request.flushHeaders();
+            request.flush(); // TODO: remove this when no longer necessary
+            return new ChunkedOutputStream(request);
+        } catch (IOException ex) {
+            throw new HttpConnectionException(ex);
+        }
+    }
+
+    protected void commit() throws HttpException {
         if (headersProvider != null) {
             headersProvider.writeHeaders(this);
         }
-        request.writeHeader(HttpConstants.H_CONTENT_TYPE, contentType);
-        request.writeHeader(HttpConstants.H_TRANSFER_ENCODING, "chunked");
-        request.flushHeaders();
-        request.flush(); // TODO: remove this when no longer necessary
-        return new ChunkedOutputStream(request);
-    }
-
-    protected void commit() throws IOException {
-        if (headersProvider != null) {
-            headersProvider.writeHeaders(this);
+        try {
+            request.writeHeader(HttpConstants.H_CONTENT_LENGTH, "0");
+            request.writeLine("");
+            request.flush();
+        } catch (IOException ex) {
+            throw new HttpConnectionException(ex);
         }
-        request.writeHeader(HttpConstants.H_CONTENT_LENGTH, "0");
-        request.writeLine("");
-        request.flush();
     }
 }

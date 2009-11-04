@@ -21,7 +21,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.common.LogUtil;
+import com.google.code.jahath.common.http.HttpConnectionException;
 import com.google.code.jahath.common.http.HttpConstants;
+import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 public class HttpClient {
@@ -37,26 +39,30 @@ public class HttpClient {
         this.proxyConfiguration = proxyConfiguration;
     }
 
-    public HttpRequest createRequest(HttpRequest.Method method, String path) throws IOException {
-        Socket socket;
-        if (proxyConfiguration == null) {
-            socket = new Socket(serverHost, serverPort);
-        } else {
-            socket = new Socket(proxyConfiguration.getHost(), proxyConfiguration.getPort());
+    public HttpRequest createRequest(HttpRequest.Method method, String path) throws HttpException {
+        try {
+            Socket socket;
+            if (proxyConfiguration == null) {
+                socket = new Socket(serverHost, serverPort);
+            } else {
+                socket = new Socket(proxyConfiguration.getHost(), proxyConfiguration.getPort());
+            }
+            HttpOutputStream request = new HttpOutputStream(LogUtil.log(socket.getOutputStream(), log, Level.FINER, "HTTP request"));
+            String address = serverPort == 80 ? serverHost : serverHost + ":" + serverPort;
+            if (proxyConfiguration == null) {
+                request.writeLine(method + " " + path + " HTTP/1.1");
+            } else {
+                request.writeLine(method + " http://" + address + path + " HTTP/1.1");
+            }
+            HttpRequest httpRequest = new HttpRequest(request, LogUtil.log(socket.getInputStream(), log, Level.FINER, "HTTP response"));
+            httpRequest.addHeader(HttpConstants.H_HOST, address);
+            httpRequest.addHeader(HttpConstants.H_CONNECTION, "keep-alive");
+            if (proxyConfiguration != null) {
+                httpRequest.addHeader(HttpConstants.H_PROXY_CONNECTION, "keep-alive");
+            }
+            return httpRequest;
+        } catch (IOException ex) {
+            throw new HttpConnectionException(ex);
         }
-        HttpOutputStream request = new HttpOutputStream(LogUtil.log(socket.getOutputStream(), log, Level.FINER, "HTTP request"));
-        String address = serverPort == 80 ? serverHost : serverHost + ":" + serverPort;
-        if (proxyConfiguration == null) {
-            request.writeLine(method + " " + path + " HTTP/1.1");
-        } else {
-            request.writeLine(method + " http://" + address + path + " HTTP/1.1");
-        }
-        HttpRequest httpRequest = new HttpRequest(request, LogUtil.log(socket.getInputStream(), log, Level.FINER, "HTTP response"));
-        httpRequest.addHeader(HttpConstants.H_HOST, address);
-        httpRequest.addHeader(HttpConstants.H_CONNECTION, "keep-alive");
-        if (proxyConfiguration != null) {
-            httpRequest.addHeader(HttpConstants.H_PROXY_CONNECTION, "keep-alive");
-        }
-        return httpRequest;
     }
 }

@@ -15,8 +15,6 @@
  */
 package com.google.code.jahath.common.http;
 
-import java.io.IOException;
-
 /**
  * Provider of headers to be added to an {@link HttpOutMessage}. HTTP requests and responses contain
  * two categories of headers:
@@ -33,5 +31,5 @@ import java.io.IOException;
  * @author Andreas Veithen
  */
 public interface HttpHeadersProvider {
-    void writeHeaders(HttpOutMessage message) throws IOException;
+    void writeHeaders(HttpOutMessage message) throws HttpException;
 }

@@ -15,10 +15,9 @@
  */
 package com.google.code.jahath.server.http;
 
-import java.io.IOException;
-
 import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.google.code.jahath.common.http.HttpException;
 
 public interface HttpRequestHandler {
-    void handle(ExecutionEnvironment env, HttpRequest request, HttpResponse response) throws IOException;
+    void handle(ExecutionEnvironment env, HttpRequest request, HttpResponse response) throws HttpException;
 }
