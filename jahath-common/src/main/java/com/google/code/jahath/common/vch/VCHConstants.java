@@ -13,20 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client.forward;
+package com.google.code.jahath.common.vch;
 
-import java.io.IOException;
-
-import com.google.code.jahath.client.vch.VCHClient;
-import com.google.code.jahath.common.server.Server;
-
-/**
- * Listens on a TCP port and forwards connections to a service registered in the Jahath server.
- * 
- * @author Andreas Veithen
- */
-public class Forwarder extends Server {
-    public Forwarder(int port, VCHClient client, String serviceName) throws IOException {
-        super(port, new ForwardConnectionHandler(client, serviceName));
-    }
+// TODO: the well known service names defined by this class should be added to the specs
+public class VCHConstants {
+    private VCHConstants() {}
+    
+    public static final String SERVICE_ECHO = "echo";
+    
+    public static final String SERVICE_SOCKS = "socks";
 }

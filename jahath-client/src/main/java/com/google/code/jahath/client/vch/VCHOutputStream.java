@@ -37,7 +37,7 @@ class VCHOutputStream extends OutputStream {
     public void write(byte[] b, int off, int len) throws IOException {
         if (request == null) {
             try {
-                request = httpClient.createRequest(HttpRequest.Method.POST, "/" + connectionId);
+                request = httpClient.createRequest(HttpRequest.Method.POST, "/connections/" + connectionId);
                 out = request.getOutputStream("application/octet-stream");
             } catch (HttpException ex) {
                 throw new VCHConnectionException(ex);

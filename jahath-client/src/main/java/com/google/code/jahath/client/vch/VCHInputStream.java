@@ -38,7 +38,7 @@ class VCHInputStream extends InputStream {
         while (true) {
             if (in == null) {
                 try {
-                    HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/" + connectionId);
+                    HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/connections/" + connectionId);
                     HttpResponse response = request.execute();
                     in = response.getInputStream();
                 } catch (HttpException ex) {

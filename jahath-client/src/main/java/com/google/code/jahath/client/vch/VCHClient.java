@@ -30,9 +30,9 @@ public class VCHClient {
         httpClient = new HttpClient(serverHost, serverPort, proxyConfiguration);
     }
     
-    public Connection createConnection() throws VCHException {
+    public Connection createConnection(String serviceName) throws VCHException {
         try {
-            HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/");
+            HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/services/" + serviceName);
             HttpResponse response = request.execute();
             switch (response.getStatusCode()) {
                 case HttpConstants.SC_NO_CONTENT: // TODO: should actually be SC_CREATED
@@ -49,7 +49,7 @@ public class VCHClient {
                     // TODO: we should validate the connection ID --> need to specify the format in the specs
                     return new ConnectionImpl(httpClient, connectionId);
                 case HttpConstants.SC_NOT_FOUND:
-                    throw new NoSuchServiceException("???"); // TODO: we don't support service names yet
+                    throw new NoSuchServiceException(serviceName);
                 default:
                     throw Util.createException(response);
             }

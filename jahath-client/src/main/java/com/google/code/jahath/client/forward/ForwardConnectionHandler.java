@@ -28,15 +28,17 @@ class ForwardConnectionHandler implements ConnectionHandler {
     private static final Logger log = Logger.getLogger(ForwardConnectionHandler.class.getName());
     
     private final VCHClient client;
+    private final String serviceName;
     
-    public ForwardConnectionHandler(VCHClient client) {
+    public ForwardConnectionHandler(VCHClient client, String serviceName) {
         this.client = client;
+        this.serviceName = serviceName;
     }
 
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
             // TODO: generate proper labels
-            new ConnectionRelay(log, env, connection, "???", client.createConnection(), "jahath-server");
+            new ConnectionRelay(log, env, connection, "???", client.createConnection(serviceName), "jahath-server");
         } catch (IOException ex) {
             // TODO
             ex.printStackTrace();

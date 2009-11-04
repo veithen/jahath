@@ -29,6 +29,7 @@ import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.socks.SocksConstants;
 import com.google.code.jahath.common.socks.SocksDataInputStream;
 import com.google.code.jahath.common.socks.SocksDataOutputStream;
+import com.google.code.jahath.common.vch.VCHConstants;
 
 class TunnelConnectionHandler implements ConnectionHandler {
     private static final Logger log = Logger.getLogger(TunnelConnectionHandler.class.getName());
@@ -43,7 +44,7 @@ class TunnelConnectionHandler implements ConnectionHandler {
 
     public void handle(ExecutionEnvironment env, Connection inConnection) {
         try {
-            Connection outConnection = client.createConnection();
+            Connection outConnection = client.createConnection(VCHConstants.SERVICE_SOCKS);
             SocksDataOutputStream out = new SocksDataOutputStream(new BufferedOutputStream(outConnection.getOutputStream(), 64));
             SocksDataInputStream in = new SocksDataInputStream(outConnection.getInputStream());
             

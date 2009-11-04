@@ -41,11 +41,11 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
     private static final SecureRandom random = new SecureRandom();
     private static String idChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!-";
     
-    private final ConnectionHandler connectionHandler;
+    private final ServiceRegistry serviceRegistry;
     private final Map<String,ConnectionImpl> connections = Collections.synchronizedMap(new HashMap<String,ConnectionImpl>());
 
-    public HttpRequestHandlerImpl(ConnectionHandler connectionHandler) {
-        this.connectionHandler = connectionHandler;
+    public HttpRequestHandlerImpl(ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
     }
 
     private static String generateConnectionId() {
@@ -58,17 +58,6 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         return buffer.toString();
     }
 
-    private ConnectionImpl createConnection(ExecutionEnvironment env) {
-        String id = generateConnectionId();
-        if (log.isLoggable(Level.FINE)) {
-            log.fine("Setting up new connection " + id);
-        }
-        ConnectionImpl connection = new ConnectionImpl(id);
-        connections.put(id, connection);
-        env.execute(new ConnectionHandlerTask(connectionHandler, env, connection));
-        return connection;
-    }
-    
     private ConnectionImpl getConnection(String id) {
         return connections.get(id);
     }
@@ -78,23 +67,37 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         if (log.isLoggable(Level.FINE)) {
             log.fine("Processing request for path " + path);
         }
-        if (path.equals("/")) {
-        	handleConnect(createConnection(env), request, response);
-        } else {
-            String connectionId = path.substring(1);
+        if (path.startsWith("/services/")) {
+            String serviceName = path.substring(10);
+            ConnectionHandler connectionHandler = serviceRegistry.getConnectionHandler(serviceName);
+            if (connectionHandler == null) {
+                response.setStatus(HttpConstants.SC_NOT_FOUND);
+                response.commit();
+                return;
+            }
+            String connectionId = generateConnectionId();
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("Setting up new connection " + connectionId);
+            }
+            ConnectionImpl connection = new ConnectionImpl(connectionId);
+            connections.put(connectionId, connection);
+            env.execute(new ConnectionHandlerTask(connectionHandler, env, connection));
+            response.setStatus(HttpConstants.SC_NO_CONTENT);
+            response.addHeader(HttpConstants.H_LOCATION, request.makeAbsoluteURI("/connections/" + connectionId));
+            response.commit();
+        } else if (path.startsWith("/connections/")) {
+            String connectionId = path.substring(13);
             ConnectionImpl connection = getConnection(connectionId);
             if (request.getHeader(HttpConstants.H_CONTENT_TYPE) != null) {
             	handleSend(connection, request, response);
             } else {
             	handleReceive(connection, request, response);
             }
+        } else {
+            response.setStatus(HttpConstants.SC_NOT_FOUND);
+            response.commit();
+            return;
         }
-    }
-    
-    private void handleConnect(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws HttpException {
-        response.setStatus(HttpConstants.SC_NO_CONTENT);
-        response.addHeader(HttpConstants.H_LOCATION, request.makeAbsoluteURI("/connections/" + connection.getId()));
-        response.commit();
     }
     
     private void handleSend(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws HttpException {

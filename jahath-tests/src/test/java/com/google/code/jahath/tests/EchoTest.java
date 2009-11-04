@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import com.google.code.jahath.client.vch.VCHClient;
 import com.google.code.jahath.common.connection.Connection;
+import com.google.code.jahath.common.vch.VCHConstants;
 import com.google.code.jahath.server.vch.VCHServer;
 import com.google.code.jahath.testutils.EchoConnectionHandler;
 import com.google.code.jahath.testutils.EchoTestUtil;
@@ -26,9 +27,10 @@ import com.google.code.jahath.testutils.EchoTestUtil;
 public class EchoTest {
     @Test
     public void test() throws Exception {
-        VCHServer server = new VCHServer(5555, new EchoConnectionHandler());
+        VCHServer server = new VCHServer(5555);
+        server.registerService(VCHConstants.SERVICE_ECHO, new EchoConnectionHandler());
         VCHClient client = new VCHClient("localhost", 5555, null);
-        Connection connection = client.createConnection();
+        Connection connection = client.createConnection(VCHConstants.SERVICE_ECHO);
         EchoTestUtil.testEcho(connection);
         client.shutdown();
         server.stop();

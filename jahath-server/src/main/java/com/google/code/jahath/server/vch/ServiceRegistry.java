@@ -15,24 +15,22 @@
  */
 package com.google.code.jahath.server.vch;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.code.jahath.common.connection.ConnectionHandler;
-import com.google.code.jahath.server.http.HttpServer;
 
-public class VCHServer {
-    private final ServiceRegistry serviceRegistry = new ServiceRegistry();
-    private final HttpServer httpServer;
+class ServiceRegistry {
+    private final Map<String,ConnectionHandler> services = new HashMap<String,ConnectionHandler>();
     
-    public VCHServer(int port) throws IOException {
-        httpServer = new HttpServer(port, new HttpRequestHandlerImpl(serviceRegistry));
+    public synchronized ConnectionHandler getConnectionHandler(String serviceName) {
+        return services.get(serviceName);
     }
-
-    public void registerService(String name, ConnectionHandler connectionHandler) {
-        serviceRegistry.registerService(name, connectionHandler);
-    }
-
-    public final void stop() throws InterruptedException {
-        httpServer.stop();
+    
+    public synchronized void registerService(String name, ConnectionHandler connectionHandler) {
+        if (services.containsKey(name)) {
+            throw new IllegalArgumentException("Service '" + name + "' already registered");
+        }
+        services.put(name, connectionHandler);
     }
 }
