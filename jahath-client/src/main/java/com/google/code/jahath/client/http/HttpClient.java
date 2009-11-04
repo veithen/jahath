@@ -50,9 +50,9 @@ public class HttpClient {
             HttpOutputStream request = new HttpOutputStream(LogUtil.log(socket.getOutputStream(), log, Level.FINER, "HTTP request"));
             String address = serverPort == 80 ? serverHost : serverHost + ":" + serverPort;
             if (proxyConfiguration == null) {
-                request.writeLine(method + " " + path + " HTTP/1.1");
+                request.writeLine(method + " " + path + " " + HttpConstants.HTTP_VERSION_1_1);
             } else {
-                request.writeLine(method + " http://" + address + path + " HTTP/1.1");
+                request.writeLine(method + " http://" + address + path + " " + HttpConstants.HTTP_VERSION_1_1);
             }
             HttpRequest httpRequest = new HttpRequest(request, LogUtil.log(socket.getInputStream(), log, Level.FINER, "HTTP response"));
             httpRequest.addHeader(HttpConstants.H_HOST, address);

@@ -27,7 +27,7 @@ public class HttpResponse extends HttpOutMessage {
     }
 
     public void setStatus(int statusCode) throws HttpException {
-        writeLine("HTTP/1.1 " + statusCode + " " + HttpConstants.getReasonPhrase(statusCode));
+        writeLine(HttpConstants.HTTP_VERSION_1_1 + " " + statusCode + " " + HttpConstants.getReasonPhrase(statusCode));
     }
     
     // TODO: this is only to increase visibility; shall we keep it like this?

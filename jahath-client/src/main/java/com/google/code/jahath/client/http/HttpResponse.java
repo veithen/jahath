@@ -17,16 +17,53 @@ package com.google.code.jahath.client.http;
 
 import java.io.InputStream;
 
+import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpInMessage;
 import com.google.code.jahath.common.http.HttpProtocolException;
 
 public class HttpResponse extends HttpInMessage {
+    private int statusCode;
+    private String reasonPhrase;
+    
     HttpResponse(InputStream in) {
         super(in);
     }
 
     @Override
     protected void processFirstLine(String line) throws HttpProtocolException {
-        // TODO: process status line
+        int i1 = line.indexOf(' ');
+        int i2 = line.indexOf(' ', i1+1);
+        if (i1 == -1 || i2 == -1) {
+            throw new HttpProtocolException("Malformed status line: doesn't match Status-Line production");
+        }
+        
+        String httpVersion = line.substring(0, i1);
+        if (!httpVersion.equals(HttpConstants.HTTP_VERSION_1_1)) {
+            throw new HttpProtocolException("Unsupported HTTP version '" + httpVersion + "'");
+        }
+        
+        String statusCodeString = line.substring(i1+1, i2);
+        if (statusCodeString.length() != 3) {
+            statusCode = -1;
+        } else {
+            try {
+                statusCode = Integer.parseInt(statusCodeString);
+            } catch (NumberFormatException ex) {
+                statusCode = -1;
+            }
+        }
+        if (statusCode == -1) {
+            throw new HttpProtocolException("Invalid status code '" + statusCodeString + "'");
+        }
+        
+        reasonPhrase = line.substring(i2+1);
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public String getReasonPhrase() {
+        return reasonPhrase;
     }
 }

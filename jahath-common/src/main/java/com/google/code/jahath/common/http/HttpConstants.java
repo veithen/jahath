@@ -568,6 +568,8 @@ public class HttpConstants {
     
     public static final String H_TRANSFER_ENCODING = "Transfer-Encoding";
     
+    public static final String HTTP_VERSION_1_1 = "HTTP/1.1";
+    
     /**
      * Get the reason phrase for a given status code.
      * 
