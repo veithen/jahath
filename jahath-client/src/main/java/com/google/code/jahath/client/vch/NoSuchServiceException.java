@@ -15,20 +15,15 @@
  */
 package com.google.code.jahath.client.vch;
 
-import com.google.code.jahath.common.http.HttpException;
-
 /**
- * Indicates that an error occurred because of a problem with the underlying HTTP connection. This
- * exception wraps an {@link HttpException} and may be thrown by the streams returned by
- * {@link com.google.code.jahath.common.connection.Connection#getInputStream()} and
- * {@link com.google.code.jahath.common.connection.Connection#getOutputStream()}.
+ * Indicates that there is no service endpoint with the given name.
  * 
  * @author Andreas Veithen
  */
-public class VCHConnectionException extends VCHException {
-    private static final long serialVersionUID = -7134597251596985153L;
+public class NoSuchServiceException extends VCHException {
+    private static final long serialVersionUID = -5196391309359021845L;
 
-    public VCHConnectionException(HttpException cause) {
-        super(cause);
+    public NoSuchServiceException(String serviceName) {
+        super("No such service: '" + serviceName + "'");
     }
 }

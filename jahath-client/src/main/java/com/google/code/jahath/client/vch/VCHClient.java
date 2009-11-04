@@ -20,6 +20,7 @@ import com.google.code.jahath.client.http.HttpRequest;
 import com.google.code.jahath.client.http.HttpResponse;
 import com.google.code.jahath.client.http.ProxyConfiguration;
 import com.google.code.jahath.common.connection.Connection;
+import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
 
 public class VCHClient {
@@ -29,12 +30,19 @@ public class VCHClient {
         httpClient = new HttpClient(serverHost, serverPort, proxyConfiguration);
     }
     
-    public Connection createConnection() throws VCHConnectionException {
+    public Connection createConnection() throws VCHException {
         try {
             HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/");
             HttpResponse response = request.execute();
-            String connectionId = response.getHeader("X-JHT-Connection-Id");
-            return new ConnectionImpl(httpClient, connectionId);
+            switch (response.getStatusCode()) {
+                case HttpConstants.SC_NO_CONTENT: // TODO: should actually be SC_CREATED
+                    String connectionId = response.getHeader("X-JHT-Connection-Id");
+                    return new ConnectionImpl(httpClient, connectionId);
+                case HttpConstants.SC_NOT_FOUND:
+                    throw new NoSuchServiceException("???"); // TODO: we don't support service names yet
+                default:
+                    throw Util.createException(response);
+            }
         } catch (HttpException ex) {
             throw new VCHConnectionException(ex);
         }

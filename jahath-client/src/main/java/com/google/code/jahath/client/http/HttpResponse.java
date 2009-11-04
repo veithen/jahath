@@ -18,6 +18,7 @@ package com.google.code.jahath.client.http;
 import java.io.InputStream;
 
 import com.google.code.jahath.common.http.HttpConstants;
+import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.common.http.HttpInMessage;
 import com.google.code.jahath.common.http.HttpProtocolException;
 
@@ -59,11 +60,13 @@ public class HttpResponse extends HttpInMessage {
         reasonPhrase = line.substring(i2+1);
     }
 
-    public int getStatusCode() {
+    public int getStatusCode() throws HttpException {
+        processHeaders();
         return statusCode;
     }
 
-    public String getReasonPhrase() {
+    public String getReasonPhrase() throws HttpException {
+        processHeaders();
         return reasonPhrase;
     }
 }
