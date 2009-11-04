@@ -15,20 +15,10 @@
  */
 package com.google.code.jahath.client.vch;
 
-import com.google.code.jahath.client.http.HttpResponse;
-import com.google.code.jahath.common.http.HttpException;
+public class MissingHeaderException extends VCHProtocolException {
+    private static final long serialVersionUID = 1191970505557653345L;
 
-class Util {
-    static VCHException createException(HttpResponse response) throws HttpException {
-        return new UnexpectedStatusCodeException(response.getStatusCode(), response.getReasonPhrase());
-    }
-    
-    static String getRequiredHeader(HttpResponse response, String name) throws HttpException, MissingHeaderException {
-        String value = response.getHeader(name);
-        if (value != null) {
-            return value;
-        } else {
-            throw new MissingHeaderException(name);
-        }
+    public MissingHeaderException(String headerName) {
+        super("Expected a " + headerName + " header");
     }
 }

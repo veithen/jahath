@@ -93,7 +93,6 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
     
     private void handleConnect(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws HttpException {
         response.setStatus(HttpConstants.SC_NO_CONTENT);
-        response.addHeader("X-JHT-Connection-Id", connection.getId());
         response.addHeader(HttpConstants.H_LOCATION, request.makeAbsoluteURI("/connections/" + connection.getId()));
         response.commit();
     }

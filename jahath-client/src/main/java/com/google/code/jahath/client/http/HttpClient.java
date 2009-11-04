@@ -48,14 +48,13 @@ public class HttpClient {
                 socket = new Socket(proxyConfiguration.getHost(), proxyConfiguration.getPort());
             }
             HttpOutputStream request = new HttpOutputStream(LogUtil.log(socket.getOutputStream(), log, Level.FINER, "HTTP request"));
-            String address = serverPort == 80 ? serverHost : serverHost + ":" + serverPort;
             if (proxyConfiguration == null) {
                 request.writeLine(method + " " + path + " " + HttpConstants.HTTP_VERSION_1_1);
             } else {
-                request.writeLine(method + " http://" + address + path + " " + HttpConstants.HTTP_VERSION_1_1);
+                request.writeLine(method + " " + getServerUrl() + path + " " + HttpConstants.HTTP_VERSION_1_1);
             }
             HttpRequest httpRequest = new HttpRequest(request, LogUtil.log(socket.getInputStream(), log, Level.FINER, "HTTP response"));
-            httpRequest.addHeader(HttpConstants.H_HOST, address);
+            httpRequest.addHeader(HttpConstants.H_HOST, getHostHeader());
             httpRequest.addHeader(HttpConstants.H_CONNECTION, "keep-alive");
             if (proxyConfiguration != null) {
                 httpRequest.addHeader(HttpConstants.H_PROXY_CONNECTION, "keep-alive");
@@ -63,6 +62,24 @@ public class HttpClient {
             return httpRequest;
         } catch (IOException ex) {
             throw new HttpConnectionException(ex);
+        }
+    }
+    
+    private String getHostHeader() {
+        return serverPort == 80 ? serverHost : serverHost + ":" + serverPort;
+    }
+    
+    private String getServerUrl() {
+        return "http://" + getHostHeader();
+    }
+    
+    public String getPath(String url) {
+        String serverUrl = getServerUrl();
+        int len = serverUrl.length();
+        if (url.length() > len && url.startsWith(serverUrl) && url.charAt(len) == '/') {
+            return url.substring(len);
+        } else {
+            return null;
         }
     }
 }

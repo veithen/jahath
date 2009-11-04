@@ -36,7 +36,17 @@ public class VCHClient {
             HttpResponse response = request.execute();
             switch (response.getStatusCode()) {
                 case HttpConstants.SC_NO_CONTENT: // TODO: should actually be SC_CREATED
-                    String connectionId = response.getHeader("X-JHT-Connection-Id");
+                    String location = Util.getRequiredHeader(response, HttpConstants.H_LOCATION);
+                    String path = httpClient.getPath(location);
+                    if (path == null) {
+                        throw new VCHProtocolException("The server returned an unexpected value for the Location header ("
+                                + location + "): the location identified by the URL is on a different server.");
+                    }
+                    if (!path.startsWith("/connections/")) {
+                        throw new VCHProtocolException("The server returned a location (" + location + ") that doesn't conform to the VC/H specification");
+                    }
+                    String connectionId = path.substring(13);
+                    // TODO: we should validate the connection ID --> need to specify the format in the specs
                     return new ConnectionImpl(httpClient, connectionId);
                 case HttpConstants.SC_NOT_FOUND:
                     throw new NoSuchServiceException("???"); // TODO: we don't support service names yet
