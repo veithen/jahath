@@ -61,7 +61,7 @@ public class VCHClient {
     }
     
     private static boolean isConnectionIdChar(char c) {
-        return 'A' <= c && c <= 'Z' || 'a' <= c && c <= 'z' || '0' <= c && c <= '9' || c == '_' || c == '.' || c == '_' || c == ':' || c == '!' || c == '@';
+        return 'A' <= c && c <= 'Z' || 'a' <= c && c <= 'z' || '0' <= c && c <= '9' || c == '-' || c == '.' || c == '_' || c == ':' || c == '!' || c == '@';
     }
     
     private static boolean isValidConnectionId(String connectionId) {
