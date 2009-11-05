@@ -35,8 +35,8 @@ public class VCHClient {
             HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/services/" + serviceName);
             HttpResponse response = request.execute();
             switch (response.getStatusCode()) {
-                case HttpConstants.SC_CREATED:
-                    String location = Util.getRequiredHeader(response, HttpConstants.H_LOCATION);
+                case HttpConstants.StatusCodes.CREATED:
+                    String location = Util.getRequiredHeader(response, HttpConstants.Headers.LOCATION);
                     String path = httpClient.getPath(location);
                     if (path == null) {
                         throw new VCHProtocolException("The server returned an unexpected value for the Location header ("
@@ -50,7 +50,7 @@ public class VCHClient {
                         throw new VCHProtocolException("The server returned an invalid connection ID (" + connectionId + ")");
                     }
                     return new ConnectionImpl(httpClient, connectionId);
-                case HttpConstants.SC_NOT_FOUND:
+                case HttpConstants.StatusCodes.NOT_FOUND:
                     throw new NoSuchServiceException(serviceName);
                 default:
                     throw Util.createException(response);

@@ -41,7 +41,7 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
     }
 
     public void writeHeaders(HttpOutMessage message) throws HttpException {
-        message.addHeader(HttpConstants.H_CONNECTION, "keep-alive");
+        message.addHeader(HttpConstants.Headers.CONNECTION, "keep-alive");
     }
 
     public void handle(ExecutionEnvironment env, Connection connection) {

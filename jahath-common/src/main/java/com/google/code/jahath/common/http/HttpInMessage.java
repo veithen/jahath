@@ -67,14 +67,14 @@ public abstract class HttpInMessage extends HttpMessage {
                 if (log.isLoggable(Level.FINE)) {
                     log.fine("HTTP headers: " + headers);
                 }
-                Integer contentLength = headers.getIntHeader(HttpConstants.H_CONTENT_LENGTH);
+                Integer contentLength = headers.getIntHeader(HttpConstants.Headers.CONTENT_LENGTH);
                 if (contentLength != null) {
                     if (contentLength == 0) {
                         contentStream = null;
                     } else {
                         contentStream = new LengthLimitedInputStream(in, contentLength);
                     }
-                } else if ("chunked".equals(headers.getHeader(HttpConstants.H_TRANSFER_ENCODING))) {
+                } else if ("chunked".equals(headers.getHeader(HttpConstants.Headers.TRANSFER_ENCODING))) {
                     contentStream = new ChunkedInputStream(in);
                 } else {
                     contentStream = null;

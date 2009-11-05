@@ -71,7 +71,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
             String serviceName = path.substring(10);
             ConnectionHandler connectionHandler = serviceRegistry.getConnectionHandler(serviceName);
             if (connectionHandler == null) {
-                response.setStatus(HttpConstants.SC_NOT_FOUND);
+                response.setStatus(HttpConstants.StatusCodes.NOT_FOUND);
                 response.commit();
                 return;
             }
@@ -82,19 +82,19 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
             ConnectionImpl connection = new ConnectionImpl(connectionId);
             connections.put(connectionId, connection);
             env.execute(new ConnectionHandlerTask(connectionHandler, env, connection));
-            response.setStatus(HttpConstants.SC_CREATED);
-            response.addHeader(HttpConstants.H_LOCATION, request.makeAbsoluteURI("/connections/" + connectionId));
+            response.setStatus(HttpConstants.StatusCodes.CREATED);
+            response.addHeader(HttpConstants.Headers.LOCATION, request.makeAbsoluteURI("/connections/" + connectionId));
             response.commit();
         } else if (path.startsWith("/connections/")) {
             String connectionId = path.substring(13);
             ConnectionImpl connection = getConnection(connectionId);
-            if (request.getHeader(HttpConstants.H_CONTENT_TYPE) != null) {
+            if (request.getHeader(HttpConstants.Headers.CONTENT_TYPE) != null) {
             	handleSend(connection, request, response);
             } else {
             	handleReceive(connection, request, response);
             }
         } else {
-            response.setStatus(HttpConstants.SC_NOT_FOUND);
+            response.setStatus(HttpConstants.StatusCodes.NOT_FOUND);
             response.commit();
             return;
         }
@@ -104,7 +104,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         InputStream data = request.getInputStream();
         if (data == null) {
             log.info("Protocol error: request didn't contain data");
-            response.setStatus(HttpConstants.SC_BAD_REQUEST);
+            response.setStatus(HttpConstants.StatusCodes.BAD_REQUEST);
         } else {
             try {
                 connection.consume(request.getInputStream());
@@ -112,13 +112,13 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
                 // TODO: check what to do here
                 Thread.currentThread().interrupt();
             }
-            response.setStatus(HttpConstants.SC_ACCEPTED);
+            response.setStatus(HttpConstants.StatusCodes.ACCEPTED);
         }
         response.commit();
     }
     
     private void handleReceive(ConnectionImpl connection, HttpRequest request, HttpResponse response) throws HttpException {
-        response.setStatus(HttpConstants.SC_OK);
+        response.setStatus(HttpConstants.StatusCodes.OK);
         OutputStream out = response.getOutputStream("application/octet-stream");
         try {
             connection.produce(out);

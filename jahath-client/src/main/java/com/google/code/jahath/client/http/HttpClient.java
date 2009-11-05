@@ -54,10 +54,10 @@ public class HttpClient {
                 request.writeLine(method + " " + getServerUrl() + path + " " + HttpConstants.HTTP_VERSION_1_1);
             }
             HttpRequest httpRequest = new HttpRequest(request, LogUtil.log(socket.getInputStream(), log, Level.FINER, "HTTP response"));
-            httpRequest.addHeader(HttpConstants.H_HOST, getHostHeader());
-            httpRequest.addHeader(HttpConstants.H_CONNECTION, "keep-alive");
+            httpRequest.addHeader(HttpConstants.Headers.HOST, getHostHeader());
+            httpRequest.addHeader(HttpConstants.Headers.CONNECTION, "keep-alive");
             if (proxyConfiguration != null) {
-                httpRequest.addHeader(HttpConstants.H_PROXY_CONNECTION, "keep-alive");
+                httpRequest.addHeader(HttpConstants.Headers.PROXY_CONNECTION, "keep-alive");
             }
             return httpRequest;
         } catch (IOException ex) {

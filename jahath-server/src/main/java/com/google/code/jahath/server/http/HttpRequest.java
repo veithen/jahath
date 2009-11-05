@@ -47,7 +47,7 @@ public class HttpRequest extends HttpInMessage {
     public String makeAbsoluteURI(String path) throws HttpException {
         StringBuilder buffer = new StringBuilder(secure ? "https" : "http");
         buffer.append("://");
-        String host = getHeader(HttpConstants.H_HOST);
+        String host = getHeader(HttpConstants.Headers.HOST);
         // TODO: check if Host header is actually present
         buffer.append(host);
         if (!path.startsWith("/")) {

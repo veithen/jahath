@@ -29,12 +29,12 @@ public class HttpConstantsTest {
      */
     @Test
     public void testGetReasonPhrase() throws Exception {
-        for (Field field : HttpConstants.class.getFields()) {
-            String name = field.getName();
-            if (name.startsWith("SC_")) {
+        for (Field field : HttpConstants.StatusCodes.class.getFields()) {
+            if (field.getType().equals(Integer.TYPE)) {
+                String name = field.getName();
                 int code = field.getInt(null);
-                String phrase = HttpConstants.getReasonPhrase(code);
-                Assert.assertEquals(phrase.toUpperCase().replaceAll("[ -]", ""), name.substring(3).replaceAll("_", ""));
+                String phrase = HttpConstants.StatusCodes.getReasonPhrase(code);
+                Assert.assertEquals(phrase.toUpperCase().replaceAll("[ -]", ""), name.replaceAll("_", ""));
             }
         }
     }

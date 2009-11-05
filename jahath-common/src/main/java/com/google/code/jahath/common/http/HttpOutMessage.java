@@ -58,8 +58,8 @@ public class HttpOutMessage extends HttpMessage {
             if (headersProvider != null) {
                 headersProvider.writeHeaders(this);
             }
-            request.writeHeader(HttpConstants.H_CONTENT_TYPE, contentType);
-            request.writeHeader(HttpConstants.H_TRANSFER_ENCODING, "chunked");
+            request.writeHeader(HttpConstants.Headers.CONTENT_TYPE, contentType);
+            request.writeHeader(HttpConstants.Headers.TRANSFER_ENCODING, "chunked");
             request.flushHeaders();
             request.flush(); // TODO: remove this when no longer necessary
             status = Status.STREAMING;
@@ -79,7 +79,7 @@ public class HttpOutMessage extends HttpMessage {
             headersProvider.writeHeaders(this);
         }
         try {
-            request.writeHeader(HttpConstants.H_CONTENT_LENGTH, "0");
+            request.writeHeader(HttpConstants.Headers.CONTENT_LENGTH, "0");
             request.writeLine("");
             request.flush();
             status = Status.COMPLETE;
