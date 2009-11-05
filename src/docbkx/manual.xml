@@ -120,7 +120,7 @@
                             <para>
                                 <replaceable>service-name</replaceable> is the name of the service endpoint
                                 to which the connection request is addressed. Service names are case sensitive and must match the
-                                <link linkend="service.name">ServiceName</link> production.
+                                <link linkend="service.name">ServiceName</link> production:
                             </para>
                             <productionset>
                                 <title>Service endpoint names</title>
@@ -141,6 +141,9 @@
                                     <rhs>[<literal>'0'</literal>-<literal>'9'</literal>]</rhs>
                                 </production>
                             </productionset>
+                            <para>
+                                A list of well known service names is given in <xref linkend="well.known.services"/>.
+                            </para>
                         </listitem>
                     </varlistentry>
                     <varlistentry>
@@ -236,6 +239,41 @@
                         </listitem>
                     </varlistentry>
                 </variablelist>
+            </section>
+            <section id="well.known.services">
+                <title>Well known service names</title>
+                <para>
+                    The following table specifies a list of well known VC/H services. If a server has a service endpoint
+                    that implements one of the given protocols, it SHOULD use the corresponding service name. If a
+                    server has a service endpoint that uses one of the given service names, then this endpoint MUST
+                    implement the corresponding protocol. Note that depending on the implementation of the server, this
+                    requirement cannot be enforced by the server itself and it is the responsibility of the user to
+                    configure the server in such a way that the requirement is satisfied.
+                </para>
+                <table>
+                    <title>Well known VC/H services</title>
+                    <tgroup cols="2">
+                        <thead>
+                            <row>
+                                <entry>Service endpoint name</entry>
+                                <entry>Protocol description</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry><literal>echo</literal></entry>
+                                <entry>A service that echoes all data sent to it back to the client.</entry>
+                            </row>
+                            <row>
+                                <entry><literal>socks</literal></entry>
+                                <entry>An implementation of the SOCKS 5 protocol.</entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+                <para> 
+                    Note that there is no requirement for the server to implement any of these endpoints.
+                </para>
             </section>
         </section>
     </chapter>

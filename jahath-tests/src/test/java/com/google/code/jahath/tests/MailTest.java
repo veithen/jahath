@@ -55,7 +55,7 @@ public class MailTest {
         greenMail.start();
         
         VCHServer server = new VCHServer(serverPort);
-        server.registerService(VCHConstants.SERVICE_SOCKS, new SocksConnectionHandler());
+        server.registerService(VCHConstants.Services.SOCKS, new SocksConnectionHandler());
         
         ProxyServer proxy;
         ProxyConfiguration proxyConfiguration;

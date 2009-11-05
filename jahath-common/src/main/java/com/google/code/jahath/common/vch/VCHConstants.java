@@ -15,11 +15,28 @@
  */
 package com.google.code.jahath.common.vch;
 
-// TODO: the well known service names defined by this class should be added to the specs
+/**
+ * Defines constants used by VC/H clients and servers.
+ * 
+ * @author Andreas Veithen
+ */
 public class VCHConstants {
     private VCHConstants() {}
-    
-    public static final String SERVICE_ECHO = "echo";
-    
-    public static final String SERVICE_SOCKS = "socks";
+
+    /**
+     * Defines constants for well known service endpoint names.
+     */
+    public static class Services {
+        private Services() {}
+        
+        /**
+         * The name of the echo service endpoint.
+         */
+        public static final String ECHO = "echo";
+        
+        /**
+         * The name of the SOCKS 5 service endpoint.
+         */
+        public static final String SOCKS = "socks";
+    }
 }

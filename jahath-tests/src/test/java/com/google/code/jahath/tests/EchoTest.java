@@ -28,9 +28,9 @@ public class EchoTest {
     @Test
     public void test() throws Exception {
         VCHServer server = new VCHServer(5555);
-        server.registerService(VCHConstants.SERVICE_ECHO, new EchoConnectionHandler());
+        server.registerService(VCHConstants.Services.ECHO, new EchoConnectionHandler());
         VCHClient client = new VCHClient("localhost", 5555, null);
-        Connection connection = client.createConnection(VCHConstants.SERVICE_ECHO);
+        Connection connection = client.createConnection(VCHConstants.Services.ECHO);
         EchoTestUtil.testEcho(connection);
         client.shutdown();
         server.stop();

@@ -44,7 +44,7 @@ class TunnelConnectionHandler implements ConnectionHandler {
 
     public void handle(ExecutionEnvironment env, Connection inConnection) {
         try {
-            Connection outConnection = client.createConnection(VCHConstants.SERVICE_SOCKS);
+            Connection outConnection = client.createConnection(VCHConstants.Services.SOCKS);
             SocksDataOutputStream out = new SocksDataOutputStream(new BufferedOutputStream(outConnection.getOutputStream(), 64));
             SocksDataInputStream in = new SocksDataInputStream(outConnection.getInputStream());
             
