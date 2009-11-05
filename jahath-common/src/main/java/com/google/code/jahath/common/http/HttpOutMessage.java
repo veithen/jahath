@@ -18,7 +18,9 @@ package com.google.code.jahath.common.http;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class HttpOutMessage {
+import com.google.code.jahath.common.io.CloseListenerOutputStream;
+
+public class HttpOutMessage extends HttpMessage {
     private final HttpOutputStream request;
     private final HttpHeadersProvider headersProvider;
 
@@ -60,7 +62,13 @@ public class HttpOutMessage {
             request.writeHeader(HttpConstants.H_TRANSFER_ENCODING, "chunked");
             request.flushHeaders();
             request.flush(); // TODO: remove this when no longer necessary
-            return new ChunkedOutputStream(request);
+            status = Status.STREAMING;
+            return new CloseListenerOutputStream(new ChunkedOutputStream(request)) {
+                @Override
+                protected void onClosed() {
+                    status = Status.COMPLETE;
+                }
+            };
         } catch (IOException ex) {
             throw new HttpConnectionException(ex);
         }
@@ -74,6 +82,7 @@ public class HttpOutMessage {
             request.writeHeader(HttpConstants.H_CONTENT_LENGTH, "0");
             request.writeLine("");
             request.flush();
+            status = Status.COMPLETE;
         } catch (IOException ex) {
             throw new HttpConnectionException(ex);
         }

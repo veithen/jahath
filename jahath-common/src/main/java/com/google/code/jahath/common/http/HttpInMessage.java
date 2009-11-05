@@ -21,8 +21,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.common.CRLFInputStream;
+import com.google.code.jahath.common.io.EndOfStreamListenerInputStream;
 
-public abstract class HttpInMessage {
+public abstract class HttpInMessage extends HttpMessage {
     private static final Logger log = Logger.getLogger(HttpInMessage.class.getName());
     
     private final CRLFInputStream in;
@@ -46,11 +47,11 @@ public abstract class HttpInMessage {
      * @throws IOException if an I/O error occurs
      */
     public boolean await() throws IOException {
-        return headers != null || in.awaitInput();
+        return status != Status.START || in.awaitInput();
     }
     
     protected void processHeaders() throws HttpException {
-        if (headers == null) {
+        if (status == Status.START) {
             try {
                 processFirstLine(in.readLine());
                 headers = new Headers(in);
@@ -68,6 +69,17 @@ public abstract class HttpInMessage {
                     contentStream = new ChunkedInputStream(in);
                 } else {
                     contentStream = null;
+                }
+                if (contentStream == null) {
+                    status = Status.COMPLETE;
+                } else {
+                    status = Status.HEADERS_COMPLETE;
+                    contentStream = new EndOfStreamListenerInputStream(contentStream) {
+                        @Override
+                        protected void onEndOfStream() {
+                            status = Status.COMPLETE;
+                        }
+                    };
                 }
             } catch (IOException ex) {
                 throw new HttpConnectionException(ex);
@@ -89,6 +101,7 @@ public abstract class HttpInMessage {
      */
     public InputStream getInputStream() throws HttpException {
         processHeaders();
+        status = Status.STREAMING;
         return contentStream;
     }
 }

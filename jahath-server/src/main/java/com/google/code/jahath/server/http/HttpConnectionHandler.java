@@ -25,8 +25,11 @@ import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.common.http.HttpHeadersProvider;
+import com.google.code.jahath.common.http.HttpMessage;
 import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
+import com.google.code.jahath.common.io.ErrorListenerInputStream;
+import com.google.code.jahath.common.io.ErrorListenerOutputStream;
 
 class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
     private static final Logger log = Logger.getLogger(HttpConnectionHandler.class.getName());
@@ -43,9 +46,11 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
 
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
+            ErrorListenerInputStream in = new ErrorListenerInputStream(connection.getInputStream());
+            ErrorListenerOutputStream out = new ErrorListenerOutputStream(connection.getOutputStream());
             log.fine("New connection");
             while (true) {
-                HttpRequest httpRequest = new HttpRequest(connection.getInputStream(), connection.isSecure());
+                HttpRequest httpRequest = new HttpRequest(in, connection.isSecure());
                 try {
                     if (!httpRequest.await()) {
                         break;
@@ -59,11 +64,21 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
                 }
                 log.fine("Start processing new request");
                 // TODO: should wrapping the stream as an HttpOutputStream be done here or in HttpRequest??
-                HttpOutputStream response = new HttpOutputStream(connection.getOutputStream());
+                HttpOutputStream response = new HttpOutputStream(out);
                 HttpResponse httpResponse = new HttpResponse(response, this);
                 requestHandler.handle(env, httpRequest, httpResponse);
-                response.flush();
                 log.fine("Finished processing request");
+                if (in.isError() || out.isError()) {
+                    log.fine("Closing connection because of previous error");
+                    break;
+                }
+                if (httpRequest.getStatus() != HttpMessage.Status.COMPLETE ||
+                        httpResponse.getStatus() != HttpMessage.Status.COMPLETE) {
+                    log.warning("Closing connection because the handler didn't completely process the request (request status: "
+                            + httpRequest.getStatus() + ", response status: " + httpResponse.getStatus() + ")");
+                    break;
+                }
+                response.flush();
             }
             // TODO: equivalent for Connection
 //            socket.close();
