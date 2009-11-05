@@ -82,7 +82,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
             ConnectionImpl connection = new ConnectionImpl(connectionId);
             connections.put(connectionId, connection);
             env.execute(new ConnectionHandlerTask(connectionHandler, env, connection));
-            response.setStatus(HttpConstants.SC_NO_CONTENT);
+            response.setStatus(HttpConstants.SC_CREATED);
             response.addHeader(HttpConstants.H_LOCATION, request.makeAbsoluteURI("/connections/" + connectionId));
             response.commit();
         } else if (path.startsWith("/connections/")) {

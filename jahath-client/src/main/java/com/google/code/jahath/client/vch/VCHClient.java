@@ -35,7 +35,7 @@ public class VCHClient {
             HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/services/" + serviceName);
             HttpResponse response = request.execute();
             switch (response.getStatusCode()) {
-                case HttpConstants.SC_NO_CONTENT: // TODO: should actually be SC_CREATED
+                case HttpConstants.SC_CREATED:
                     String location = Util.getRequiredHeader(response, HttpConstants.H_LOCATION);
                     String path = httpClient.getPath(location);
                     if (path == null) {
