@@ -197,6 +197,25 @@
                                             A URI that identifies the newly created connection. It must be of the following form:
                                         </para>
                                         <synopsis>http(s)://<replaceable>host-part</replaceable>/connections/<replaceable>connection-id</replaceable></synopsis>
+                                        <para>
+                                            The <replaceable>connection-id</replaceable> is case sensitive an must match the following production:
+                                        </para>
+                                        <productionset>
+                                            <title>Connection IDs</title>
+                                            <production id="connection.id">
+                                                <lhs>ConnectionId</lhs>
+                                                <rhs>(<nonterminal def="#connection.id.char">ConnectionIdChar</nonterminal>)+</rhs>
+                                            </production>
+                                            <production id="connection.id.char">
+                                                <lhs>ConnectionIdChar</lhs>
+                                                <rhs><nonterminal def="#alpha">Alpha</nonterminal> | <nonterminal def="#digit">Digit</nonterminal> | <literal>'-'</literal> | <literal>'.'</literal> | <literal>'_'</literal> | <literal>':'</literal> | <literal>'!'</literal> | <literal>'@'</literal></rhs>
+                                            </production>
+                                        </productionset>
+                                        <para>
+                                            The server must choose a connection ID that is sufficiently random in order to
+                                            prevent an attacker from guessing connection IDs. In particular, the minimum length
+                                            for the connection ID is 10 characters.
+                                        </para>
                                     </listitem>
                                 </varlistentry>
                             </variablelist>
@@ -206,12 +225,6 @@
                         <term>Processing requirements</term>
                         <listitem>
                             <itemizedlist>
-                                <listitem>
-                                    <para>
-                                        The server must choose a connection ID that is sufficiently random in order to
-                                        prevent an attacker from guessing connection IDs.
-                                    </para>
-                                </listitem>
                                 <listitem>
                                     <para>
                                         The client may either store the URI returned in the <literal>Location</literal> header
