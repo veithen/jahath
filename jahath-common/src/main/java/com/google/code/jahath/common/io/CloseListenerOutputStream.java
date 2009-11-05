@@ -28,6 +28,7 @@ public abstract class CloseListenerOutputStream extends ProxyOutputStream {
     @Override
     public void close() throws IOException {
         super.close();
+        onClosed();
     }
 
     protected abstract void onClosed();
