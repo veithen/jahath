@@ -33,7 +33,7 @@ public class HttpRequest extends HttpInMessage {
     }
 
     @Override
-    protected void processFirstLine(String line) throws HttpProtocolException {
+    protected void processStartLine(String line) throws HttpProtocolException {
         // TODO: do this properly!
         String[] parts = line.split(" ");
         path = parts[1];

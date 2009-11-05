@@ -34,7 +34,16 @@ public abstract class HttpInMessage extends HttpMessage {
         this.in = new CRLFInputStream(in);
     }
 
-    protected abstract void processFirstLine(String line) throws HttpProtocolException;
+    /**
+     * Process the start-line of the HTTP message. The start-line is either the Request-Line or the
+     * Status-Line, depending on the type of message. See section 4.1 of RFC2616.
+     * 
+     * @param line
+     *            the start-line
+     * @throws HttpProtocolException
+     *             if the start-line doesn't conform to the HTTP specifications
+     */
+    protected abstract void processStartLine(String line) throws HttpProtocolException;
     
     /**
      * Block until data for this message is available, i.e until the start of the message has been
@@ -53,7 +62,7 @@ public abstract class HttpInMessage extends HttpMessage {
     protected void processHeaders() throws HttpException {
         if (status == Status.START) {
             try {
-                processFirstLine(in.readLine());
+                processStartLine(in.readLine());
                 headers = new Headers(in);
                 if (log.isLoggable(Level.FINE)) {
                     log.fine("HTTP headers: " + headers);
