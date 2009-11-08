@@ -75,6 +75,9 @@ public interface Connection {
      * Close this connection. This will first put the connection into state {@link State#CLOSING}
      * and then attempt to close the connection. After successful completion of the close operation,
      * the state will be {@link State#CLOSED}.
+     * <p>
+     * Any thread blocked reading from the input stream returned by {@link #getInputStream()} will
+     * receive a {@link ConnectionClosedLocallyException}.
      * 
      * @throws IOException
      */

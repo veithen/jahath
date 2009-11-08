@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.common.connection.Connection;
+import com.google.code.jahath.common.connection.ConnectionClosedLocallyException;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.http.HttpConstants;
@@ -55,12 +56,8 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
                     if (!httpRequest.await()) {
                         break;
                     }
-                } catch (IOException ex) {
-                    if (connection.getState() == Connection.State.CLOSING) {
-                        return;
-                    } else {
-                        throw ex;
-                    }
+                } catch (ConnectionClosedLocallyException ex) {
+                    break;
                 }
                 log.fine("Start processing new request");
                 // TODO: should wrapping the stream as an HttpOutputStream be done here or in HttpRequest??
@@ -80,8 +77,6 @@ class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
                 }
                 response.flush();
             }
-            // TODO: equivalent for Connection
-//            socket.close();
         } catch (Exception ex) {
             log.log(Level.SEVERE, "", ex);
         }

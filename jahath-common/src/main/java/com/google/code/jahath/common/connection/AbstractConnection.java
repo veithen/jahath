@@ -20,10 +20,14 @@ import java.io.IOException;
 public abstract class AbstractConnection implements Connection {
     private State state = State.OPEN;
 
-    public final synchronized void close() throws IOException {
-        state = State.CLOSING;
+    public final void close() throws IOException {
+        synchronized (this) {
+            state = State.CLOSING;
+        }
         doClose();
-        state = State.CLOSED;
+        synchronized (this) {
+            state = State.CLOSED;
+        }
     }
 
     /**

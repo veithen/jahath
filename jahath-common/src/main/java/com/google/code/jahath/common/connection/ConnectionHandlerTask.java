@@ -35,15 +35,7 @@ public class ConnectionHandlerTask implements Task {
         this.connection = connection;
     }
 
-    public void run() {
-        if (log.isLoggable(Level.FINE)) {
-            // TODO: should we simply use Connection#toString or should we define a specific method in Connection?
-            log.fine("Running " + connectionHandler.getClass().getName() + " on connection " + connection);
-        }
-        connectionHandler.handle(env, connection);
-    }
-
-    public void stop() {
+    private void closeConnection() {
         if (connection.getState() == Connection.State.OPEN) {
             try {
                 connection.close();
@@ -51,5 +43,21 @@ public class ConnectionHandlerTask implements Task {
                 log.log(Level.SEVERE, "Error closing connection", ex);
             }
         }
+    }
+    
+    public void run() {
+        if (log.isLoggable(Level.FINE)) {
+            // TODO: should we simply use Connection#toString or should we define a specific method in Connection?
+            log.fine("Running " + connectionHandler.getClass().getName() + " on connection " + connection);
+        }
+        try {
+            connectionHandler.handle(env, connection);
+        } finally {
+            closeConnection();
+        }
+    }
+
+    public void stop() {
+        closeConnection();
     }
 }

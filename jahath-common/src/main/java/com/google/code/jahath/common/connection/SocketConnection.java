@@ -33,7 +33,7 @@ public class SocketConnection extends AbstractConnection {
     }
 
     public InputStream getInputStream() throws IOException {
-        return socket.getInputStream();
+        return new SocketInputStream(this, socket.getInputStream());
     }
 
     public OutputStream getOutputStream() throws IOException {
