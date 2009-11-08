@@ -260,6 +260,45 @@
                 </variablelist>
             </section>
             <section>
+                <title>Connection close</title>
+                <variablelist>
+                    <varlistentry>
+                        <term>Method</term>
+                        <listitem>
+                            <synopsis>DELETE</synopsis>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Request URI</term>
+                        <listitem>
+                            <synopsis>/connections/<replaceable>connection-id</replaceable></synopsis>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Response codes</term>
+                        <listitem>
+                            <variablelist>
+                                <varlistentry>
+                                    <term>204 No Content</term>
+                                    <listitem>
+                                        <para>Indicates that the connection has been successfully closed.</para>
+                                    </listitem>
+                                </varlistentry>
+                                <varlistentry>
+                                    <term>404 Not Found</term>
+                                    <listitem>
+                                        <para>
+                                            Indicates that a connection with the specified ID doesn't exist, either because it has
+                                            never existed or because it has already been closed.
+                                        </para>
+                                    </listitem>
+                                </varlistentry>
+                            </variablelist>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+            </section>
+            <section>
                 <title>Error reporting</title>
                 <para>
                     The VC/H server MUST report error conditions using the 4xx and 5xx status codes foreseen by the HTTP protocol.

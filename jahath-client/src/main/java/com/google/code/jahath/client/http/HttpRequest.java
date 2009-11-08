@@ -22,7 +22,7 @@ import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
 public class HttpRequest extends HttpOutMessage {
-    public enum Method { GET, POST };
+    public enum Method { GET, POST, DELETE };
     
     private final InputStream response;
     

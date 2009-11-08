@@ -20,13 +20,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.google.code.jahath.client.http.HttpClient;
+import com.google.code.jahath.client.http.HttpRequest;
+import com.google.code.jahath.client.http.HttpResponse;
 import com.google.code.jahath.common.connection.AbstractConnection;
+import com.google.code.jahath.common.http.HttpConstants;
+import com.google.code.jahath.common.http.HttpException;
 
 class ConnectionImpl extends AbstractConnection {
+    private final HttpClient httpClient;
+    private final String connectionId;
     private final OutputStream out;
     private final InputStream in;
     
     public ConnectionImpl(HttpClient httpClient, String connectionId) {
+        this.httpClient = httpClient;
+        this.connectionId = connectionId;
         out = new VCHOutputStream(httpClient, connectionId);
         in = new VCHInputStream(httpClient, connectionId);
     }
@@ -41,6 +49,17 @@ class ConnectionImpl extends AbstractConnection {
 
     @Override
     protected void doClose() throws IOException {
-        // TODO
+        // TODO: need a unit test for this
+        try {
+            HttpRequest request = httpClient.createRequest(HttpRequest.Method.POST, "/connections/" + connectionId);
+            HttpResponse response = request.execute();
+            if (response.getStatusCode() == HttpConstants.StatusCodes.NO_CONTENT) {
+                return;
+            } else {
+                throw Util.createException(response);
+            }
+        } catch (HttpException ex) {
+            throw new VCHConnectionException(ex);
+        }
     }
 }
