@@ -74,6 +74,22 @@ public class HttpOutMessage extends HttpMessage {
         }
     }
 
+    public void send(String contentType, byte[] content) throws HttpException {
+        if (headersProvider != null) {
+            headersProvider.writeHeaders(this);
+        }
+        try {
+            request.writeHeader(HttpConstants.Headers.CONTENT_TYPE, contentType);
+            request.writeIntHeader(HttpConstants.Headers.CONTENT_LENGTH, content.length);
+            request.writeLine("");
+            request.write(content);
+            request.flush();
+            status = Status.COMPLETE;
+        } catch (IOException ex) {
+            throw new HttpConnectionException(ex);
+        }
+    }
+    
     protected void commit() throws HttpException {
         if (headersProvider != null) {
             headersProvider.writeHeaders(this);

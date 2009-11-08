@@ -173,10 +173,29 @@
                                     </listitem>
                                 </varlistentry>
                                 <varlistentry>
+                                    <term>400 Bad Request</term>
+                                    <listitem>
+                                        <para>
+                                            Used if the request didn't contain an <literal>X-VCH-Version</literal> header or if the
+                                            server was unable to understand the request for some other reason.
+                                        </para>
+                                    </listitem>
+                                </varlistentry>
+                                <varlistentry>
                                     <term>404 Not Found</term>
                                     <listitem>
                                         <para>
                                             Indicates that no service is registered for the service name provided by the client.
+                                        </para>
+                                    </listitem>
+                                </varlistentry>
+                                <varlistentry>
+                                    <term>500 Internal Server Error</term>
+                                    <listitem>
+                                        <para>
+                                            Used if the request contained an <literal>X-VCH-Version</literal> header requesting a
+                                            VC/H protocol version that is not supported by the server, or if some other problem
+                                            prevented the server from fulfilling the request.
                                         </para>
                                     </listitem>
                                 </varlistentry>
@@ -239,6 +258,23 @@
                         </listitem>
                     </varlistentry>
                 </variablelist>
+            </section>
+            <section>
+                <title>Error reporting</title>
+                <para>
+                    The VC/H server MUST report error conditions using the 4xx and 5xx status codes foreseen by the HTTP protocol.
+                    The server SHOULD use standard reason phrases, e.g. "Bad Request" for status code 400. For any
+                    status codes in the 4xx and 5xx range, the server MUST include a human readable error message in the response.
+                    This message MUST be transmitted as the message body of the response. Its content type MUST be
+                    <literal>text/plain</literal> with an appropriate charset encoding. The client SHOULD extract the
+                    message body and present the error message to the user, except if the status code has an unambiguous meaning
+                    in the given context.
+                </para>
+                <para>
+                    A VC/H client should interpret reception of an HTTP response with a status code in the 4xx or 5xx range
+                    and with a content type other than <literal>text/plain</literal> as an indication that the server doesn't
+                    implement the VC/H protocol or that an HTTP proxy rejected the request.
+                </para>
             </section>
             <section id="well.known.services">
                 <title>Well known service names</title>

@@ -15,6 +15,8 @@
  */
 package com.google.code.jahath.server.http;
 
+import java.io.UnsupportedEncodingException;
+
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.common.http.HttpHeadersProvider;
@@ -28,6 +30,15 @@ public class HttpResponse extends HttpOutMessage {
 
     public void setStatus(int statusCode) throws HttpException {
         writeLine(HttpConstants.HTTP_VERSION_1_1 + " " + statusCode + " " + HttpConstants.StatusCodes.getReasonPhrase(statusCode));
+    }
+    
+    public void sendError(int statusCode, String message) throws HttpException {
+        setStatus(statusCode);
+        try {
+            send("text/plain; charset=\"UTF-8\"", message.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+            throw new Error(ex); // We should never get here
+        }
     }
     
     // TODO: this is only to increase visibility; shall we keep it like this?

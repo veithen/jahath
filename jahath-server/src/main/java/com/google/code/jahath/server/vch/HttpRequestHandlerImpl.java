@@ -71,8 +71,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
             String serviceName = path.substring(10);
             ConnectionHandler connectionHandler = serviceRegistry.getConnectionHandler(serviceName);
             if (connectionHandler == null) {
-                response.setStatus(HttpConstants.StatusCodes.NOT_FOUND);
-                response.commit();
+                response.sendError(HttpConstants.StatusCodes.NOT_FOUND, "No such service: " + serviceName);
                 return;
             }
             String connectionId = generateConnectionId();
@@ -94,8 +93,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
             	handleReceive(connection, request, response);
             }
         } else {
-            response.setStatus(HttpConstants.StatusCodes.NOT_FOUND);
-            response.commit();
+            response.sendError(HttpConstants.StatusCodes.NOT_FOUND, "Page not found");
             return;
         }
     }
