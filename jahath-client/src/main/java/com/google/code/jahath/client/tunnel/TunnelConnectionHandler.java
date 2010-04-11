@@ -21,9 +21,9 @@ import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.code.jahath.Connection;
 import com.google.code.jahath.client.vch.VCHClient;
 import com.google.code.jahath.common.ConnectionRelay;
-import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.socks.SocksConstants;

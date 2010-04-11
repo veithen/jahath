@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.google.code.jahath.common.connection.Connection;
+import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 

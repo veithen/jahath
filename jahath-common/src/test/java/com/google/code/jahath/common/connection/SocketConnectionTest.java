@@ -22,6 +22,9 @@ import java.net.Socket;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.code.jahath.Connection;
+import com.google.code.jahath.ConnectionClosedLocallyException;
+
 public class SocketConnectionTest {
     private static class ExceptionCatcher implements Runnable {
         private final Connection connection;

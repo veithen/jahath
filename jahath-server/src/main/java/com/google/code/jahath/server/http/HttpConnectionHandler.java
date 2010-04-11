@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.common.connection.Connection;
-import com.google.code.jahath.common.connection.ConnectionClosedLocallyException;
+import com.google.code.jahath.Connection;
+import com.google.code.jahath.ConnectionClosedLocallyException;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.http.HttpConstants;

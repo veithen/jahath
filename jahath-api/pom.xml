@@ -24,31 +24,9 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>jahath-common</artifactId>
-    <name>Jahath :: Common components</name>
+    <artifactId>jahath-api</artifactId>
+    <name>Jahath :: API</name>
     <packaging>bundle</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty</artifactId>
-            <version>6.1.20</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -56,9 +34,8 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>com.google.code.jahath.common</Bundle-SymbolicName>
-                        <Bundle-Name>Jahath Common Components</Bundle-Name>
-                        <Embed-Dependency>commons-io</Embed-Dependency>
+                        <Bundle-SymbolicName>com.google.code.jahath.api</Bundle-SymbolicName>
+                        <Bundle-Name>Jahath API</Bundle-Name>
                     </instructions>
                 </configuration>
             </plugin>

@@ -22,8 +22,8 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.ConnectionRelay;
-import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.common.container.ExecutionEnvironment;

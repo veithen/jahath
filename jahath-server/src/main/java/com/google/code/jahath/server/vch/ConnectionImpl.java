@@ -21,8 +21,8 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.code.jahath.AbstractConnection;
 import com.google.code.jahath.common.LogUtil;
-import com.google.code.jahath.common.connection.AbstractConnection;
 import com.google.code.jahath.common.io.SwappableInputStream;
 import com.google.code.jahath.common.io.SwappableOutputStream;
 

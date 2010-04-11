@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Andreas Veithen
+  ~ Copyright 2009-2010 Andreas Veithen
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -55,8 +55,10 @@
     </scm>
     
     <modules>
+        <module>jahath-api</module>
         <module>jahath-client</module>
         <module>jahath-common</module>
+        <module>jahath-gateway-direct</module>
         <module>jahath-server</module>
         <module>jahath-test-utils</module>
         <module>jahath-tests</module>
@@ -73,6 +75,11 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.osgi.core</artifactId>
+                <version>1.4.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -97,6 +104,12 @@
                         </property>
                     </systemProperties>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.0.1</version>
+                <extensions>true</extensions>
             </plugin>
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>

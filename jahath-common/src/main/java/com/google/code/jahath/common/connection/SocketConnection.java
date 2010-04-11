@@ -20,6 +20,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import com.google.code.jahath.AbstractConnection;
+import com.google.code.jahath.Connection;
+
 /**
  * Adapts a {@link Socket} to the {@link Connection} interface.
  * 

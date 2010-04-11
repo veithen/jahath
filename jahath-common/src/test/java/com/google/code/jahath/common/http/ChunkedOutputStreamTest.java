@@ -29,8 +29,8 @@ import org.junit.Test;
 import org.mortbay.jetty.Request;
 import org.mortbay.jetty.handler.AbstractHandler;
 
+import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.connection.ConnectionHandler;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.server.Server;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common.connection;
+package com.google.code.jahath;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
-public class ConnectionClosedLocallyException extends IOException {
-    private static final long serialVersionUID = 173577175685541083L;
-
-    public ConnectionClosedLocallyException() {
-        super("Connection closed locally");
-    }
+public interface Gateway {
+    Connection connect(InetSocketAddress socketAddress) throws IOException;
 }

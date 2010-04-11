@@ -17,8 +17,8 @@ package com.google.code.jahath.tests;
 
 import org.junit.Test;
 
+import com.google.code.jahath.Connection;
 import com.google.code.jahath.client.vch.VCHClient;
-import com.google.code.jahath.common.connection.Connection;
 import com.google.code.jahath.common.vch.VCHConstants;
 import com.google.code.jahath.server.vch.VCHServer;
 import com.google.code.jahath.testutils.EchoConnectionHandler;

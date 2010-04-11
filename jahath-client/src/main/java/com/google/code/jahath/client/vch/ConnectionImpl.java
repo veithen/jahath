@@ -19,10 +19,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.google.code.jahath.AbstractConnection;
 import com.google.code.jahath.client.http.HttpClient;
 import com.google.code.jahath.client.http.HttpRequest;
 import com.google.code.jahath.client.http.HttpResponse;
-import com.google.code.jahath.common.connection.AbstractConnection;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
 
