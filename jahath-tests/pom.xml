@@ -47,6 +47,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-endpoint-socks</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>jahath-test-utils</artifactId>
             <version>${version}</version>

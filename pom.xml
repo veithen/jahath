@@ -58,6 +58,7 @@
         <module>jahath-api</module>
         <module>jahath-client</module>
         <module>jahath-common</module>
+        <module>jahath-endpoint-socks</module>
         <module>jahath-gateway-direct</module>
         <module>jahath-server</module>
         <module>jahath-test-utils</module>

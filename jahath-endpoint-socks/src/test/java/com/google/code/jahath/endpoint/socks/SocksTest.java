@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.server.socks;
+package com.google.code.jahath.endpoint.socks;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.common.server.Server;
+import com.google.code.jahath.endpoint.socks.SocksConnectionHandler;
 import com.google.code.jahath.gateway.direct.DirectGateway;
 import com.google.code.jahath.testutils.EchoConnectionHandler;
 import com.google.code.jahath.testutils.EchoTestUtil;
