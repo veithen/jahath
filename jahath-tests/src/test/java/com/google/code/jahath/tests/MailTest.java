@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import com.google.code.jahath.client.http.ProxyConfiguration;
 import com.google.code.jahath.client.tunnel.Tunnel;
 import com.google.code.jahath.client.vch.VCHClient;
 import com.google.code.jahath.common.vch.VCHConstants;
+import com.google.code.jahath.gateway.direct.DirectGateway;
 import com.google.code.jahath.server.socks.SocksConnectionHandler;
 import com.google.code.jahath.server.vch.VCHServer;
 import com.icegreen.greenmail.util.GreenMail;
@@ -55,7 +56,7 @@ public class MailTest {
         greenMail.start();
         
         VCHServer server = new VCHServer(serverPort);
-        server.registerService(VCHConstants.Services.SOCKS, new SocksConnectionHandler());
+        server.registerService(VCHConstants.Services.SOCKS, new SocksConnectionHandler(new DirectGateway()));
         
         ProxyServer proxy;
         ProxyConfiguration proxyConfiguration;

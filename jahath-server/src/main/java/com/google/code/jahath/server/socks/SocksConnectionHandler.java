@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,13 @@ package com.google.code.jahath.server.socks;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.Connection;
+import com.google.code.jahath.Gateway;
 import com.google.code.jahath.common.ConnectionRelay;
 import com.google.code.jahath.common.connection.ConnectionHandler;
-import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.socks.SocksConstants;
 import com.google.code.jahath.common.socks.SocksDataInputStream;
@@ -34,6 +33,12 @@ import com.google.code.jahath.common.socks.SocksDataOutputStream;
 public class SocksConnectionHandler implements ConnectionHandler {
     private static final Logger log = Logger.getLogger(SocksConnectionHandler.class.getName());
     
+    private final Gateway gateway;
+    
+    public SocksConnectionHandler(Gateway gateway) {
+        this.gateway = gateway;
+    }
+
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
             boolean fineEnabled = log.isLoggable(Level.FINE);
@@ -81,7 +86,7 @@ public class SocksConnectionHandler implements ConnectionHandler {
             }
             InetSocketAddress destination = in.readSocketAddress();
             
-            Socket socket = new Socket(destination.getAddress(), destination.getPort());
+            Connection targetConnection = gateway.connect(destination);
             if (fineEnabled) {
                 log.fine("Connected to " + destination);
             }
@@ -95,7 +100,7 @@ public class SocksConnectionHandler implements ConnectionHandler {
                 log.fine("End processing SOCKS request");
             }
             
-            new ConnectionRelay(log, env, connection, "socks", new SocketConnection(socket), destination.toString()).run();
+            new ConnectionRelay(log, env, connection, "socks", targetConnection, destination.toString()).run();
         } catch (IOException ex) {
             ex.printStackTrace(); // TODO
         }
