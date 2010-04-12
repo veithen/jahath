@@ -16,19 +16,12 @@
 package com.google.code.jahath.endpoint.socks.cli;
 
 import org.apache.felix.shell.Command;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
-	    Bundle targetBundle = null;
-	    for (Bundle bundle : context.getBundles()) {
-	        if (bundle.getSymbolicName().equals("com.google.code.jahath.endpoint.socks")) {
-	            targetBundle = bundle;
-	        }
-	    }
-	    context.registerService(Command.class.getName(), new CommandImpl(context, targetBundle), null);
+	    context.registerService(Command.class.getName(), new CommandImpl(context), null);
 	}
 
 	public void stop(BundleContext context) throws Exception {

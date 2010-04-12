@@ -19,20 +19,16 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Properties;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.Configuration;
-import org.osgi.service.cm.ConfigurationAdmin;
 
 import com.google.code.jahath.common.cli.CommandLineParser;
 import com.google.code.jahath.common.cli.ConfigurationCommand;
+import com.google.code.jahath.common.cli.Configurator;
 
 public class CommandImpl extends ConfigurationCommand {
-    private final Bundle bundle;
-    
-    public CommandImpl(BundleContext bundleContext, Bundle bundle) {
-        super(bundleContext);
-        this.bundle = bundle;
+    public CommandImpl(BundleContext bundleContext) {
+        super(bundleContext, "endpoint-socks");
     }
 
     public String getName() {
@@ -48,7 +44,7 @@ public class CommandImpl extends ConfigurationCommand {
     }
     
     @Override
-	protected void execute(ConfigurationAdmin configurationAdmin, CommandLineParser p, PrintStream out, PrintStream err) {
+	protected void execute(Configurator configurator, CommandLineParser p, PrintStream out, PrintStream err) {
         try {
             p.consume();
             String subcommand = p.consume();
@@ -60,7 +56,7 @@ public class CommandImpl extends ConfigurationCommand {
                 if (name == null || gateway == null) {
                     out.println("Invalid command");
                 } else {
-                    Configuration config = configurationAdmin.createFactoryConfiguration("endpoint-socks", bundle.getLocation());
+                    Configuration config = configurator.createConfiguration();
                     Properties props = new Properties();
                     props.setProperty("name", name);
                     props.setProperty("gateway", gateway);

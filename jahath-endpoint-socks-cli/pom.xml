@@ -55,7 +55,6 @@
                         <Bundle-Name>Jahath SOCKS Endpoint CLI</Bundle-Name>
                         <Bundle-Activator>com.google.code.jahath.endpoint.socks.cli.Activator</Bundle-Activator>
                         <Export-Package></Export-Package>
-                        <Require-Bundle>com.google.code.jahath.endpoint.socks</Require-Bundle>
                         <Embed-Dependency>jahath-common-cli</Embed-Dependency>
                     </instructions>
                 </configuration>
