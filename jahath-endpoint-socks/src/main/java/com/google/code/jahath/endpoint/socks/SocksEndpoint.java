@@ -24,18 +24,18 @@ import java.util.logging.Logger;
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.Gateway;
 import com.google.code.jahath.common.ConnectionRelay;
-import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.socks.SocksConstants;
 import com.google.code.jahath.common.socks.SocksDataInputStream;
 import com.google.code.jahath.common.socks.SocksDataOutputStream;
 
-public class SocksConnectionHandler implements ConnectionHandler {
-    private static final Logger log = Logger.getLogger(SocksConnectionHandler.class.getName());
+public class SocksEndpoint implements Endpoint {
+    private static final Logger log = Logger.getLogger(SocksEndpoint.class.getName());
     
     private final Gateway gateway;
     
-    public SocksConnectionHandler(Gateway gateway) {
+    public SocksEndpoint(Gateway gateway) {
         this.gateway = gateway;
     }
 

@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.ConnectionClosedLocallyException;
-import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
@@ -32,12 +32,12 @@ import com.google.code.jahath.common.http.HttpOutputStream;
 import com.google.code.jahath.common.io.ErrorListenerInputStream;
 import com.google.code.jahath.common.io.ErrorListenerOutputStream;
 
-class HttpConnectionHandler implements ConnectionHandler, HttpHeadersProvider {
-    private static final Logger log = Logger.getLogger(HttpConnectionHandler.class.getName());
+class HttpEndpoint implements Endpoint, HttpHeadersProvider {
+    private static final Logger log = Logger.getLogger(HttpEndpoint.class.getName());
     
     private final HttpRequestHandler requestHandler;
 
-    public HttpConnectionHandler(HttpRequestHandler requestHandler) {
+    public HttpEndpoint(HttpRequestHandler requestHandler) {
         this.requestHandler = requestHandler;
     }
 

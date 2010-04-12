@@ -18,19 +18,19 @@ package com.google.code.jahath.server.vch;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.Endpoint;
 
 class ServiceRegistry {
-    private final Map<String,ConnectionHandler> services = new HashMap<String,ConnectionHandler>();
+    private final Map<String,Endpoint> services = new HashMap<String,Endpoint>();
     
-    public synchronized ConnectionHandler getConnectionHandler(String serviceName) {
+    public synchronized Endpoint getEndpoint(String serviceName) {
         return services.get(serviceName);
     }
     
-    public synchronized void registerService(String name, ConnectionHandler connectionHandler) {
+    public synchronized void registerService(String name, Endpoint endpoint) {
         if (services.containsKey(name)) {
             throw new IllegalArgumentException("Service '" + name + "' already registered");
         }
-        services.put(name, connectionHandler);
+        services.put(name, endpoint);
     }
 }

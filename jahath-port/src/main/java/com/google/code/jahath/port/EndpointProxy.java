@@ -20,10 +20,10 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.code.jahath.Connection;
-import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 
-public class EndpointProxy implements ConnectionHandler {
+public class EndpointProxy implements Endpoint {
     private final String name;
     private final ServiceTracker tracker;
     
@@ -31,7 +31,7 @@ public class EndpointProxy implements ConnectionHandler {
         this.name = name;
         try {
             tracker = new ServiceTracker(bundleContext,
-                    bundleContext.createFilter("(&(objectClass=" + ConnectionHandler.class.getName() + ")(name=" + name + "))"), null);
+                    bundleContext.createFilter("(&(objectClass=" + Endpoint.class.getName() + ")(name=" + name + "))"), null);
             tracker.open(); // TODO: do we need to shut this down somewhere???
         } catch (InvalidSyntaxException ex) {
             throw new Error(ex); // Should never get here
@@ -39,7 +39,7 @@ public class EndpointProxy implements ConnectionHandler {
     }
 
     public void handle(ExecutionEnvironment env, Connection connection) {
-        ConnectionHandler target = (ConnectionHandler)tracker.getService();
+        Endpoint target = (Endpoint)tracker.getService();
         if (target == null) {
             throw new IllegalStateException("Endpoint " + name + " not available");
         }

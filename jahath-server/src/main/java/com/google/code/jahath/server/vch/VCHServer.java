@@ -17,7 +17,7 @@ package com.google.code.jahath.server.vch;
 
 import java.io.IOException;
 
-import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.server.http.HttpServer;
 
 public class VCHServer {
@@ -28,8 +28,8 @@ public class VCHServer {
         httpServer = new HttpServer(port, new HttpRequestHandlerImpl(serviceRegistry));
     }
 
-    public void registerService(String name, ConnectionHandler connectionHandler) {
-        serviceRegistry.registerService(name, connectionHandler);
+    public void registerService(String name, Endpoint endpoint) {
+        serviceRegistry.registerService(name, endpoint);
     }
 
     public final void stop() throws InterruptedException {

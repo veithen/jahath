@@ -20,10 +20,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.google.code.jahath.Connection;
-import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 
-public class EchoConnectionHandler implements ConnectionHandler {
+public class EchoEndpoint implements Endpoint {
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
             byte[] buffer = new byte[4096];

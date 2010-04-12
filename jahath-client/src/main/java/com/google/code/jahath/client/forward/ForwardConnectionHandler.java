@@ -21,10 +21,10 @@ import java.util.logging.Logger;
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.client.vch.VCHClient;
 import com.google.code.jahath.common.ConnectionRelay;
-import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 
-class ForwardConnectionHandler implements ConnectionHandler {
+class ForwardConnectionHandler implements Endpoint {
     private static final Logger log = Logger.getLogger(ForwardConnectionHandler.class.getName());
     
     private final VCHClient client;

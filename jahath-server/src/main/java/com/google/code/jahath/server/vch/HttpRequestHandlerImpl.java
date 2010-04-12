@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.common.connection.ConnectionHandlerTask;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.http.HttpConnectionException;
@@ -69,8 +69,8 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         }
         if (path.startsWith("/services/")) {
             String serviceName = path.substring(10);
-            ConnectionHandler connectionHandler = serviceRegistry.getConnectionHandler(serviceName);
-            if (connectionHandler == null) {
+            Endpoint endpoint = serviceRegistry.getEndpoint(serviceName);
+            if (endpoint == null) {
                 response.sendError(HttpConstants.StatusCodes.NOT_FOUND, "No such service: " + serviceName);
                 return;
             }
@@ -80,7 +80,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
             }
             ConnectionImpl connection = new ConnectionImpl(connectionId);
             connections.put(connectionId, connection);
-            env.execute(new ConnectionHandlerTask(connectionHandler, env, connection));
+            env.execute(new ConnectionHandlerTask(endpoint, env, connection));
             response.setStatus(HttpConstants.StatusCodes.CREATED);
             response.addHeader(HttpConstants.Headers.LOCATION, request.makeAbsoluteURI("/connections/" + connectionId));
             response.commit();

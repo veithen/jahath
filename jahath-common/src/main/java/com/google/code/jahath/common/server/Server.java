@@ -18,7 +18,7 @@ package com.google.code.jahath.common.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.common.container.Container;
 import com.google.code.jahath.common.container.ContainerFactory;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
@@ -27,10 +27,10 @@ public class Server {
     private final Container container;
     private final Acceptor acceptor;
     
-    public Server(int port, ConnectionHandler connectionHandler) throws IOException {
+    public Server(int port, Endpoint endpoint) throws IOException {
         container = ContainerFactory.createContainer("Server:" + port);
         ExecutionEnvironment env = container.getExecutionEnvironment();
-        acceptor = new Acceptor(new ServerSocket(port), env, connectionHandler);
+        acceptor = new Acceptor(new ServerSocket(port), env, endpoint);
         env.execute(acceptor);
     }
 

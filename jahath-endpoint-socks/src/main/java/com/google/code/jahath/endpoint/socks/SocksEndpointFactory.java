@@ -24,11 +24,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
 
-import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.Endpoint;
 
 public class SocksEndpointFactory implements ManagedServiceFactory {
     private final BundleContext bundleContext;
-    private final Map<String,SocksConnectionHandler> services = new HashMap<String,SocksConnectionHandler>();
+    private final Map<String,SocksEndpoint> services = new HashMap<String,SocksEndpoint>();
     
     public SocksEndpointFactory(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
@@ -49,8 +49,8 @@ public class SocksEndpointFactory implements ManagedServiceFactory {
         String name = (String)properties.get("name");
         Properties serviceProps = new Properties();
         serviceProps.setProperty("name", name);
-        SocksConnectionHandler endpoint = new SocksConnectionHandler(null /* TODO */);
-        bundleContext.registerService(ConnectionHandler.class.getName(), endpoint, serviceProps);
+        SocksEndpoint endpoint = new SocksEndpoint(null /* TODO */);
+        bundleContext.registerService(Endpoint.class.getName(), endpoint, serviceProps);
         services.put(pid, endpoint);
     }
 }

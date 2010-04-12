@@ -21,14 +21,14 @@ import com.google.code.jahath.Connection;
 import com.google.code.jahath.client.vch.VCHClient;
 import com.google.code.jahath.common.vch.VCHConstants;
 import com.google.code.jahath.server.vch.VCHServer;
-import com.google.code.jahath.testutils.EchoConnectionHandler;
+import com.google.code.jahath.testutils.EchoEndpoint;
 import com.google.code.jahath.testutils.EchoTestUtil;
 
 public class EchoTest {
     @Test
     public void test() throws Exception {
         VCHServer server = new VCHServer(5555);
-        server.registerService(VCHConstants.Services.ECHO, new EchoConnectionHandler());
+        server.registerService(VCHConstants.Services.ECHO, new EchoEndpoint());
         VCHClient client = new VCHClient("localhost", 5555, null);
         Connection connection = client.createConnection(VCHConstants.Services.ECHO);
         EchoTestUtil.testEcho(connection);

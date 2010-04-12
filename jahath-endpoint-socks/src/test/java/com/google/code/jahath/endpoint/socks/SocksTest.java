@@ -23,16 +23,16 @@ import org.junit.Test;
 
 import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.common.server.Server;
-import com.google.code.jahath.endpoint.socks.SocksConnectionHandler;
+import com.google.code.jahath.endpoint.socks.SocksEndpoint;
 import com.google.code.jahath.gateway.direct.DirectGateway;
-import com.google.code.jahath.testutils.EchoConnectionHandler;
+import com.google.code.jahath.testutils.EchoEndpoint;
 import com.google.code.jahath.testutils.EchoTestUtil;
 
 public class SocksTest {
     @Test
     public void test() throws Exception {
-        Server socksServer = new Server(9000, new SocksConnectionHandler(new DirectGateway()));
-        Server echoServer = new Server(9001, new EchoConnectionHandler());
+        Server socksServer = new Server(9000, new SocksEndpoint(new DirectGateway()));
+        Server echoServer = new Server(9001, new EchoEndpoint());
         Socket socket = new Socket(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("localhost", 9000)));
         socket.connect(new InetSocketAddress("localhost", 9001));
         EchoTestUtil.testEcho(new SocketConnection(socket));

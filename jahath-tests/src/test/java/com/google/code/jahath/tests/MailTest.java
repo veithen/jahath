@@ -34,7 +34,7 @@ import com.google.code.jahath.client.http.ProxyConfiguration;
 import com.google.code.jahath.client.tunnel.Tunnel;
 import com.google.code.jahath.client.vch.VCHClient;
 import com.google.code.jahath.common.vch.VCHConstants;
-import com.google.code.jahath.endpoint.socks.SocksConnectionHandler;
+import com.google.code.jahath.endpoint.socks.SocksEndpoint;
 import com.google.code.jahath.gateway.direct.DirectGateway;
 import com.google.code.jahath.server.vch.VCHServer;
 import com.icegreen.greenmail.util.GreenMail;
@@ -56,7 +56,7 @@ public class MailTest {
         greenMail.start();
         
         VCHServer server = new VCHServer(serverPort);
-        server.registerService(VCHConstants.Services.SOCKS, new SocksConnectionHandler(new DirectGateway()));
+        server.registerService(VCHConstants.Services.SOCKS, new SocksEndpoint(new DirectGateway()));
         
         ProxyServer proxy;
         ProxyConfiguration proxyConfiguration;

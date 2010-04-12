@@ -21,7 +21,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.common.connection.ConnectionHandler;
+import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.common.connection.ConnectionHandlerTask;
 import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
@@ -32,19 +32,19 @@ class Acceptor implements Task {
 
     private final ServerSocket serverSocket;
     final ExecutionEnvironment env;
-    final ConnectionHandler connectionHandler;
+    final Endpoint endpoint;
 
-    public Acceptor(ServerSocket serverSocket, ExecutionEnvironment env, ConnectionHandler connectionHandler) {
+    public Acceptor(ServerSocket serverSocket, ExecutionEnvironment env, Endpoint endpoint) {
         this.serverSocket = serverSocket;
         this.env = env;
-        this.connectionHandler = connectionHandler;
+        this.endpoint = endpoint;
     }
     
     public final void run() {
         try {
             while (true) {
                 final Socket socket = serverSocket.accept();
-                env.execute(new ConnectionHandlerTask(connectionHandler, env, new SocketConnection(socket)));
+                env.execute(new ConnectionHandlerTask(endpoint, env, new SocketConnection(socket)));
             }
         } catch (IOException ex) {
             if (!serverSocket.isClosed()) {
