@@ -19,19 +19,19 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Properties;
 
-import org.apache.felix.shell.Command;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 import com.google.code.jahath.common.cli.CommandLineParser;
+import com.google.code.jahath.common.cli.ConfigurationCommand;
 
-public class CommandImpl implements Command {
-    private final ConfigurationAdmin configurationAdmin;
+public class CommandImpl extends ConfigurationCommand {
     private final Bundle bundle;
     
-    public CommandImpl(ConfigurationAdmin configurationAdmin, Bundle bundle) {
-        this.configurationAdmin = configurationAdmin;
+    public CommandImpl(BundleContext bundleContext, Bundle bundle) {
+        super(bundleContext);
         this.bundle = bundle;
     }
 
@@ -47,9 +47,9 @@ public class CommandImpl implements Command {
         return "socksep [add <name> <gateway> | del <name>]";
     }
     
-    public void execute(String commandLine, PrintStream out, PrintStream err) {
+    @Override
+	protected void execute(ConfigurationAdmin configurationAdmin, CommandLineParser p, PrintStream out, PrintStream err) {
         try {
-            CommandLineParser p = new CommandLineParser(commandLine);
             p.consume();
             String subcommand = p.consume();
             if (subcommand == null) {

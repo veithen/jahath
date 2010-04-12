@@ -19,8 +19,6 @@ import org.apache.felix.shell.Command;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.cm.ConfigurationAdmin;
 
 public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
@@ -30,10 +28,7 @@ public class Activator implements BundleActivator {
 	            targetBundle = bundle;
 	        }
 	    }
-	    // TODO: this will not work because the ConfigurationAdmin service may not be registered yet
-	    ServiceReference configAdminServiceRef = context.getServiceReference(ConfigurationAdmin.class.getName());
-	    ConfigurationAdmin configurationAdmin = (ConfigurationAdmin)context.getService(configAdminServiceRef);
-	    context.registerService(Command.class.getName(), new CommandImpl(configurationAdmin, targetBundle), null);
+	    context.registerService(Command.class.getName(), new CommandImpl(context, targetBundle), null);
 	}
 
 	public void stop(BundleContext context) throws Exception {
