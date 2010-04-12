@@ -60,6 +60,7 @@
         <module>jahath-common</module>
         <module>jahath-common-cli</module>
         <module>jahath-common-socks</module>
+        <module>jahath-endpoint-echo</module>
         <module>jahath-endpoint-socks</module>
         <module>jahath-endpoint-socks-cli</module>
         <module>jahath-gateway-direct</module>

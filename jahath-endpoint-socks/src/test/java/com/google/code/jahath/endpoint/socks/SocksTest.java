@@ -23,9 +23,9 @@ import org.junit.Test;
 
 import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.common.server.Server;
+import com.google.code.jahath.endpoint.echo.EchoEndpoint;
 import com.google.code.jahath.endpoint.socks.SocksEndpoint;
 import com.google.code.jahath.gateway.direct.DirectGateway;
-import com.google.code.jahath.testutils.EchoEndpoint;
 import com.google.code.jahath.testutils.EchoTestUtil;
 
 public class SocksTest {
