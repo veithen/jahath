@@ -15,7 +15,10 @@
  */
 package com.google.code.jahath.common.cli;
 
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Dictionary;
+import java.util.Properties;
 
 import org.apache.felix.shell.Command;
 import org.osgi.framework.BundleContext;
@@ -24,13 +27,20 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
-public abstract class ConfigurationCommand implements Command {
+public class ConfigurationCommand implements Command {
+    private final String name;
+    private final String shortDescription;
     private final String factoryPid;
+    private final ConfigSpec configSpec;
+    // TODO: we don't really need trackers here; just do a lookup when executing the command!
     private final ServiceTracker configurationAdminTracker;
     private final ServiceTracker managedServiceTracker;
     
-    public ConfigurationCommand(BundleContext bundleContext, String factoryPid) {
+    public ConfigurationCommand(BundleContext bundleContext, String name, String shortDescription, String factoryPid, ConfigSpec configSpec) {
+        this.name = name;
+        this.shortDescription = shortDescription;
         this.factoryPid = factoryPid;
+        this.configSpec = configSpec;
         configurationAdminTracker = new ServiceTracker(bundleContext, ConfigurationAdmin.class.getName(), null);
         try {
             managedServiceTracker = new ServiceTracker(bundleContext,
@@ -42,6 +52,23 @@ public abstract class ConfigurationCommand implements Command {
         managedServiceTracker.open();
     }
     
+    public final String getName() {
+        return name;
+    }
+
+    public final String getShortDescription() {
+        return shortDescription;
+    }
+
+    public String getUsage() {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(name);
+        buffer.append(" [add ");
+        configSpec.formatUsage(buffer);
+        buffer.append(" | del <id>]");
+        return buffer.toString();
+    }
+
     public final void execute(String commandLine, PrintStream out, PrintStream err) {
         ConfigurationAdmin configurationAdmin = (ConfigurationAdmin)configurationAdminTracker.getService();
         if (configurationAdmin == null) {
@@ -53,9 +80,28 @@ public abstract class ConfigurationCommand implements Command {
             err.println("The managed service with service.pid " + factoryPid + " is unavailable");
             return;
         }
-        execute(new Configurator(configurationAdmin, factoryPid, managedServiceRef.getBundle().getLocation()),
-                new CommandLineParser(commandLine), out, err);
+        // TODO: not sure if we really need a Configurator class
+        Configurator configurator = new Configurator(configurationAdmin, factoryPid, managedServiceRef.getBundle().getLocation());
+        CommandLineParser p = new CommandLineParser(commandLine);
+        try {
+            p.consume();
+            String subcommand = p.consume();
+            if (subcommand == null) {
+                out.println("Invalid command: expected 'add' or 'del'");
+            } else if (subcommand.equals("add")) {
+                try {
+                    Properties props = new Properties();
+                    configSpec.parse(p, props);
+                    configurator.createConfiguration().update(props);
+                } catch (ParseException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            } else if (subcommand.equals("del")) {
+                // TODO
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace(err);
+            return;
+        }
     }
-    
-    protected abstract void execute(Configurator configurator, CommandLineParser commandLine, PrintStream out, PrintStream err);
 }

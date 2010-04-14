@@ -19,9 +19,17 @@ import org.apache.felix.shell.Command;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+import com.google.code.jahath.common.cli.ConfigurationCommand;
+import com.google.code.jahath.common.cli.Sequence;
+import com.google.code.jahath.common.cli.StringArgument;
+
 public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
-	    context.registerService(Command.class.getName(), new CommandImpl(context), null);
+	    Sequence sequence = new Sequence();
+	    sequence.add(new StringArgument("name"));
+	    sequence.add(new StringArgument("gateway"));
+	    context.registerService(Command.class.getName(), new ConfigurationCommand(context,
+	            "socksep", "Manipulate SOCKS endpoints", "endpoint-socks", sequence), null);
 	}
 
 	public void stop(BundleContext context) throws Exception {
