@@ -15,14 +15,27 @@
  */
 package com.google.code.jahath.gateway.ssh;
 
+import org.apache.felix.shell.Command;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-public class Activator implements BundleActivator {
-	public void start(BundleContext context) throws Exception {
-		
-	}
+import com.google.code.jahath.common.cli.ConfigurationCommand;
+import com.google.code.jahath.common.cli.IntegerArgument;
+import com.google.code.jahath.common.cli.Sequence;
+import com.google.code.jahath.common.cli.StringArgument;
 
-	public void stop(BundleContext context) throws Exception {
-	}
+public class Activator implements BundleActivator {
+    public void start(BundleContext context) throws Exception {
+        Sequence sequence = new Sequence();
+        sequence.add(new StringArgument("name"));
+        // TODO: see if we can use "host:port" syntax here
+        sequence.add(new StringArgument("host"));
+        sequence.add(new IntegerArgument("port"));
+        sequence.add(new StringArgument("user"));
+        sequence.add(new StringArgument("password"));
+        context.registerService(Command.class.getName(), new ConfigurationCommand(context, "ssh", "Manipulate SSH gateways", "gateway-ssh", sequence), null);
+    }
+
+    public void stop(BundleContext context) throws Exception {
+    }
 }
