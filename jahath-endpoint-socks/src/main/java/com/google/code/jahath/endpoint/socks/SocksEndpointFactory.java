@@ -16,41 +16,25 @@
 package com.google.code.jahath.endpoint.socks;
 
 import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedServiceFactory;
 
 import com.google.code.jahath.common.connection.Endpoint;
+import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
 
-public class SocksEndpointFactory implements ManagedServiceFactory {
-    private final BundleContext bundleContext;
-    private final Map<String,SocksEndpoint> services = new HashMap<String,SocksEndpoint>();
-    
+public class SocksEndpointFactory extends SimpleManagedServiceFactory {
     public SocksEndpointFactory(BundleContext bundleContext) {
-        this.bundleContext = bundleContext;
+        super(bundleContext);
     }
 
-    public String getName() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void deleted(String pid) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void updated(String pid, Dictionary properties) throws ConfigurationException {
-        deleted(pid);
+    @Override
+    protected void configure(Instance instance, Dictionary properties) throws ConfigurationException {
         String name = (String)properties.get("name");
         Properties serviceProps = new Properties();
         serviceProps.setProperty("name", name);
         SocksEndpoint endpoint = new SocksEndpoint(null /* TODO */);
-        bundleContext.registerService(Endpoint.class.getName(), endpoint, serviceProps);
-        services.put(pid, endpoint);
+        instance.registerService(Endpoint.class.getName(), endpoint, serviceProps);
     }
 }

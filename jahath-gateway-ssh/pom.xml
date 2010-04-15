@@ -34,6 +34,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-common-osgi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
         </dependency>
@@ -54,7 +59,7 @@
                         <Bundle-Activator>com.google.code.jahath.gateway.ssh.Activator</Bundle-Activator>
                         <Bundle-SymbolicName>com.google.code.jahath.gateway.ssh</Bundle-SymbolicName>
                         <Bundle-Name>Jahath SSH Gateway</Bundle-Name>
-                        <Embed-Dependency>jsch</Embed-Dependency>
+                        <Embed-Dependency>jsch,jahath-common-*</Embed-Dependency>
                     </instructions>
                 </configuration>
             </plugin>

@@ -24,20 +24,10 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>jahath-port</artifactId>
-    <name>Jahath :: Port manager</name>
-    <packaging>bundle</packaging>
+    <artifactId>jahath-common-osgi</artifactId>
+    <name>Jahath :: Common OSGi utility classes</name>
+    <packaging>jar</packaging>
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-common-osgi</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
@@ -47,21 +37,4 @@
             <artifactId>org.osgi.compendium</artifactId>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>com.google.code.jahath.port</Bundle-SymbolicName>
-                        <Bundle-Name>Jahath Port Manager</Bundle-Name>
-                        <Bundle-Activator>com.google.code.jahath.port.Activator</Bundle-Activator>
-                        <Export-Package></Export-Package>
-                        <Embed-Dependency>jahath-common-osgi</Embed-Dependency>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

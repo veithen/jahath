@@ -20,34 +20,32 @@ import java.util.Dictionary;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedServiceFactory;
 
+import com.google.code.jahath.common.osgi.DeletionListener;
+import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
 import com.google.code.jahath.common.server.Server;
 
-public class PortFactory implements ManagedServiceFactory {
-    private final BundleContext bundleContext;
-    
+public class PortFactory extends SimpleManagedServiceFactory {
     public PortFactory(BundleContext bundleContext) {
-        this.bundleContext = bundleContext;
+        super(bundleContext);
     }
     
-    public String getName() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void deleted(String pid) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void updated(String pid, Dictionary properties) throws ConfigurationException {
-        
+    @Override
+    protected void configure(Instance instance, Dictionary properties) throws ConfigurationException {
         int port = (Integer)properties.get("port");
         String endpoint = (String)properties.get("endpoint");
         
         try {
-            new Server(port, new EndpointProxy(bundleContext, endpoint));
+            final Server server = new Server(port, new EndpointProxy(bundleContext, endpoint));
+            instance.addDeletionListener(new DeletionListener() {
+                public void deleted() {
+                    try {
+                        server.stop();
+                    } catch (InterruptedException ex) {
+                        Thread.interrupted();
+                    }
+                }
+            });
         } catch (IOException ex) {
             throw new RuntimeException(ex); // TODO
         }
