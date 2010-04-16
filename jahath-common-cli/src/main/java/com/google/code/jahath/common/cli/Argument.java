@@ -17,7 +17,7 @@ package com.google.code.jahath.common.cli;
 
 import java.util.Dictionary;
 
-public abstract class Argument<T> implements ConfigSpec {
+public abstract class Argument<T> implements CommandParser<Dictionary> {
     private final String key;
     
     public Argument(String key) {
@@ -30,7 +30,7 @@ public abstract class Argument<T> implements ConfigSpec {
         buffer.append('>');
     }
 
-    public final void parse(CommandLineParser p, Dictionary dictionary) throws ParseException {
+    public final void parse(CommandLine p, Dictionary dictionary) throws ParseException {
         String value = p.consume();
         if (value == null) {
             throw new ParseException("Expected argument '" + key + "'");

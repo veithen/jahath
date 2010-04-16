@@ -15,9 +15,7 @@
  */
 package com.google.code.jahath.common.cli;
 
-import java.util.Dictionary;
-
-public interface ConfigSpec {
+public interface CommandParser<C> {
     void formatUsage(StringBuilder buffer);
-    void parse(CommandLineParser p, Dictionary dictionary) throws ParseException;
+    void parse(CommandLine p, C context) throws ParseException;
 }

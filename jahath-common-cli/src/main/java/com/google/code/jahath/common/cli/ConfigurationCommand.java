@@ -31,16 +31,16 @@ public class ConfigurationCommand implements Command {
     private final String name;
     private final String shortDescription;
     private final String factoryPid;
-    private final ConfigSpec configSpec;
+    private final CommandParser<Dictionary> parser;
     // TODO: we don't really need trackers here; just do a lookup when executing the command!
     private final ServiceTracker configurationAdminTracker;
     private final ServiceTracker managedServiceTracker;
     
-    public ConfigurationCommand(BundleContext bundleContext, String name, String shortDescription, String factoryPid, ConfigSpec configSpec) {
+    public ConfigurationCommand(BundleContext bundleContext, String name, String shortDescription, String factoryPid, CommandParser<Dictionary> parser) {
         this.name = name;
         this.shortDescription = shortDescription;
         this.factoryPid = factoryPid;
-        this.configSpec = configSpec;
+        this.parser = parser;
         configurationAdminTracker = new ServiceTracker(bundleContext, ConfigurationAdmin.class.getName(), null);
         try {
             managedServiceTracker = new ServiceTracker(bundleContext,
@@ -64,7 +64,7 @@ public class ConfigurationCommand implements Command {
         StringBuilder buffer = new StringBuilder();
         buffer.append(name);
         buffer.append(" [add ");
-        configSpec.formatUsage(buffer);
+        parser.formatUsage(buffer);
         buffer.append(" | del <id>]");
         return buffer.toString();
     }
@@ -82,7 +82,7 @@ public class ConfigurationCommand implements Command {
         }
         // TODO: not sure if we really need a Configurator class
         Configurator configurator = new Configurator(configurationAdmin, factoryPid, managedServiceRef.getBundle().getLocation());
-        CommandLineParser p = new CommandLineParser(commandLine);
+        CommandLine p = new CommandLine(commandLine);
         try {
             p.consume();
             String subcommand = p.consume();
@@ -91,7 +91,7 @@ public class ConfigurationCommand implements Command {
             } else if (subcommand.equals("add")) {
                 try {
                     Properties props = new Properties();
-                    configSpec.parse(p, props);
+                    parser.parse(p, props);
                     configurator.createConfiguration().update(props);
                 } catch (ParseException ex) {
                     System.out.println(ex.getMessage());

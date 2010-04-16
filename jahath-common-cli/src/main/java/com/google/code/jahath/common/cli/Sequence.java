@@ -19,16 +19,16 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 
-public class Sequence implements ConfigSpec {
-    private final List<ConfigSpec> parts = new ArrayList<ConfigSpec>();
+public class Sequence implements CommandParser<Dictionary> {
+    private final List<CommandParser<Dictionary>> parts = new ArrayList<CommandParser<Dictionary>>();
     
-    public void add(ConfigSpec part) {
+    public void add(CommandParser<Dictionary> part) {
         parts.add(part);
     }
     
     public void formatUsage(StringBuilder buffer) {
         boolean first = true;
-        for (ConfigSpec part : parts) {
+        for (CommandParser<Dictionary> part : parts) {
             if (first) {
                 first = false;
             } else {
@@ -38,8 +38,8 @@ public class Sequence implements ConfigSpec {
         }
     }
 
-    public void parse(CommandLineParser p, Dictionary dictionary) throws ParseException {
-        for (ConfigSpec part : parts) {
+    public void parse(CommandLine p, Dictionary dictionary) throws ParseException {
+        for (CommandParser<Dictionary> part : parts) {
             part.parse(p, dictionary);
         }
     }

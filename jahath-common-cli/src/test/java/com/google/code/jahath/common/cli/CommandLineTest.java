@@ -18,10 +18,10 @@ package com.google.code.jahath.common.cli;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class CommandLineParserTest {
+public class CommandLineTest {
     @Test
     public void testSimple() {
-        CommandLineParser p = new CommandLineParser("command arg1 arg2");
+        CommandLine p = new CommandLine("command arg1 arg2");
         Assert.assertTrue(p.hasNext());
         Assert.assertEquals("command", p.consume());
         Assert.assertTrue(p.hasNext());

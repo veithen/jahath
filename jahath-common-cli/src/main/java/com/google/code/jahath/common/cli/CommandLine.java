@@ -15,12 +15,12 @@
  */
 package com.google.code.jahath.common.cli;
 
-public class CommandLineParser {
+public class CommandLine {
     private final String line;
     private String nextArg;
     private int pos;
     
-    public CommandLineParser(String line) {
+    public CommandLine(String line) {
         this.line = line;
     }
     
