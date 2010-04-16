@@ -15,12 +15,24 @@
  */
 package com.google.code.jahath.gateway.ssh;
 
+import java.util.Properties;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.cm.ManagedServiceFactory;
+
+import com.jcraft.jsch.JSch;
 
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
-        
+        JSch jsch = new JSch();
+        // TODO: probably we need a smarter solution here
+        System.out.println(System.getProperty("user.home") + "/.ssh/known_hosts");
+        jsch.setKnownHosts(System.getProperty("user.home") + "/.ssh/known_hosts");
+        System.out.println(jsch.getHostKeyRepository().getHostKey().length + " host keys loaded");
+        Properties props = new Properties();
+        props.setProperty("service.pid", "gateway-ssh");
+        context.registerService(ManagedServiceFactory.class.getName(), new SSHGatewayFactory(context, jsch), props);
     }
 
     public void stop(BundleContext context) throws Exception {

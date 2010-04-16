@@ -55,6 +55,7 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
+                        <Import-Package>!com.jcraft.jzlib,*</Import-Package>
                         <Export-Package></Export-Package>
                         <Bundle-Activator>com.google.code.jahath.gateway.ssh.Activator</Bundle-Activator>
                         <Bundle-SymbolicName>com.google.code.jahath.gateway.ssh</Bundle-SymbolicName>

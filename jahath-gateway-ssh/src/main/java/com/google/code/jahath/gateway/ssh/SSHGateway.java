@@ -21,27 +21,25 @@ import java.net.InetSocketAddress;
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.Gateway;
 import com.jcraft.jsch.ChannelDirectTCPIP;
-import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 public class SSHGateway implements Gateway {
+    private final Session session;
+    
+    public SSHGateway(Session session) {
+        this.session = session;
+    }
+
     public Connection connect(InetSocketAddress socketAddress) throws IOException {
         try {
-            JSch jsch = new JSch();
-            Session session = jsch.getSession("user", "password");
-            session.connect();
             ChannelDirectTCPIP channel = (ChannelDirectTCPIP)session.openChannel("direct-tcpip");
             channel.setHost(socketAddress.getHostName());
             channel.setPort(socketAddress.getPort());
     //        channel.setOrgIPAddress(socket.getInetAddress().getHostAddress());
     //        channel.setOrgPort(socket.getPort());
             channel.connect();
-            channel.getInputStream();
-            channel.getOutputStream();
-            
-            // TODO Auto-generated method stub
-            return null;
+            return new ChannelConnection(channel);
         } catch (JSchException ex) {
             IOException ioEx = new IOException();
             ioEx.initCause(ex);
