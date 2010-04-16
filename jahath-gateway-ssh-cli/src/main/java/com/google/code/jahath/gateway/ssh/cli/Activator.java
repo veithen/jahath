@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.gateway.ssh;
+package com.google.code.jahath.gateway.ssh.cli;
 
 import org.apache.felix.shell.Command;
 import org.osgi.framework.BundleActivator;
