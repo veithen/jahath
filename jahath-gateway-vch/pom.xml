@@ -24,8 +24,8 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>jahath-client</artifactId>
-    <name>Jahath :: Client</name>
+    <artifactId>jahath-gateway-vch</artifactId>
+    <name>Jahath :: Gateway :: VC/H</name>
     <packaging>jar</packaging>
     <dependencies>
     	<dependency>

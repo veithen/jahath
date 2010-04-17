@@ -56,7 +56,6 @@
     
     <modules>
         <module>jahath-api</module>
-        <module>jahath-client</module>
         <module>jahath-common</module>
         <module>jahath-common-cli</module>
         <module>jahath-common-http</module>
@@ -69,6 +68,7 @@
         <module>jahath-gateway-direct</module>
         <module>jahath-gateway-ssh</module>
         <module>jahath-gateway-ssh-cli</module>
+        <module>jahath-gateway-vch</module>
         <module>jahath-port</module>
         <module>jahath-port-cli</module>
         <module>jahath-test-utils</module>
