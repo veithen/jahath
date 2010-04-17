@@ -20,11 +20,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.google.code.jahath.AbstractConnection;
-import com.google.code.jahath.client.http.HttpClient;
-import com.google.code.jahath.client.http.HttpRequest;
-import com.google.code.jahath.client.http.HttpResponse;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
+import com.google.code.jahath.common.http.client.HttpClient;
+import com.google.code.jahath.common.http.client.HttpRequest;
+import com.google.code.jahath.common.http.client.HttpResponse;
 
 class ConnectionImpl extends AbstractConnection {
     private final HttpClient httpClient;

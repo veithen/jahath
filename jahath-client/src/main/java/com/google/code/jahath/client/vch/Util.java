@@ -15,8 +15,8 @@
  */
 package com.google.code.jahath.client.vch;
 
-import com.google.code.jahath.client.http.HttpResponse;
 import com.google.code.jahath.common.http.HttpException;
+import com.google.code.jahath.common.http.client.HttpResponse;
 
 class Util {
     static VCHException createException(HttpResponse response) throws HttpException {

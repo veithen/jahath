@@ -18,9 +18,9 @@ package com.google.code.jahath.client.vch;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.google.code.jahath.client.http.HttpClient;
-import com.google.code.jahath.client.http.HttpRequest;
 import com.google.code.jahath.common.http.HttpException;
+import com.google.code.jahath.common.http.client.HttpClient;
+import com.google.code.jahath.common.http.client.HttpRequest;
 
 class VCHOutputStream extends OutputStream {
     private final HttpClient httpClient;

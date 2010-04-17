@@ -16,12 +16,12 @@
 package com.google.code.jahath.client.vch;
 
 import com.google.code.jahath.Connection;
-import com.google.code.jahath.client.http.HttpClient;
-import com.google.code.jahath.client.http.HttpRequest;
-import com.google.code.jahath.client.http.HttpResponse;
-import com.google.code.jahath.client.http.ProxyConfiguration;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
+import com.google.code.jahath.common.http.client.HttpClient;
+import com.google.code.jahath.common.http.client.HttpRequest;
+import com.google.code.jahath.common.http.client.HttpResponse;
+import com.google.code.jahath.common.http.client.ProxyConfiguration;
 
 public class VCHClient {
     private final HttpClient httpClient;

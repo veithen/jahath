@@ -59,6 +59,7 @@
         <module>jahath-client</module>
         <module>jahath-common</module>
         <module>jahath-common-cli</module>
+        <module>jahath-common-http</module>
         <module>jahath-common-osgi</module>
         <module>jahath-common-socks</module>
         <module>jahath-endpoint-echo</module>

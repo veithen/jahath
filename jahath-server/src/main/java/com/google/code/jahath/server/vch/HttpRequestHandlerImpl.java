@@ -31,9 +31,9 @@ import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.http.HttpConnectionException;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
-import com.google.code.jahath.server.http.HttpRequest;
-import com.google.code.jahath.server.http.HttpRequestHandler;
-import com.google.code.jahath.server.http.HttpResponse;
+import com.google.code.jahath.common.http.server.HttpRequest;
+import com.google.code.jahath.common.http.server.HttpRequestHandler;
+import com.google.code.jahath.common.http.server.HttpResponse;
 
 class HttpRequestHandlerImpl implements HttpRequestHandler {
     static final Logger log = Logger.getLogger(HttpRequestHandlerImpl.class.getName());

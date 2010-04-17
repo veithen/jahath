@@ -38,6 +38,11 @@
             <artifactId>jahath-common-socks</artifactId>
             <version>${version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-common-http</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     	<dependency>
     		<groupId>commons-io</groupId>
     		<artifactId>commons-io</artifactId>
