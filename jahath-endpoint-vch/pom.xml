@@ -24,8 +24,8 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>jahath-server</artifactId>
-    <name>Jahath :: Server</name>
+    <artifactId>jahath-endpoint-vch</artifactId>
+    <name>Jahath :: Endpoint :: VC/H</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>

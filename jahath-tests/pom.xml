@@ -55,9 +55,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>jahath-server</artifactId>
-            <version>${version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-endpoint-vch</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

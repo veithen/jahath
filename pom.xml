@@ -65,12 +65,12 @@
         <module>jahath-endpoint-echo</module>
         <module>jahath-endpoint-socks</module>
         <module>jahath-endpoint-socks-cli</module>
+        <module>jahath-endpoint-vch</module>
         <module>jahath-gateway-direct</module>
         <module>jahath-gateway-ssh</module>
         <module>jahath-gateway-ssh-cli</module>
         <module>jahath-port</module>
         <module>jahath-port-cli</module>
-        <module>jahath-server</module>
         <module>jahath-test-utils</module>
         <module>jahath-tests</module>
     </modules>
