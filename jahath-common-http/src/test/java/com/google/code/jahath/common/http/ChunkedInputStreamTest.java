@@ -29,7 +29,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.AbstractHandler;
 
 import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.testutils.CRC;
+import com.google.code.jahath.testutils.CRC;
 
 public class ChunkedInputStreamTest {
     private void test(int requestCount) throws Exception {

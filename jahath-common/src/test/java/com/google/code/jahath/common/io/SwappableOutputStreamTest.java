@@ -20,8 +20,8 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.code.jahath.common.testutils.CRC;
-import com.google.code.jahath.common.testutils.CRCOutputStream;
+import com.google.code.jahath.testutils.CRC;
+import com.google.code.jahath.testutils.CRCOutputStream;
 
 public class SwappableOutputStreamTest {
     @Test

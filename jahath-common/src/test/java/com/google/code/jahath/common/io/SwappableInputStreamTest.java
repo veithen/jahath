@@ -23,7 +23,7 @@ import org.apache.commons.io.input.CountingInputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.code.jahath.common.testutils.CRC;
+import com.google.code.jahath.testutils.CRC;
 
 public class SwappableInputStreamTest {
     @Test

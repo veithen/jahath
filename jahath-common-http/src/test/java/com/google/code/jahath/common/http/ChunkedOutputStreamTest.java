@@ -34,7 +34,7 @@ import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.server.Server;
-import com.google.code.jahath.common.testutils.CRC;
+import com.google.code.jahath.testutils.CRC;
 
 public class ChunkedOutputStreamTest {
     private void testClient(int requestCount) throws Exception {

@@ -29,9 +29,9 @@
     <packaging>jar</packaging>
     <dependencies>
     	<dependency>
-    		<groupId>${groupId}</groupId>
-    		<artifactId>jahath-common</artifactId>
-    		<version>${version}</version>
+    		<groupId>${project.groupId}</groupId>
+    		<artifactId>jahath-api</artifactId>
+    		<version>${project.version}</version>
     	</dependency>
         <dependency>
             <groupId>junit</groupId>
