@@ -21,7 +21,7 @@ import com.google.code.jahath.Connection;
 import com.google.code.jahath.client.vch.VCHClient;
 import com.google.code.jahath.common.vch.VCHConstants;
 import com.google.code.jahath.endpoint.echo.EchoEndpoint;
-import com.google.code.jahath.server.vch.VCHServer;
+import com.google.code.jahath.endpoint.vch.VCHServer;
 import com.google.code.jahath.testutils.EchoTestUtil;
 
 public class EchoTest {
