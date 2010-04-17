@@ -22,6 +22,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationException;
 
 import com.google.code.jahath.common.connection.Endpoint;
+import com.google.code.jahath.common.osgi.DeletionListener;
+import com.google.code.jahath.common.osgi.GatewayProxy;
 import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
 
 public class SocksEndpointFactory extends SimpleManagedServiceFactory {
@@ -32,9 +34,16 @@ public class SocksEndpointFactory extends SimpleManagedServiceFactory {
     @Override
     protected void configure(Instance instance, Dictionary properties) throws ConfigurationException {
         String name = (String)properties.get("name");
+        String gateway = (String)properties.get("gateway");
+        final GatewayProxy gatewayProxy = new GatewayProxy(bundleContext, gateway);
+        instance.addDeletionListener(new DeletionListener() {
+            public void deleted() {
+                gatewayProxy.release();
+            }
+        });
+        SocksEndpoint endpoint = new SocksEndpoint(gatewayProxy);
         Properties serviceProps = new Properties();
-        serviceProps.setProperty("name", name);
-        SocksEndpoint endpoint = new SocksEndpoint(null /* TODO */);
+        serviceProps.put("name", name);
         instance.registerService(Endpoint.class.getName(), endpoint, serviceProps);
     }
 }

@@ -16,33 +16,18 @@
 package com.google.code.jahath.port;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.google.code.jahath.common.osgi.NamedServiceProxy;
 
-public class EndpointProxy implements Endpoint {
-    private final String name;
-    private final ServiceTracker tracker;
-    
+public class EndpointProxy extends NamedServiceProxy<Endpoint> implements Endpoint {
     public EndpointProxy(BundleContext bundleContext, String name) {
-        this.name = name;
-        try {
-            tracker = new ServiceTracker(bundleContext,
-                    bundleContext.createFilter("(&(objectClass=" + Endpoint.class.getName() + ")(name=" + name + "))"), null);
-            tracker.open(); // TODO: do we need to shut this down somewhere???
-        } catch (InvalidSyntaxException ex) {
-            throw new Error(ex); // Should never get here
-        }
+        super(bundleContext, Endpoint.class, name);
     }
 
     public void handle(ExecutionEnvironment env, Connection connection) {
-        Endpoint target = (Endpoint)tracker.getService();
-        if (target == null) {
-            throw new IllegalStateException("Endpoint " + name + " not available");
-        }
-        target.handle(env, connection);
+        getTarget().handle(env, connection);
     }
 }
