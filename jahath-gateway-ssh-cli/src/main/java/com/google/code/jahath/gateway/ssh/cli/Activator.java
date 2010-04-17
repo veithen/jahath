@@ -26,6 +26,17 @@ import com.google.code.jahath.common.cli.StringArgument;
 
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
+        registerKnownHostsCommand(context);
+        registerSshCommand(context);
+    }
+    
+    private void registerKnownHostsCommand(BundleContext context) {
+        Sequence sequence = new Sequence();
+        sequence.add(new StringArgument("file"));
+        context.registerService(Command.class.getName(), new ConfigurationCommand(context, "known_hosts", "Manage known_hosts files", "known-hosts-file", sequence), null);
+    }
+    
+    private void registerSshCommand(BundleContext context) {
         Sequence sequence = new Sequence();
         sequence.add(new StringArgument("name"));
         // TODO: see if we can use "host:port" syntax here

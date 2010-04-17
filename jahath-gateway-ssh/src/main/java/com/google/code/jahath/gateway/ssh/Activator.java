@@ -25,14 +25,18 @@ import com.jcraft.jsch.JSch;
 
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
+        registerHostKeyRepositoryFactory(context);
         JSch jsch = new JSch();
-        // TODO: probably we need a smarter solution here
-        System.out.println(System.getProperty("user.home") + "/.ssh/known_hosts");
-        jsch.setKnownHosts(System.getProperty("user.home") + "/.ssh/known_hosts");
-        System.out.println(jsch.getHostKeyRepository().getHostKey().length + " host keys loaded");
+        jsch.setHostKeyRepository(new HostKeyRepositoryImpl(context));
         Properties props = new Properties();
         props.setProperty("service.pid", "gateway-ssh");
         context.registerService(ManagedServiceFactory.class.getName(), new SSHGatewayFactory(context, jsch), props);
+    }
+    
+    private void registerHostKeyRepositoryFactory(BundleContext context) {
+        Properties props = new Properties();
+        props.setProperty("service.pid", "known-hosts-file");
+        context.registerService(ManagedServiceFactory.class.getName(), new HostKeyRepositoryFactory(context), props);
     }
 
     public void stop(BundleContext context) throws Exception {
