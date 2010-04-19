@@ -71,6 +71,8 @@
         <module>jahath-gateway-vch</module>
         <module>jahath-port</module>
         <module>jahath-port-cli</module>
+        <module>jahath-resolver</module>
+        <module>jahath-resolver-dns</module>
         <module>jahath-test-utils</module>
         <module>jahath-tests</module>
     </modules>
