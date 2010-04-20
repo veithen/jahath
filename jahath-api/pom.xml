@@ -27,6 +27,13 @@
     <artifactId>jahath-api</artifactId>
     <name>Jahath :: API</name>
     <packaging>bundle</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>

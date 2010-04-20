@@ -25,7 +25,11 @@ public class IPv4Address extends IPAddress {
 
     @Override
     public String toString() {
-        // TODO
-        return null;
+        return (address[0] & 0xFF) + "." + (address[1] & 0xFF) + "." + (address[2] & 0xFF) + "." + (address[3] & 0xFF);
+    }
+
+    @Override
+    public int hashCode() {
+        return (address[0] & 0xFF) << 24 | (address[1] & 0xFF) << 16 | (address[2] & 0xFF) << 8 | (address[3] & 0xFF);
     }
 }

@@ -15,30 +15,20 @@
  */
 package com.google.code.jahath;
 
-import java.net.InetAddress;
-
-public class DnsAddress extends HostAddress {
-    private final String name;
-
-    public DnsAddress(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException();
-        }
-        this.name = name;
+public class SocketAddress {
+    private final HostAddress host;
+    private final int port;
+    
+    public SocketAddress(HostAddress host, int port) {
+        this.host = host;
+        this.port = port;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof DnsAddress && ((DnsAddress)obj).name.equals(name);
+    public HostAddress getHost() {
+        return host;
     }
 
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return name;
+    public int getPort() {
+        return port;
     }
 }

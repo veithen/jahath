@@ -15,11 +15,34 @@
  */
 package com.google.code.jahath;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+
 public abstract class IPAddress extends HostAddress {
     protected final byte[] address;
 
     public IPAddress(byte[] address) {
         // TODO: clone here?
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof IPAddress && Arrays.equals(((IPAddress)obj).address, address);
+    }
+
+    public final InetAddress toInetAddress() {
+        try {
+            return InetAddress.getByAddress(address);
+        } catch (UnknownHostException ex) {
+            throw new Error(ex); // This should never happen
+        }
     }
 }
