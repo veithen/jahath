@@ -15,16 +15,30 @@
  */
 package com.google.code.jahath.resolver.impl;
 
-import org.osgi.framework.BundleActivator;
+import java.net.InetAddress;
+
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
+import com.google.code.jahath.DnsAddress;
 import com.google.code.jahath.resolver.Resolver;
+import com.google.code.jahath.resolver.ResolverPlugin;
 
-public class Activator implements BundleActivator {
-    public void start(BundleContext context) throws Exception {
-        context.registerService(Resolver.class.getName(), new ResolverImpl(context), null);
+public class ResolverImpl implements Resolver {
+    private final ServiceTracker tracker;
+    
+    public ResolverImpl(BundleContext bundleContext) {
+        tracker = new ServiceTracker(bundleContext, ResolverPlugin.class.getName(), null);
+        tracker.open();
     }
 
-    public void stop(BundleContext context) throws Exception {
+    public InetAddress resolve(DnsAddress address) {
+        for (Object service : tracker.getServices()) {
+            InetAddress result = ((ResolverPlugin)service).resolve(address);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
     }
 }

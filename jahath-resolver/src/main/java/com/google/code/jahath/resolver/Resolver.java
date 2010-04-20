@@ -15,6 +15,10 @@
  */
 package com.google.code.jahath.resolver;
 
-public interface Resolver {
+import java.net.InetAddress;
 
+import com.google.code.jahath.DnsAddress;
+
+public interface Resolver {
+    InetAddress resolve(DnsAddress address);
 }
