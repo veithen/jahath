@@ -18,8 +18,12 @@ package com.google.code.jahath.common.socks;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
+
+import com.google.code.jahath.DnsAddress;
+import com.google.code.jahath.HostAddress;
+import com.google.code.jahath.IPv4Address;
+import com.google.code.jahath.IPv6Address;
+import com.google.code.jahath.SocketAddress;
 
 public class SocksDataOutputStream extends DataOutputStream {
     public SocksDataOutputStream(OutputStream out) {
@@ -31,19 +35,23 @@ public class SocksDataOutputStream extends DataOutputStream {
         write(ascii.getBytes("ascii"));
     }
     
-    public void writeAddress(InetAddress address) throws IOException {
-        // TODO: unfortunately there seems to be no reliable way to tell if the InetAddress has been created from an IP address or a host name
-        byte[] addr = address.getAddress();
-        if (addr.length == 4) {
+    public void writeAddress(HostAddress address) throws IOException {
+        if (address instanceof DnsAddress) {
+            writeByte(SocksConstants.ADDRESS_DNS);
+            writeASCII(((DnsAddress)address).getName());
+        } else if (address instanceof IPv4Address) {
             writeByte(SocksConstants.ADDRESS_IPV4);
-        } else {
+            write(((IPv4Address)address).getAddress());
+        } else if (address instanceof IPv6Address) {
             writeByte(SocksConstants.ADDRESS_IPV6);
+            write(((IPv6Address)address).getAddress());
+        } else {
+            throw new UnsupportedOperationException("Unsupported address type: " + address.getClass().getName());
         }
-        write(addr);
     }
     
-    public void writeSocketAddress(InetSocketAddress socketAddress) throws IOException {
-        writeAddress(socketAddress.getAddress());
+    public void writeSocketAddress(SocketAddress socketAddress) throws IOException {
+        writeAddress(socketAddress.getHost());
         writeShort(socketAddress.getPort());
     }
 }

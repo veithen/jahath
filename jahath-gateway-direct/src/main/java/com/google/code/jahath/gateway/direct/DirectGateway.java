@@ -16,15 +16,45 @@
 package com.google.code.jahath.gateway.direct;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.code.jahath.Connection;
+import com.google.code.jahath.DnsAddress;
 import com.google.code.jahath.Gateway;
+import com.google.code.jahath.HostAddress;
+import com.google.code.jahath.IPAddress;
+import com.google.code.jahath.SocketAddress;
 import com.google.code.jahath.common.connection.SocketConnection;
+import com.google.code.jahath.resolver.Resolver;
 
 public class DirectGateway implements Gateway {
-    public Connection connect(InetSocketAddress socketAddress) throws IOException {
-        return new SocketConnection(new Socket(socketAddress.getAddress(), socketAddress.getPort()));
+    private final ServiceTracker resolverTracker;
+    
+    public DirectGateway(BundleContext bundleContext) {
+        resolverTracker = new ServiceTracker(bundleContext, Resolver.class.getName(), null);
+        resolverTracker.open();
+    }
+    
+    public Connection connect(SocketAddress socketAddress) throws IOException {
+        HostAddress host = socketAddress.getHost();
+        IPAddress ip;
+        if (host instanceof IPAddress) {
+            ip = (IPAddress)host;
+        } else {
+            Resolver resolver = (Resolver)resolverTracker.getService();
+            if (resolver == null) {
+                throw new UnknownHostException(host.toString());
+            } else {
+                ip = resolver.resolve((DnsAddress)host);
+                if (ip == null) {
+                    throw new UnknownHostException(host.toString());
+                }
+            }
+        }
+        return new SocketConnection(new Socket(ip.toInetAddress(), socketAddress.getPort()));
     }
 }

@@ -15,10 +15,15 @@
  */
 package com.google.code.jahath.resolver;
 
-import java.net.InetAddress;
-
 import com.google.code.jahath.DnsAddress;
+import com.google.code.jahath.IPAddress;
 
 public interface Resolver {
-    InetAddress resolve(DnsAddress address);
+    /**
+     * Resolve the given DNS address to an IP address.
+     * 
+     * @param address the DNS address to resolve
+     * @return the corresponding IP address or <code>null</code> if the name was not found
+     */
+    IPAddress resolve(DnsAddress address);
 }

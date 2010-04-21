@@ -18,8 +18,12 @@ package com.google.code.jahath.common.socks;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
+
+import com.google.code.jahath.DnsAddress;
+import com.google.code.jahath.HostAddress;
+import com.google.code.jahath.IPv4Address;
+import com.google.code.jahath.IPv6Address;
+import com.google.code.jahath.SocketAddress;
 
 public class SocksDataInputStream extends DataInputStream {
     public SocksDataInputStream(InputStream in) {
@@ -33,26 +37,26 @@ public class SocksDataInputStream extends DataInputStream {
         return new String(b, "ascii");
     }
     
-    public InetAddress readAddress() throws IOException {
+    public HostAddress readAddress() throws IOException {
     	switch (readByte()) {
     		case SocksConstants.ADDRESS_IPV4: {
     			byte[] addr = new byte[4];
     			readFully(addr);
-    			return InetAddress.getByAddress(addr);
+    			return new IPv4Address(addr);
     		}
     		case SocksConstants.ADDRESS_DNS:
-    			return InetAddress.getByName(readASCII());
+    			return new DnsAddress(readASCII());
     		case SocksConstants.ADDRESS_IPV6: {
     			byte[] addr = new byte[16];
     			readFully(addr);
-    			return InetAddress.getByAddress(addr);
+    			return new IPv6Address(addr);
     		}
     		default:
     			return null; // TODO
     	}
     }
     
-    public InetSocketAddress readSocketAddress() throws IOException {
-    	return new InetSocketAddress(readAddress(), readUnsignedShort());
+    public SocketAddress readSocketAddress() throws IOException {
+    	return new SocketAddress(readAddress(), readUnsignedShort());
     }
 }

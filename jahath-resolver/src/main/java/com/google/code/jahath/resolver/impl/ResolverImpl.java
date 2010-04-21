@@ -15,12 +15,11 @@
  */
 package com.google.code.jahath.resolver.impl;
 
-import java.net.InetAddress;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.code.jahath.DnsAddress;
+import com.google.code.jahath.IPAddress;
 import com.google.code.jahath.resolver.Resolver;
 import com.google.code.jahath.resolver.ResolverPlugin;
 
@@ -32,9 +31,9 @@ public class ResolverImpl implements Resolver {
         tracker.open();
     }
 
-    public InetAddress resolve(DnsAddress address) {
+    public IPAddress resolve(DnsAddress address) {
         for (Object service : tracker.getServices()) {
-            InetAddress result = ((ResolverPlugin)service).resolve(address);
+            IPAddress result = ((ResolverPlugin)service).resolve(address);
             if (result != null) {
                 return result;
             }

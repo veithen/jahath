@@ -13,22 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.gateway.direct;
+package com.google.code.jahath;
 
-import java.util.Properties;
+public class IPv6Address extends IPAddress {
+    public IPv6Address(byte[] address) {
+        super(address);
+        if (address == null || address.length != 16) {
+            throw new IllegalArgumentException();
+        }
+    }
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-
-import com.google.code.jahath.Gateway;
-
-public class Activator implements BundleActivator {
-	public void start(BundleContext context) throws Exception {
-	    Properties props = new Properties();
-	    props.put("name", "direct");
-	    context.registerService(Gateway.class.getName(), new DirectGateway(context), props);
-	}
-
-	public void stop(BundleContext context) throws Exception {
-	}
+    // TODO: implement toString and hashCode
 }

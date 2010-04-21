@@ -27,6 +27,10 @@ public abstract class IPAddress extends HostAddress {
         this.address = address;
     }
 
+    public byte[] getAddress() {
+        return address;
+    }
+
     @Override
     public String toString() {
         // TODO Auto-generated method stub

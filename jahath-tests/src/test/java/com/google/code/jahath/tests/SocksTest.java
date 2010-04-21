@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.socks;
+package com.google.code.jahath.tests;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -22,22 +22,28 @@ import java.net.Socket;
 import org.junit.Test;
 
 import com.google.code.jahath.common.connection.SocketConnection;
-import com.google.code.jahath.common.server.Server;
-import com.google.code.jahath.endpoint.echo.EchoEndpoint;
-import com.google.code.jahath.endpoint.socks.SocksEndpoint;
-import com.google.code.jahath.gateway.direct.DirectGateway;
 import com.google.code.jahath.testutils.EchoTestUtil;
 
 public class SocksTest {
     @Test
     public void test() throws Exception {
-        Server socksServer = new Server(9000, new SocksEndpoint(new DirectGateway()));
-        Server echoServer = new Server(9001, new EchoEndpoint());
-        Socket socket = new Socket(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("localhost", 9000)));
-        socket.connect(new InetSocketAddress("localhost", 9001));
-        EchoTestUtil.testEcho(new SocketConnection(socket));
-        socket.close();
-        echoServer.stop();
-        socksServer.stop();
+        OSGiRuntime socksServer = new OSGiRuntime();
+        try {
+            socksServer.cmd("socksep add socks direct");
+            socksServer.cmd("port add 9000 socks");
+            OSGiRuntime echoServer = new OSGiRuntime();
+            try {
+                echoServer.cmd("port add 9001 echo");
+                Thread.sleep(1000); // TODO
+                Socket socket = new Socket(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("localhost", 9000)));
+                socket.connect(new InetSocketAddress("localhost", 9001));
+                EchoTestUtil.testEcho(new SocketConnection(socket));
+                socket.close();
+            } finally {
+                echoServer.stop();
+            }
+        } finally {
+            socksServer.stop();
+        }
     }
 }

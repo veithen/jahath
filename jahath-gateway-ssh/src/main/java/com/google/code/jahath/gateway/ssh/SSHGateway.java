@@ -16,10 +16,10 @@
 package com.google.code.jahath.gateway.ssh;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.Gateway;
+import com.google.code.jahath.SocketAddress;
 import com.jcraft.jsch.ChannelDirectTCPIP;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -31,10 +31,10 @@ public class SSHGateway implements Gateway {
         this.session = session;
     }
 
-    public Connection connect(InetSocketAddress socketAddress) throws IOException {
+    public Connection connect(SocketAddress socketAddress) throws IOException {
         try {
             ChannelDirectTCPIP channel = (ChannelDirectTCPIP)session.openChannel("direct-tcpip");
-            channel.setHost(socketAddress.getHostName());
+            channel.setHost(socketAddress.getHost().toString());
             channel.setPort(socketAddress.getPort());
     //        channel.setOrgIPAddress(socket.getInetAddress().getHostAddress());
     //        channel.setOrgPort(socket.getPort());

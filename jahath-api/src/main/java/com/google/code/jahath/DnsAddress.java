@@ -15,8 +15,6 @@
  */
 package com.google.code.jahath;
 
-import java.net.InetAddress;
-
 public class DnsAddress extends HostAddress {
     private final String name;
 
@@ -25,6 +23,10 @@ public class DnsAddress extends HostAddress {
             throw new IllegalArgumentException();
         }
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

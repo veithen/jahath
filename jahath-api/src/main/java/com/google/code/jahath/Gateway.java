@@ -16,8 +16,7 @@
 package com.google.code.jahath;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 
 public interface Gateway {
-    Connection connect(InetSocketAddress socketAddress) throws IOException;
+    Connection connect(SocketAddress socketAddress) throws IOException;
 }

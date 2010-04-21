@@ -17,12 +17,12 @@ package com.google.code.jahath.endpoint.socks;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.Gateway;
+import com.google.code.jahath.SocketAddress;
 import com.google.code.jahath.common.ConnectionRelay;
 import com.google.code.jahath.common.connection.Endpoint;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
@@ -84,7 +84,7 @@ public class SocksEndpoint implements Endpoint {
             if (in.readByte() != 0) {
                 return; // TODO
             }
-            InetSocketAddress destination = in.readSocketAddress();
+            SocketAddress destination = in.readSocketAddress();
             
             Connection targetConnection = gateway.connect(destination);
             if (fineEnabled) {

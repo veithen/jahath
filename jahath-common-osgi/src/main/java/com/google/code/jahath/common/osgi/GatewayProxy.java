@@ -16,19 +16,19 @@
 package com.google.code.jahath.common.osgi;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 
 import org.osgi.framework.BundleContext;
 
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.Gateway;
+import com.google.code.jahath.SocketAddress;
 
 public class GatewayProxy extends NamedServiceProxy<Gateway> implements Gateway {
     public GatewayProxy(BundleContext bundleContext, String name) {
         super(bundleContext, Gateway.class, name);
     }
 
-    public Connection connect(InetSocketAddress socketAddress) throws IOException {
+    public Connection connect(SocketAddress socketAddress) throws IOException {
         return getTarget().connect(socketAddress);
     }
 }

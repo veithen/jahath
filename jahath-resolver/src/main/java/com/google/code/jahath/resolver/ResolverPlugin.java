@@ -15,10 +15,9 @@
  */
 package com.google.code.jahath.resolver;
 
-import java.net.InetAddress;
-
 import com.google.code.jahath.DnsAddress;
+import com.google.code.jahath.IPAddress;
 
 public interface ResolverPlugin {
-    InetAddress resolve(DnsAddress address);
+    IPAddress resolve(DnsAddress address);
 }
