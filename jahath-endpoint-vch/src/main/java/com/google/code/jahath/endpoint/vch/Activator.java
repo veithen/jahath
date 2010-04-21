@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common.cli;
+package com.google.code.jahath.endpoint.vch;
 
-public class StringArgument extends Argument<String> {
-    public StringArgument(String key) {
-        super(key);
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+
+public class Activator implements BundleActivator {
+    public void start(BundleContext context) throws Exception {
+        
     }
 
-    @Override
-    protected String parse(String value) throws ParseException {
-        return value;
+    public void stop(BundleContext context) throws Exception {
     }
 }

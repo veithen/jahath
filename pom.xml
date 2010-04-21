@@ -65,6 +65,7 @@
         <module>jahath-endpoint-socks</module>
         <module>jahath-endpoint-socks-cli</module>
         <module>jahath-endpoint-vch</module>
+        <module>jahath-endpoint-vch-cli</module>
         <module>jahath-gateway-direct</module>
         <module>jahath-gateway-ssh</module>
         <module>jahath-gateway-ssh-cli</module>

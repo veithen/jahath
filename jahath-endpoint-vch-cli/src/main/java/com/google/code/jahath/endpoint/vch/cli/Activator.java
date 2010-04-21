@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.socks.cli;
+package com.google.code.jahath.endpoint.vch.cli;
 
 import org.apache.felix.shell.Command;
 import org.osgi.framework.BundleActivator;
@@ -24,14 +24,13 @@ import com.google.code.jahath.common.cli.ConfigurationCommand;
 import com.google.code.jahath.common.cli.Sequence;
 
 public class Activator implements BundleActivator {
-	public void start(BundleContext context) throws Exception {
-	    Sequence sequence = new Sequence();
-	    sequence.add(new Argument("name"));
-	    sequence.add(new Argument("gateway"));
-	    context.registerService(Command.class.getName(), new ConfigurationCommand(context,
-	            "socksep", "Manipulate SOCKS endpoints", "endpoint-socks", sequence), null);
-	}
+    public void start(BundleContext context) throws Exception {
+        Sequence sequence = new Sequence();
+        sequence.add(new Argument("name"));
+        context.registerService(Command.class.getName(), new ConfigurationCommand(context,
+                "vchep", "Manipulate VC/H endpoints", "endpoint-vch", sequence), null);
+    }
 
-	public void stop(BundleContext context) throws Exception {
-	}
+    public void stop(BundleContext context) throws Exception {
+    }
 }

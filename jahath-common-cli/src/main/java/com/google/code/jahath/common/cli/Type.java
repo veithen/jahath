@@ -15,13 +15,20 @@
  */
 package com.google.code.jahath.common.cli;
 
-public class IntegerArgument extends Argument<Integer> {
-    public IntegerArgument(String key) {
-        super(key);
-    }
-
-    @Override
-    protected Integer parse(String value) throws ParseException {
-        return Integer.valueOf(value); // TODO: exception handling
-    }
+public abstract class Type {
+    public static final Type STRING = new Type() {
+        @Override
+        public Object parse(String s) throws ParseException {
+            return s;
+        }
+    };
+    
+    public static final Type INTEGER = new Type() {
+        @Override
+        public Object parse(String s) throws ParseException {
+            return Integer.valueOf(s); // TODO: exception handling
+        }
+    };
+    
+    public abstract Object parse(String s) throws ParseException;
 }

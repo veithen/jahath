@@ -19,16 +19,16 @@ import org.apache.felix.shell.Command;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+import com.google.code.jahath.common.cli.Argument;
 import com.google.code.jahath.common.cli.ConfigurationCommand;
-import com.google.code.jahath.common.cli.IntegerArgument;
 import com.google.code.jahath.common.cli.Sequence;
-import com.google.code.jahath.common.cli.StringArgument;
+import com.google.code.jahath.common.cli.Type;
 
 public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
         Sequence sequence = new Sequence();
-        sequence.add(new IntegerArgument("port"));
-        sequence.add(new StringArgument("endpoint"));
+        sequence.add(new Argument("port", Type.INTEGER));
+        sequence.add(new Argument("endpoint"));
         context.registerService(Command.class.getName(), new ConfigurationCommand(context,
                 "port", "Manage ports", "port", sequence), null);
 	}

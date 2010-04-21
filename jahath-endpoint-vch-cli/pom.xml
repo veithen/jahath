@@ -24,42 +24,22 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>jahath-endpoint-vch</artifactId>
-    <name>Jahath :: Endpoint :: VC/H</name>
+    <artifactId>jahath-endpoint-vch-cli</artifactId>
+    <name>Jahath :: Endpoint :: VC/H :: CLI</name>
     <packaging>bundle</packaging>
     <dependencies>
         <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>jahath-common</artifactId>
-            <version>${version}</version>
-        </dependency>
-        <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-common-http</artifactId>
+            <artifactId>jahath-common-cli</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>jahath-test-utils</artifactId>
-            <version>${version}</version>
-            <scope>test</scope>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.shell</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -69,11 +49,11 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>com.google.code.jahath.endpoint.vch</Bundle-SymbolicName>
-                        <Bundle-Name>Jahath VC/H Endpoint</Bundle-Name>
-                        <Bundle-Activator>com.google.code.jahath.endpoint.vch.Activator</Bundle-Activator>
+                        <Bundle-SymbolicName>com.google.code.jahath.endpoint.vch.cli</Bundle-SymbolicName>
+                        <Bundle-Name>Jahath VC/H Endpoint CLI</Bundle-Name>
+                        <Bundle-Activator>com.google.code.jahath.endpoint.vch.cli.Activator</Bundle-Activator>
                         <Export-Package></Export-Package>
-                        <Embed-Dependency>jahath-common-http,commons-io</Embed-Dependency>
+                        <Embed-Dependency>jahath-common-cli</Embed-Dependency>
                     </instructions>
                 </configuration>
             </plugin>

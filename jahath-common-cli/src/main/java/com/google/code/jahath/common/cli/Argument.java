@@ -17,11 +17,17 @@ package com.google.code.jahath.common.cli;
 
 import java.util.Dictionary;
 
-public abstract class Argument<T> implements CommandParser<Dictionary> {
+public class Argument implements CommandParser<Dictionary> {
     private final String key;
+    private final Type type;
+    
+    public Argument(String key, Type type) {
+        this.key = key;
+        this.type = type;
+    }
     
     public Argument(String key) {
-        this.key = key;
+        this(key, Type.STRING);
     }
 
     public final void formatUsage(StringBuilder buffer) {
@@ -35,9 +41,7 @@ public abstract class Argument<T> implements CommandParser<Dictionary> {
         if (value == null) {
             throw new ParseException("Expected argument '" + key + "'");
         } else {
-            dictionary.put(key, parse(value));
+            dictionary.put(key, type.parse(value));
         }
     }
-    
-    protected abstract T parse(String value) throws ParseException;
 }
