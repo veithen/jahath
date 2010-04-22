@@ -18,8 +18,8 @@ package com.google.code.jahath.gateway.ssh;
 import java.io.IOException;
 
 import com.google.code.jahath.Connection;
-import com.google.code.jahath.Gateway;
-import com.google.code.jahath.SocketAddress;
+import com.google.code.jahath.tcp.Gateway;
+import com.google.code.jahath.tcp.SocketAddress;
 import com.jcraft.jsch.ChannelDirectTCPIP;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;

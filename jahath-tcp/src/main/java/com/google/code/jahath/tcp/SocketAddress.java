@@ -15,20 +15,22 @@
  */
 package com.google.code.jahath.tcp;
 
-import java.util.Dictionary;
+import com.google.code.jahath.HostAddress;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.service.cm.ConfigurationException;
-
-import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
-
-public class TcpEndpointFactory extends SimpleManagedServiceFactory {
-    public TcpEndpointFactory(BundleContext bundleContext) {
-        super(bundleContext);
+public class SocketAddress {
+    private final HostAddress host;
+    private final int port;
+    
+    public SocketAddress(HostAddress host, int port) {
+        this.host = host;
+        this.port = port;
     }
 
-    @Override
-    protected void configure(Instance instance, Dictionary properties) throws ConfigurationException {
-        // TODO
+    public HostAddress getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
     }
 }

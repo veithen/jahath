@@ -13,25 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.tcp;
+package com.google.code.jahath.tcp.impl;
 
-import java.io.IOException;
+import org.osgi.framework.BundleContext;
 
 import com.google.code.jahath.Connection;
-import com.google.code.jahath.Endpoint;
-import com.google.code.jahath.Gateway;
-import com.google.code.jahath.SocketAddress;
+import com.google.code.jahath.common.connection.Service;
+import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.google.code.jahath.common.osgi.NamedServiceProxy;
 
-public class TcpEndpoint implements Endpoint {
-    private final SocketAddress address;
-    private final Gateway gateway;
-
-    public TcpEndpoint(SocketAddress address, Gateway gateway) {
-        this.address = address;
-        this.gateway = gateway;
+public class EndpointProxy extends NamedServiceProxy<Service> implements Service {
+    public EndpointProxy(BundleContext bundleContext, String name) {
+        super(bundleContext, Service.class, name);
     }
 
-    public Connection connect() throws IOException {
-        return gateway.connect(address);
+    public void handle(ExecutionEnvironment env, Connection connection) {
+        getTarget().handle(env, connection);
     }
 }

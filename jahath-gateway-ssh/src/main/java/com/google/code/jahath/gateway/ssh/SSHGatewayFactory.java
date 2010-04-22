@@ -21,8 +21,8 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationException;
 
-import com.google.code.jahath.Gateway;
 import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
+import com.google.code.jahath.tcp.Gateway;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;

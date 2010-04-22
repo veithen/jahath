@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common.osgi;
+package com.google.code.jahath.service.socks;
 
 import java.io.IOException;
 
 import org.osgi.framework.BundleContext;
 
 import com.google.code.jahath.Connection;
-import com.google.code.jahath.Gateway;
-import com.google.code.jahath.SocketAddress;
+import com.google.code.jahath.common.osgi.NamedServiceProxy;
+import com.google.code.jahath.tcp.Gateway;
+import com.google.code.jahath.tcp.SocketAddress;
 
+// TODO: eliminate this
 public class GatewayProxy extends NamedServiceProxy<Gateway> implements Gateway {
     public GatewayProxy(BundleContext bundleContext, String name) {
         super(bundleContext, Gateway.class, name);

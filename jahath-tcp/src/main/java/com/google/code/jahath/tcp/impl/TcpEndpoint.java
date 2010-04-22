@@ -13,23 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath;
+package com.google.code.jahath.tcp.impl;
 
-//TODO: move to jahath-tcp
-public class SocketAddress {
-    private final HostAddress host;
-    private final int port;
-    
-    public SocketAddress(HostAddress host, int port) {
-        this.host = host;
-        this.port = port;
+import java.io.IOException;
+
+import com.google.code.jahath.Connection;
+import com.google.code.jahath.Endpoint;
+import com.google.code.jahath.tcp.Gateway;
+import com.google.code.jahath.tcp.SocketAddress;
+
+public class TcpEndpoint implements Endpoint {
+    private final SocketAddress address;
+    private final Gateway gateway;
+
+    public TcpEndpoint(SocketAddress address, Gateway gateway) {
+        this.address = address;
+        this.gateway = gateway;
     }
 
-    public HostAddress getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
+    public Connection connect() throws IOException {
+        return gateway.connect(address);
     }
 }

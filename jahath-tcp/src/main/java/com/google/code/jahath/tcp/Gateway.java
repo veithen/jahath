@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath;
+package com.google.code.jahath.tcp;
 
 import java.io.IOException;
 
-// TODO: move to jahath-tcp
+import com.google.code.jahath.Connection;
+
 public interface Gateway {
     Connection connect(SocketAddress socketAddress) throws IOException;
 }

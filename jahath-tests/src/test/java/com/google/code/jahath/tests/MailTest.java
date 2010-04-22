@@ -36,7 +36,7 @@ import com.google.code.jahath.common.http.client.ProxyConfiguration;
 import com.google.code.jahath.common.vch.VCHConstants;
 import com.google.code.jahath.service.socks.SocksService;
 import com.google.code.jahath.service.vch.VCHServer;
-import com.google.code.jahath.tcp.DirectGateway;
+import com.google.code.jahath.tcp.impl.DirectGateway;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
 

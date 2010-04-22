@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.tcp;
+package com.google.code.jahath.tcp.impl;
+
+import java.util.Dictionary;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.service.cm.ConfigurationException;
 
-import com.google.code.jahath.Connection;
-import com.google.code.jahath.common.connection.Service;
-import com.google.code.jahath.common.container.ExecutionEnvironment;
-import com.google.code.jahath.common.osgi.NamedServiceProxy;
+import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
 
-public class EndpointProxy extends NamedServiceProxy<Service> implements Service {
-    public EndpointProxy(BundleContext bundleContext, String name) {
-        super(bundleContext, Service.class, name);
+public class TcpEndpointFactory extends SimpleManagedServiceFactory {
+    public TcpEndpointFactory(BundleContext bundleContext) {
+        super(bundleContext);
     }
 
-    public void handle(ExecutionEnvironment env, Connection connection) {
-        getTarget().handle(env, connection);
+    @Override
+    protected void configure(Instance instance, Dictionary properties) throws ConfigurationException {
+        // TODO
     }
 }

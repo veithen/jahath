@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.tcp;
+package com.google.code.jahath.tcp.impl;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -24,12 +24,12 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.DnsAddress;
-import com.google.code.jahath.Gateway;
 import com.google.code.jahath.HostAddress;
 import com.google.code.jahath.IPAddress;
-import com.google.code.jahath.SocketAddress;
 import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.resolver.Resolver;
+import com.google.code.jahath.tcp.Gateway;
+import com.google.code.jahath.tcp.SocketAddress;
 
 public class DirectGateway implements Gateway {
     private final ServiceTracker resolverTracker;

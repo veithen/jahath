@@ -23,7 +23,7 @@ import com.google.code.jahath.DnsAddress;
 import com.google.code.jahath.HostAddress;
 import com.google.code.jahath.IPv4Address;
 import com.google.code.jahath.IPv6Address;
-import com.google.code.jahath.SocketAddress;
+import com.google.code.jahath.tcp.SocketAddress;
 
 public class SocksDataOutputStream extends DataOutputStream {
     public SocksDataOutputStream(OutputStream out) {

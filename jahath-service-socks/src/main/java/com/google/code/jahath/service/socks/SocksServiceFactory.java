@@ -23,7 +23,6 @@ import org.osgi.service.cm.ConfigurationException;
 
 import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.osgi.DeletionListener;
-import com.google.code.jahath.common.osgi.GatewayProxy;
 import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
 
 public class SocksServiceFactory extends SimpleManagedServiceFactory {

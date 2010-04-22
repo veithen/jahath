@@ -61,7 +61,7 @@
                     <instructions>
                         <Bundle-SymbolicName>com.google.code.jahath.tcp</Bundle-SymbolicName>
                         <Bundle-Name>Jahath TCP Support</Bundle-Name>
-                        <Bundle-Activator>com.google.code.jahath.tcp.Activator</Bundle-Activator>
+                        <Bundle-Activator>com.google.code.jahath.tcp.impl.Activator</Bundle-Activator>
                         <Export-Package></Export-Package>
                         <Embed-Dependency>jahath-common-osgi</Embed-Dependency>
                     </instructions>
