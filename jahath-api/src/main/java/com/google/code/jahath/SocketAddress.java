@@ -15,6 +15,7 @@
  */
 package com.google.code.jahath;
 
+//TODO: move to jahath-tcp
 public class SocketAddress {
     private final HostAddress host;
     private final int port;

@@ -17,7 +17,9 @@ package com.google.code.jahath;
 
 import java.io.IOException;
 
-// TODO: move to jahath-tcp
-public interface Gateway {
-    Connection connect(SocketAddress socketAddress) throws IOException;
+/**
+ * A (remote) endpoint.
+ */
+public interface Endpoint {
+    Connection connect() throws IOException;
 }

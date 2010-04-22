@@ -26,6 +26,7 @@ import com.google.code.jahath.Gateway;
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         registerPortFactory(context);
+        registerTcpEndpointFactory(context);
         registerDirectGateway(context);
     }
     
@@ -33,6 +34,12 @@ public class Activator implements BundleActivator {
         Properties props = new Properties();
         props.setProperty("service.pid", "port");
         context.registerService(ManagedServiceFactory.class.getName(), new PortFactory(context), props);
+    }
+    
+    private void registerTcpEndpointFactory(BundleContext context) {
+        Properties props = new Properties();
+        props.setProperty("service.pid", "endpoint-tcp");
+        context.registerService(ManagedServiceFactory.class.getName(), new TcpEndpointFactory(context), props);
     }
     
     private void registerDirectGateway(BundleContext context) {

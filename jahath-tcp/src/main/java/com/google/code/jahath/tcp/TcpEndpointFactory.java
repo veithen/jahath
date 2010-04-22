@@ -13,11 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath;
+package com.google.code.jahath.tcp;
 
-import java.io.IOException;
+import java.util.Dictionary;
 
-// TODO: move to jahath-tcp
-public interface Gateway {
-    Connection connect(SocketAddress socketAddress) throws IOException;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.cm.ConfigurationException;
+
+import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
+
+public class TcpEndpointFactory extends SimpleManagedServiceFactory {
+    public TcpEndpointFactory(BundleContext bundleContext) {
+        super(bundleContext);
+    }
+
+    @Override
+    protected void configure(Instance instance, Dictionary properties) throws ConfigurationException {
+        // TODO
+    }
 }
