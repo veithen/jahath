@@ -76,13 +76,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-gateway-direct</artifactId>
-            <version>${project.version}</version>
-            <type>bundle</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>jahath-service-socks</artifactId>
             <version>${project.version}</version>
             <type>bundle</type>
@@ -104,14 +97,14 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-port</artifactId>
+            <artifactId>jahath-tcp</artifactId>
             <version>${project.version}</version>
             <type>bundle</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-port-cli</artifactId>
+            <artifactId>jahath-tcp-cli</artifactId>
             <version>${project.version}</version>
             <type>bundle</type>
             <scope>test</scope>
