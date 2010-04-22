@@ -24,8 +24,8 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>jahath-port-cli</artifactId>
-    <name>Jahath :: Port manager :: CLI</name>
+    <artifactId>jahath-tcp-cli</artifactId>
+    <name>Jahath :: TCP support :: CLI</name>
     <packaging>bundle</packaging>
     <dependencies>
         <dependency>
@@ -49,9 +49,9 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>com.google.code.jahath.port.cli</Bundle-SymbolicName>
-                        <Bundle-Name>Jahath Port Manager CLI</Bundle-Name>
-                        <Bundle-Activator>com.google.code.jahath.port.cli.Activator</Bundle-Activator>
+                        <Bundle-SymbolicName>com.google.code.jahath.tcp.cli</Bundle-SymbolicName>
+                        <Bundle-Name>Jahath TCP Support CLI</Bundle-Name>
+                        <Bundle-Activator>com.google.code.jahath.tcp.cli.Activator</Bundle-Activator>
                         <Export-Package></Export-Package>
                         <Embed-Dependency>jahath-common-cli</Embed-Dependency>
                     </instructions>

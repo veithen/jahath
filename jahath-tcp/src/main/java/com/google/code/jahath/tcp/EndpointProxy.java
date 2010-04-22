@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.gateway.direct;
+package com.google.code.jahath.tcp;
 
-import java.util.Properties;
-
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import com.google.code.jahath.Gateway;
+import com.google.code.jahath.Connection;
+import com.google.code.jahath.common.connection.Service;
+import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.google.code.jahath.common.osgi.NamedServiceProxy;
 
-public class Activator implements BundleActivator {
-	public void start(BundleContext context) throws Exception {
-	    Properties props = new Properties();
-	    props.put("name", "direct");
-	    context.registerService(Gateway.class.getName(), new DirectGateway(context), props);
-	}
+public class EndpointProxy extends NamedServiceProxy<Service> implements Service {
+    public EndpointProxy(BundleContext bundleContext, String name) {
+        super(bundleContext, Service.class, name);
+    }
 
-	public void stop(BundleContext context) throws Exception {
-	}
+    public void handle(ExecutionEnvironment env, Connection connection) {
+        getTarget().handle(env, connection);
+    }
 }

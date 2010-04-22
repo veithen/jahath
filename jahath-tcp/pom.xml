@@ -24,8 +24,8 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>jahath-port</artifactId>
-    <name>Jahath :: Port manager</name>
+    <artifactId>jahath-tcp</artifactId>
+    <name>Jahath :: TCP support</name>
     <packaging>bundle</packaging>
     <dependencies>
         <dependency>
@@ -36,6 +36,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jahath-common-osgi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-resolver</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -54,9 +59,9 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>com.google.code.jahath.port</Bundle-SymbolicName>
-                        <Bundle-Name>Jahath Port Manager</Bundle-Name>
-                        <Bundle-Activator>com.google.code.jahath.port.Activator</Bundle-Activator>
+                        <Bundle-SymbolicName>com.google.code.jahath.tcp</Bundle-SymbolicName>
+                        <Bundle-Name>Jahath TCP Support</Bundle-Name>
+                        <Bundle-Activator>com.google.code.jahath.tcp.Activator</Bundle-Activator>
                         <Export-Package></Export-Package>
                         <Embed-Dependency>jahath-common-osgi</Embed-Dependency>
                     </instructions>

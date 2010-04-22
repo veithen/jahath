@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.port;
+package com.google.code.jahath.tcp;
 
 import java.util.Properties;
 
@@ -21,11 +21,24 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ManagedServiceFactory;
 
+import com.google.code.jahath.Gateway;
+
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
+        registerPortFactory(context);
+        registerDirectGateway(context);
+    }
+    
+    private void registerPortFactory(BundleContext context) {
         Properties props = new Properties();
         props.setProperty("service.pid", "port");
         context.registerService(ManagedServiceFactory.class.getName(), new PortFactory(context), props);
+    }
+    
+    private void registerDirectGateway(BundleContext context) {
+        Properties props = new Properties();
+        props.put("name", "direct");
+        context.registerService(Gateway.class.getName(), new DirectGateway(context), props);
     }
 
     public void stop(BundleContext context) throws Exception {
