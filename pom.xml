@@ -61,11 +61,6 @@
         <module>jahath-common-http</module>
         <module>jahath-common-osgi</module>
         <module>jahath-common-socks</module>
-        <module>jahath-endpoint-echo</module>
-        <module>jahath-endpoint-socks</module>
-        <module>jahath-endpoint-socks-cli</module>
-        <module>jahath-endpoint-vch</module>
-        <module>jahath-endpoint-vch-cli</module>
         <module>jahath-gateway-direct</module>
         <module>jahath-gateway-ssh</module>
         <module>jahath-gateway-ssh-cli</module>
@@ -74,6 +69,11 @@
         <module>jahath-port-cli</module>
         <module>jahath-resolver</module>
         <module>jahath-resolver-dns</module>
+        <module>jahath-service-echo</module>
+        <module>jahath-service-socks</module>
+        <module>jahath-service-socks-cli</module>
+        <module>jahath-service-vch</module>
+        <module>jahath-service-vch-cli</module>
         <module>jahath-test-utils</module>
         <module>jahath-tests</module>
     </modules>
