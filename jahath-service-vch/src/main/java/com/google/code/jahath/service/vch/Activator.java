@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.echo;
-
-import java.util.Properties;
+package com.google.code.jahath.service.vch;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import com.google.code.jahath.common.connection.Endpoint;
-
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
-        Properties props = new Properties();
-        props.put("name", "echo");
-        context.registerService(Endpoint.class.getName(), new EchoEndpoint(), props);
+        
     }
 
     public void stop(BundleContext context) throws Exception {

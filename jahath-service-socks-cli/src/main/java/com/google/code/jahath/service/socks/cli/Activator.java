@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.socks;
+package com.google.code.jahath.service.socks.cli;
 
-import java.util.Properties;
-
+import org.apache.felix.shell.Command;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.cm.ManagedServiceFactory;
+
+import com.google.code.jahath.common.cli.Argument;
+import com.google.code.jahath.common.cli.ConfigurationCommand;
+import com.google.code.jahath.common.cli.Sequence;
 
 public class Activator implements BundleActivator {
-    public void start(BundleContext context) throws Exception {
-        Properties props = new Properties();
-        props.setProperty("service.pid", "endpoint-socks");
-        context.registerService(ManagedServiceFactory.class.getName(), new SocksEndpointFactory(context), props);
-    }
+	public void start(BundleContext context) throws Exception {
+	    Sequence sequence = new Sequence();
+	    sequence.add(new Argument("name"));
+	    sequence.add(new Argument("gateway"));
+	    context.registerService(Command.class.getName(), new ConfigurationCommand(context,
+	            "sockssvc", "Manipulate SOCKS services", "service-socks", sequence), null);
+	}
 
-    public void stop(BundleContext context) throws Exception {
-    }
+	public void stop(BundleContext context) throws Exception {
+	}
 }

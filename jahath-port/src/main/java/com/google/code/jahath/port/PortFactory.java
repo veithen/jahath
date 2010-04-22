@@ -33,10 +33,10 @@ public class PortFactory extends SimpleManagedServiceFactory {
     @Override
     protected void configure(Instance instance, Dictionary properties) throws ConfigurationException {
         int port = (Integer)properties.get("port");
-        String endpoint = (String)properties.get("endpoint");
+        String service = (String)properties.get("service");
         
         try {
-            final Server server = new Server(port, new EndpointProxy(bundleContext, endpoint));
+            final Server server = new Server(port, new EndpointProxy(bundleContext, service));
             instance.addDeletionListener(new DeletionListener() {
                 public void deleted() {
                     try {

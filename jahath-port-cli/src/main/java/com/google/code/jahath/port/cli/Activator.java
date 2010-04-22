@@ -28,7 +28,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
         Sequence sequence = new Sequence();
         sequence.add(new Argument("port", Type.INTEGER));
-        sequence.add(new Argument("endpoint"));
+        sequence.add(new Argument("service"));
         context.registerService(Command.class.getName(), new ConfigurationCommand(context,
                 "port", "Manage ports", "port", sequence), null);
 	}

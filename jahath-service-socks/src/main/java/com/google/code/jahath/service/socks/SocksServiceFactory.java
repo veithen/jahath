@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.socks;
+package com.google.code.jahath.service.socks;
 
 import java.util.Dictionary;
 import java.util.Properties;
@@ -21,13 +21,13 @@ import java.util.Properties;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationException;
 
-import com.google.code.jahath.common.connection.Endpoint;
+import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.osgi.DeletionListener;
 import com.google.code.jahath.common.osgi.GatewayProxy;
 import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
 
-public class SocksEndpointFactory extends SimpleManagedServiceFactory {
-    public SocksEndpointFactory(BundleContext bundleContext) {
+public class SocksServiceFactory extends SimpleManagedServiceFactory {
+    public SocksServiceFactory(BundleContext bundleContext) {
         super(bundleContext);
     }
 
@@ -41,9 +41,9 @@ public class SocksEndpointFactory extends SimpleManagedServiceFactory {
                 gatewayProxy.release();
             }
         });
-        SocksEndpoint endpoint = new SocksEndpoint(gatewayProxy);
+        SocksService service = new SocksService(gatewayProxy);
         Properties serviceProps = new Properties();
         serviceProps.put("name", name);
-        instance.registerService(Endpoint.class.getName(), endpoint, serviceProps);
+        instance.registerService(Service.class.getName(), service, serviceProps);
     }
 }

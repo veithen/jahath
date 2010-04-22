@@ -23,7 +23,7 @@ import com.google.code.jahath.common.container.ExecutionEnvironment;
  * 
  * @author Andreas Veithen
  */
-public interface Endpoint {
+public interface Service {
     /**
      * Handle a given connection. The method will block until the connection is completely handled,
      * i.e. until it is closed or ready to be closed. Note that the implementation may close the

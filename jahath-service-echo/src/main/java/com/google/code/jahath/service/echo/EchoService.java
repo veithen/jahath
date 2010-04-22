@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.echo;
+package com.google.code.jahath.service.echo;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.google.code.jahath.Connection;
-import com.google.code.jahath.common.connection.Endpoint;
+import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 
-public class EchoEndpoint implements Endpoint {
+public class EchoService implements Service {
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
             byte[] buffer = new byte[4096];

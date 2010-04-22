@@ -26,12 +26,12 @@ import com.google.code.jahath.common.container.Task;
 public class ConnectionHandlerTask implements Task {
     private static final Logger log = Logger.getLogger(ConnectionHandlerTask.class.getName());
 
-    private final Endpoint endpoint;
+    private final Service service;
     private final ExecutionEnvironment env;
     private final Connection connection;
     
-    public ConnectionHandlerTask(Endpoint endpoint, ExecutionEnvironment env, Connection connection) {
-        this.endpoint = endpoint;
+    public ConnectionHandlerTask(Service service, ExecutionEnvironment env, Connection connection) {
+        this.service = service;
         this.env = env;
         this.connection = connection;
     }
@@ -49,10 +49,10 @@ public class ConnectionHandlerTask implements Task {
     public void run() {
         if (log.isLoggable(Level.FINE)) {
             // TODO: should we simply use Connection#toString or should we define a specific method in Connection?
-            log.fine("Running " + endpoint.getClass().getName() + " on connection " + connection);
+            log.fine("Running " + service.getClass().getName() + " on connection " + connection);
         }
         try {
-            endpoint.handle(env, connection);
+            service.handle(env, connection);
         } finally {
             closeConnection();
         }

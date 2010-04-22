@@ -21,6 +21,6 @@ import com.google.code.jahath.common.server.Server;
 
 public class HttpServer extends Server {
     public HttpServer(int port, HttpRequestHandler requestHandler) throws IOException {
-        super(port, new HttpEndpoint(requestHandler));
+        super(port, new HttpService(requestHandler));
     }
 }

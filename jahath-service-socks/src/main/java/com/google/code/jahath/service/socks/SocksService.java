@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.socks;
+package com.google.code.jahath.service.socks;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -24,18 +24,18 @@ import com.google.code.jahath.Connection;
 import com.google.code.jahath.Gateway;
 import com.google.code.jahath.SocketAddress;
 import com.google.code.jahath.common.ConnectionRelay;
-import com.google.code.jahath.common.connection.Endpoint;
+import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.socks.SocksConstants;
 import com.google.code.jahath.common.socks.SocksDataInputStream;
 import com.google.code.jahath.common.socks.SocksDataOutputStream;
 
-public class SocksEndpoint implements Endpoint {
-    private static final Logger log = Logger.getLogger(SocksEndpoint.class.getName());
+public class SocksService implements Service {
+    private static final Logger log = Logger.getLogger(SocksService.class.getName());
     
     private final Gateway gateway;
     
-    public SocksEndpoint(Gateway gateway) {
+    public SocksService(Gateway gateway) {
         this.gateway = gateway;
     }
 

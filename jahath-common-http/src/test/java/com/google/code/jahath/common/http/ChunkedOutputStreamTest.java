@@ -31,7 +31,7 @@ import org.mortbay.jetty.handler.AbstractHandler;
 
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.CRLFInputStream;
-import com.google.code.jahath.common.connection.Endpoint;
+import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.server.Server;
 import com.google.code.jahath.testutils.CRC;
@@ -89,7 +89,7 @@ public class ChunkedOutputStreamTest {
     
     public void testServer(int requestCount) throws Exception {
         final CRC expectedCRC = new CRC();
-        Server server = new Server(5555, new Endpoint() {
+        Server server = new Server(5555, new Service() {
             public void handle(ExecutionEnvironment env, Connection connection) {
                 try {
                     CRLFInputStream in = new CRLFInputStream(connection.getInputStream());

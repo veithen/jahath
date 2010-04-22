@@ -29,7 +29,7 @@ public class SocksTest {
     public void test() throws Exception {
         OSGiRuntime socksServer = new OSGiRuntime();
         try {
-            socksServer.cmd("socksep add socks direct");
+            socksServer.cmd("sockssvc add socks direct");
             socksServer.cmd("port add 9000 socks");
             OSGiRuntime echoServer = new OSGiRuntime();
             try {

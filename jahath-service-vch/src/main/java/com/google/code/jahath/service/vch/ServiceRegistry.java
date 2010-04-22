@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.vch;
+package com.google.code.jahath.service.vch;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.code.jahath.common.connection.Endpoint;
+import com.google.code.jahath.common.connection.Service;
 
 class ServiceRegistry {
-    private final Map<String,Endpoint> services = new HashMap<String,Endpoint>();
+    private final Map<String,Service> services = new HashMap<String,Service>();
     
-    public synchronized Endpoint getEndpoint(String serviceName) {
+    public synchronized Service getService(String serviceName) {
         return services.get(serviceName);
     }
     
-    public synchronized void registerService(String name, Endpoint endpoint) {
+    public synchronized void registerService(String name, Service service) {
         if (services.containsKey(name)) {
             throw new IllegalArgumentException("Service '" + name + "' already registered");
         }
-        services.put(name, endpoint);
+        services.put(name, service);
     }
 }

@@ -24,8 +24,8 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>jahath-endpoint-echo</artifactId>
-    <name>Jahath :: Endpoint :: Echo</name>
+    <artifactId>jahath-service-echo</artifactId>
+    <name>Jahath :: Service :: Echo</name>
     <packaging>bundle</packaging>
     <dependencies>
         <dependency>
@@ -45,9 +45,9 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>com.google.code.jahath.endpoint.echo</Bundle-SymbolicName>
-                        <Bundle-Name>Jahath Echo Endpoint</Bundle-Name>
-                        <Bundle-Activator>com.google.code.jahath.endpoint.echo.Activator</Bundle-Activator>
+                        <Bundle-SymbolicName>com.google.code.jahath.service.echo</Bundle-SymbolicName>
+                        <Bundle-Name>Jahath Echo Service</Bundle-Name>
+                        <Bundle-Activator>com.google.code.jahath.service.echo.Activator</Bundle-Activator>
                         <Export-Package></Export-Package>
                     </instructions>
                 </configuration>

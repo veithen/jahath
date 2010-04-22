@@ -13,14 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.vch;
+package com.google.code.jahath.service.socks;
+
+import java.util.Properties;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.cm.ManagedServiceFactory;
 
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
-        
+        Properties props = new Properties();
+        props.setProperty("service.pid", "service-socks");
+        context.registerService(ManagedServiceFactory.class.getName(), new SocksServiceFactory(context), props);
     }
 
     public void stop(BundleContext context) throws Exception {

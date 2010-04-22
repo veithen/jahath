@@ -24,8 +24,8 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>jahath-endpoint-socks</artifactId>
-    <name>Jahath :: Endpoint :: SOCKS</name>
+    <artifactId>jahath-service-socks</artifactId>
+    <name>Jahath :: Service :: SOCKS</name>
     <packaging>bundle</packaging>
     <dependencies>
         <dependency>
@@ -55,7 +55,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-endpoint-echo</artifactId>
+            <artifactId>jahath-service-echo</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
@@ -79,9 +79,9 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>com.google.code.jahath.endpoint.socks</Bundle-SymbolicName>
-                        <Bundle-Name>Jahath SOCKS Endpoint</Bundle-Name>
-                        <Bundle-Activator>com.google.code.jahath.endpoint.socks.Activator</Bundle-Activator>
+                        <Bundle-SymbolicName>com.google.code.jahath.service.socks</Bundle-SymbolicName>
+                        <Bundle-Name>Jahath SOCKS Service</Bundle-Name>
+                        <Bundle-Activator>com.google.code.jahath.service.socks.Activator</Bundle-Activator>
                         <Export-Package></Export-Package>
                         <Embed-Dependency>jahath-common-*</Embed-Dependency>
                     </instructions>

@@ -20,15 +20,15 @@ import org.junit.Test;
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.client.vch.VCHClient;
 import com.google.code.jahath.common.vch.VCHConstants;
-import com.google.code.jahath.endpoint.echo.EchoEndpoint;
-import com.google.code.jahath.endpoint.vch.VCHServer;
+import com.google.code.jahath.service.echo.EchoService;
+import com.google.code.jahath.service.vch.VCHServer;
 import com.google.code.jahath.testutils.EchoTestUtil;
 
 public class EchoTest {
     @Test
     public void test() throws Exception {
         VCHServer server = new VCHServer(5555);
-        server.registerService(VCHConstants.Services.ECHO, new EchoEndpoint());
+        server.registerService(VCHConstants.Services.ECHO, new EchoService());
         VCHClient client = new VCHClient("localhost", 5555, null);
         Connection connection = client.createConnection(VCHConstants.Services.ECHO);
         EchoTestUtil.testEcho(connection);

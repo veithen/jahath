@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.vch;
+package com.google.code.jahath.service.vch;
 
 import java.io.IOException;
 
-import com.google.code.jahath.common.connection.Endpoint;
+import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.http.server.HttpServer;
 
 public class VCHServer {
@@ -28,8 +28,8 @@ public class VCHServer {
         httpServer = new HttpServer(port, new HttpRequestHandlerImpl(serviceRegistry));
     }
 
-    public void registerService(String name, Endpoint endpoint) {
-        serviceRegistry.registerService(name, endpoint);
+    public void registerService(String name, Service service) {
+        serviceRegistry.registerService(name, service);
     }
 
     public final void stop() throws InterruptedException {

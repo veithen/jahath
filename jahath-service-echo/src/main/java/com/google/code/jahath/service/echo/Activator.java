@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.vch.cli;
+package com.google.code.jahath.service.echo;
 
-import org.apache.felix.shell.Command;
+import java.util.Properties;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import com.google.code.jahath.common.cli.Argument;
-import com.google.code.jahath.common.cli.ConfigurationCommand;
-import com.google.code.jahath.common.cli.Sequence;
+import com.google.code.jahath.common.connection.Service;
 
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
-        Sequence sequence = new Sequence();
-        sequence.add(new Argument("name"));
-        context.registerService(Command.class.getName(), new ConfigurationCommand(context,
-                "vchep", "Manipulate VC/H endpoints", "endpoint-vch", sequence), null);
+        Properties props = new Properties();
+        props.put("name", "echo");
+        context.registerService(Service.class.getName(), new EchoService(), props);
     }
 
     public void stop(BundleContext context) throws Exception {

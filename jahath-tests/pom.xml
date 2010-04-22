@@ -56,7 +56,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-endpoint-vch</artifactId>
+            <artifactId>jahath-service-vch</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
@@ -83,21 +83,21 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-endpoint-socks</artifactId>
+            <artifactId>jahath-service-socks</artifactId>
             <version>${project.version}</version>
             <type>bundle</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-endpoint-socks-cli</artifactId>
+            <artifactId>jahath-service-socks-cli</artifactId>
             <version>${project.version}</version>
             <type>bundle</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-endpoint-echo</artifactId>
+            <artifactId>jahath-service-echo</artifactId>
             <version>${project.version}</version>
             <type>bundle</type>
             <scope>test</scope>
@@ -180,9 +180,6 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                             <includeTypes>bundle</includeTypes>
-                            <!-- includeArtifactIds>
-                                jahath-endpoint-echo,jahath-gateway-direct,jahath-port,jahath-port-cli,org.apache.felix.shell
-                            </includeArtifactIds -->
                         </configuration>
                     </execution>
                 </executions>

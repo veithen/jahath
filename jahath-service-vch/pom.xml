@@ -24,8 +24,8 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>jahath-endpoint-vch</artifactId>
-    <name>Jahath :: Endpoint :: VC/H</name>
+    <artifactId>jahath-service-vch</artifactId>
+    <name>Jahath :: Service :: VC/H</name>
     <packaging>bundle</packaging>
     <dependencies>
         <dependency>
@@ -69,9 +69,9 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>com.google.code.jahath.endpoint.vch</Bundle-SymbolicName>
-                        <Bundle-Name>Jahath VC/H Endpoint</Bundle-Name>
-                        <Bundle-Activator>com.google.code.jahath.endpoint.vch.Activator</Bundle-Activator>
+                        <Bundle-SymbolicName>com.google.code.jahath.service.vch</Bundle-SymbolicName>
+                        <Bundle-Name>Jahath VC/H Service</Bundle-Name>
+                        <Bundle-Activator>com.google.code.jahath.service.vch.Activator</Bundle-Activator>
                         <Export-Package></Export-Package>
                         <Embed-Dependency>jahath-common-http,commons-io</Embed-Dependency>
                     </instructions>

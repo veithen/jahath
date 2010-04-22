@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.endpoint.vch;
+package com.google.code.jahath.service.vch;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.common.connection.Endpoint;
+import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.connection.ConnectionHandlerTask;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.http.HttpConnectionException;
@@ -69,8 +69,8 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
         }
         if (path.startsWith("/services/")) {
             String serviceName = path.substring(10);
-            Endpoint endpoint = serviceRegistry.getEndpoint(serviceName);
-            if (endpoint == null) {
+            Service service = serviceRegistry.getService(serviceName);
+            if (service == null) {
                 response.sendError(HttpConstants.StatusCodes.NOT_FOUND, "No such service: " + serviceName);
                 return;
             }
@@ -80,7 +80,7 @@ class HttpRequestHandlerImpl implements HttpRequestHandler {
             }
             ConnectionImpl connection = new ConnectionImpl(connectionId);
             connections.put(connectionId, connection);
-            env.execute(new ConnectionHandlerTask(endpoint, env, connection));
+            env.execute(new ConnectionHandlerTask(service, env, connection));
             response.setStatus(HttpConstants.StatusCodes.CREATED);
             response.addHeader(HttpConstants.Headers.LOCATION, request.makeAbsoluteURI("/connections/" + connectionId));
             response.commit();
