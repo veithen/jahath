@@ -27,6 +27,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
 
+// TODO: we also need to invoke the DeletionListeners when the bundle is stopped!
 public abstract class SimpleManagedServiceFactory implements ManagedServiceFactory {
     public class Instance {
         private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
