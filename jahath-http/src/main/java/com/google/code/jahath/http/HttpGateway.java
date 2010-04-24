@@ -16,7 +16,8 @@
 package com.google.code.jahath.http;
 
 import com.google.code.jahath.common.http.HttpException;
+import com.google.code.jahath.tcp.SocketAddress;
 
 public interface HttpGateway {
-    HttpRequest createRequest(HttpRequest.Method method, String path) throws HttpException;
+    HttpRequest createRequest(HttpRequest.Method method, SocketAddress server, String path) throws HttpException;
 }

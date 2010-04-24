@@ -57,4 +57,8 @@ public class DirectHttpGateway extends AbstractHttpGateway {
     @Override
     protected void addHeaders(HttpRequest request) {
     }
+    
+    public void destroy() {
+        tcpGatewayTracker.close();
+    }
 }

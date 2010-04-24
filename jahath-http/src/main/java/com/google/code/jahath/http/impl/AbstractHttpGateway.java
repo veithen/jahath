@@ -25,10 +25,11 @@ import com.google.code.jahath.common.http.HttpConnectionException;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.common.http.HttpOutputStream;
+import com.google.code.jahath.http.HttpGateway;
 import com.google.code.jahath.http.HttpRequest;
 import com.google.code.jahath.tcp.SocketAddress;
 
-public abstract class AbstractHttpGateway {
+public abstract class AbstractHttpGateway implements HttpGateway {
     private static final Logger log = Logger.getLogger(AbstractHttpGateway.class.getName());
     
     public HttpRequest createRequest(HttpRequest.Method method, SocketAddress server, String path) throws HttpException {

@@ -72,8 +72,8 @@
                         <Bundle-SymbolicName>com.google.code.jahath.http</Bundle-SymbolicName>
                         <Bundle-Name>Jahath HTTP Support</Bundle-Name>
                         <Bundle-Activator>com.google.code.jahath.http.impl.Activator</Bundle-Activator>
-                        <Export-Package></Export-Package>
-                        <Embed-Dependency>jahath-common-osgi</Embed-Dependency>
+                        <Export-Package>com.google.code.jahath.http</Export-Package>
+                        <Embed-Dependency>jahath-common-*</Embed-Dependency>
                     </instructions>
                 </configuration>
             </plugin>

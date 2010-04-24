@@ -17,6 +17,8 @@ package com.google.code.jahath.http.impl;
 
 import java.io.IOException;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.code.jahath.Connection;
@@ -29,8 +31,14 @@ import com.google.code.jahath.tcp.SocketAddress;
 public class HttpProxyGateway extends AbstractHttpGateway {
     private final ServiceTracker endpointTracker;
     
-    public HttpProxyGateway() {
-        
+    public HttpProxyGateway(BundleContext bundleContext, String endpointName) {
+        try {
+            endpointTracker = new ServiceTracker(bundleContext,
+                    bundleContext.createFilter("(&(objectClass=" + Endpoint.class.getName() + ")(name=" + endpointName + "))"), null);
+            endpointTracker.open();
+        } catch (InvalidSyntaxException ex) {
+            throw new Error(ex);
+        }
     }
 
     @Override
@@ -51,5 +59,9 @@ public class HttpProxyGateway extends AbstractHttpGateway {
     @Override
     protected void addHeaders(HttpRequest request) throws HttpException {
         request.addHeader(HttpConstants.Headers.PROXY_CONNECTION, "keep-alive");
+    }
+    
+    public void destroy() {
+        endpointTracker.close();
     }
 }

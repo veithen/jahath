@@ -25,11 +25,24 @@ import com.google.code.jahath.common.cli.Sequence;
 
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
+        registerDirectHttpCommand(context);
+        registerHttpProxyCommand(context);
+    }
+    
+    private void registerDirectHttpCommand(BundleContext context) {
         Sequence sequence = new Sequence();
         sequence.add(new Argument("name"));
         sequence.add(new Argument("gateway"));
         context.registerService(Command.class.getName(), new ConfigurationCommand(context,
                 "direct-http", "Manage direct HTTP gateways", "http-gateway-direct", sequence), null);
+    }
+
+    private void registerHttpProxyCommand(BundleContext context) {
+        Sequence sequence = new Sequence();
+        sequence.add(new Argument("name"));
+        sequence.add(new Argument("endpoint"));
+        context.registerService(Command.class.getName(), new ConfigurationCommand(context,
+                "http-proxy", "Manage HTTP proxy gateways", "http-gateway-proxy", sequence), null);
     }
 
     public void stop(BundleContext context) throws Exception {
