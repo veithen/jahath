@@ -131,6 +131,20 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-gateway-socks</artifactId>
+            <version>${project.version}</version>
+            <type>bundle</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-gateway-socks-cli</artifactId>
+            <version>${project.version}</version>
+            <type>bundle</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>jahath-test-utils</artifactId>
             <version>${version}</version>

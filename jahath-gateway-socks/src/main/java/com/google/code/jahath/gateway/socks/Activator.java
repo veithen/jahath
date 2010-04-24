@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client.tunnel;
+package com.google.code.jahath.gateway.socks;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
+import java.util.Properties;
 
-import com.google.code.jahath.client.vch.VCHClient;
-import com.google.code.jahath.common.server.Server;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.cm.ManagedServiceFactory;
 
-public class Tunnel extends Server {
-    public Tunnel(int port, VCHClient client, InetSocketAddress target) throws IOException {
-        super(port, new TunnelConnectionHandler(client, target));
+public class Activator implements BundleActivator {
+    public void start(BundleContext context) throws Exception {
+        Properties props = new Properties();
+        props.put("service.pid", "gateway-socks");
+        context.registerService(ManagedServiceFactory.class.getName(), new SocksGatewayFactory(context), props);
+    }
+
+    public void stop(BundleContext context) throws Exception {
     }
 }

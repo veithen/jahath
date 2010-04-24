@@ -26,7 +26,7 @@ import com.google.code.jahath.testutils.EchoTestUtil;
 
 public class SocksTest {
     @Test
-    public void test() throws Exception {
+    public void testService() throws Exception {
         OSGiRuntime socksServer = new OSGiRuntime();
         try {
             socksServer.cmd("sockssvc add socks direct");
@@ -44,6 +44,37 @@ public class SocksTest {
             }
         } finally {
             socksServer.stop();
+        }
+    }
+
+    @Test
+    public void testGatewayAndService() throws Exception {
+        OSGiRuntime socksGateway = new OSGiRuntime();
+        try {
+            socksGateway.cmd("endpoint add socks-endpoint localhost 8001 direct");
+            socksGateway.cmd("socksgw add socks-gateway socks-endpoint");
+            socksGateway.cmd("endpoint add remote-echo localhost 8002 socks-gateway");
+            socksGateway.cmd("forward add local-echo remote-echo");
+            socksGateway.cmd("port add 8000 local-echo");
+            OSGiRuntime socksServer = new OSGiRuntime();
+            try {
+                socksServer.cmd("sockssvc add socks direct");
+                socksServer.cmd("port add 8001 socks");
+                OSGiRuntime echoServer = new OSGiRuntime();
+                try {
+                    echoServer.cmd("port add 8002 echo");
+                    Thread.sleep(1000); // TODO
+                    Socket socket = new Socket("localhost", 8000);
+                    EchoTestUtil.testEcho(new SocketConnection(socket));
+                    socket.close();
+                } finally {
+                    echoServer.stop();
+                }
+            } finally {
+                socksServer.stop();
+            }
+        } finally {
+            socksGateway.stop();
         }
     }
 }
