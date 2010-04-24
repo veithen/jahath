@@ -48,7 +48,7 @@
             <type>bundle</type>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!-- dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jahath-gateway-vch</artifactId>
             <version>${project.version}</version>
@@ -59,7 +59,7 @@
             <artifactId>jahath-service-vch</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jahath-api</artifactId>
@@ -112,6 +112,20 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jahath-resolver</artifactId>
+            <version>${project.version}</version>
+            <type>bundle</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-service-forward</artifactId>
+            <version>${project.version}</version>
+            <type>bundle</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-service-forward-cli</artifactId>
             <version>${project.version}</version>
             <type>bundle</type>
             <scope>test</scope>
