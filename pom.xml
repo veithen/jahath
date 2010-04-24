@@ -61,11 +61,12 @@
         <module>jahath-common-http</module>
         <module>jahath-common-osgi</module>
         <module>jahath-common-socks</module>
+        <module>jahath-endpoint-vch</module>
+        <module>jahath-endpoint-vch-cli</module>
         <module>jahath-gateway-socks</module>
         <module>jahath-gateway-socks-cli</module>
         <module>jahath-gateway-ssh</module>
         <module>jahath-gateway-ssh-cli</module>
-        <module>jahath-gateway-vch</module>
         <module>jahath-http</module>
         <module>jahath-http-cli</module>
         <module>jahath-resolver</module>

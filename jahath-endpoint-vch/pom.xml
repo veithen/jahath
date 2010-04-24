@@ -24,8 +24,8 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>jahath-gateway-vch</artifactId>
-    <name>Jahath :: Gateway :: VC/H</name>
+    <artifactId>jahath-endpoint-vch</artifactId>
+    <name>Jahath :: Endpoint :: VC/H</name>
     <packaging>jar</packaging>
     <dependencies>
     	<dependency>
@@ -33,11 +33,6 @@
     		<artifactId>jahath-common</artifactId>
     		<version>${version}</version>
     	</dependency>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>jahath-common-socks</artifactId>
-            <version>${version}</version>
-        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jahath-common-http</artifactId>
