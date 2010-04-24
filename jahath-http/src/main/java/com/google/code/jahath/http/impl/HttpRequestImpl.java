@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common.http.client;
+package com.google.code.jahath.http.impl;
 
 import java.io.InputStream;
 
 import com.google.code.jahath.common.http.HttpException;
-import com.google.code.jahath.common.http.HttpOutMessage;
+import com.google.code.jahath.common.http.HttpOutMessageImpl;
 import com.google.code.jahath.common.http.HttpOutputStream;
+import com.google.code.jahath.http.HttpRequest;
+import com.google.code.jahath.http.HttpResponse;
 
-public class HttpRequest extends HttpOutMessage {
-    public enum Method { GET, POST, DELETE };
-    
+public class HttpRequestImpl extends HttpOutMessageImpl implements HttpRequest {
     private final InputStream response;
     
-    HttpRequest(HttpOutputStream request, InputStream response) {
+    HttpRequestImpl(HttpOutputStream request, InputStream response) {
         super(request, null);
         this.response = response;
     }
     
     public HttpResponse getResponse() throws HttpException {
-        return new HttpResponse(response);
+        return new HttpResponseImpl(response);
     }
     
     public HttpResponse execute() throws HttpException {

@@ -13,22 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common.http.client;
+package com.google.code.jahath.http.impl;
 
-public class ProxyConfiguration {
-    private final String host;
-    private final int port;
-    
-    public ProxyConfiguration(String host, int port) {
-        this.host = host;
-        this.port = port;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+
+public class Activator implements BundleActivator {
+    public void start(BundleContext context) throws Exception {
     }
 
-    public String getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
+    public void stop(BundleContext context) throws Exception {
     }
 }

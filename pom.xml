@@ -64,6 +64,8 @@
         <module>jahath-gateway-ssh</module>
         <module>jahath-gateway-ssh-cli</module>
         <module>jahath-gateway-vch</module>
+        <module>jahath-http</module>
+        <module>jahath-http-cli</module>
         <module>jahath-resolver</module>
         <module>jahath-resolver-dns</module>
         <module>jahath-service-echo</module>

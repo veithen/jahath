@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,22 @@ import com.google.code.jahath.testutils.EchoTestUtil;
 public class EchoTest {
     @Test
     public void test() throws Exception {
+        OSGiRuntime vchServer = new OSGiRuntime();
+        try {
+            vchServer.cmd("vchsvc add vch echo");
+            vchServer.cmd("port add 9001 vchsvc");
+            OSGiRuntime vchClient = new OSGiRuntime();
+            try {
+                vchClient.cmd("direct-http add http direct");
+                
+            } finally {
+                vchClient.stop();
+            }
+        } finally {
+            vchServer.stop();
+        }
+        
+        
         VCHServer server = new VCHServer(5555);
         server.registerService(VCHConstants.Services.ECHO, new EchoService());
         VCHClient client = new VCHClient("localhost", 5555, null);

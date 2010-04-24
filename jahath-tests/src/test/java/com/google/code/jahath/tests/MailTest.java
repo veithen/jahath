@@ -55,17 +55,26 @@ public class MailTest {
         greenMail.setUser("user@localhost", "user", "password");
         greenMail.start();
         
+        OSGiRuntime vchServer = new OSGiRuntime();
+        vchServer.cmd("sockssvc add socks direct");
+        
+        
         VCHServer server = new VCHServer(serverPort);
         server.registerService(VCHConstants.Services.SOCKS, new SocksService(new DirectGateway()));
         
         ProxyServer proxy;
-        ProxyConfiguration proxyConfiguration;
         if (useProxy) {
             proxy = new ProxyServer(proxyPort);
-            proxyConfiguration = new ProxyConfiguration("localhost", proxyPort);
         } else {
             proxy = null;
-            proxyConfiguration = null;
+        }
+        
+        OSGiRuntime vchClient = new OSGiRuntime();
+        if (useProxy) {
+            vchClient.cmd("endpoint add proxy localhost " + proxyPort + " direct");
+            vchClient.cmd("proxy-http add http proxy");
+        } else {
+            vchClient.cmd("direct-http add http direct");
         }
         
         VCHClient client = new VCHClient("localhost", serverPort, proxyConfiguration);

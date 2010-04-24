@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.service.vch.cli;
+package com.google.code.jahath.http.cli;
 
 import org.apache.felix.shell.Command;
 import org.osgi.framework.BundleActivator;
@@ -27,9 +27,9 @@ public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         Sequence sequence = new Sequence();
         sequence.add(new Argument("name"));
-        // TODO: list of services here
+        sequence.add(new Argument("gateway"));
         context.registerService(Command.class.getName(), new ConfigurationCommand(context,
-                "vchsvc", "Manipulate VC/H services", "service-vch", sequence), null);
+                "direct-http", "Manage direct HTTP gateways", "http-gateway-direct", sequence), null);
     }
 
     public void stop(BundleContext context) throws Exception {

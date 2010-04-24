@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common.http;
+package com.google.code.jahath.http;
 
-import java.io.OutputStream;
+import com.google.code.jahath.common.http.HttpOutMessage;
 
-public interface HttpOutMessage {
-    void addHeader(String name, String value) throws HttpException;
-    void addIntHeader(String name, int value) throws HttpException;
-    OutputStream getOutputStream(String contentType) throws HttpException;
-    void send(String contentType, byte[] content) throws HttpException;
+public interface HttpRequest extends HttpOutMessage {
+    public enum Method { GET, POST, DELETE };
 }

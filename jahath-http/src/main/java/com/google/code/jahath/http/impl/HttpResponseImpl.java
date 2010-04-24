@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.common.http.client;
+package com.google.code.jahath.http.impl;
 
 import java.io.InputStream;
 
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
-import com.google.code.jahath.common.http.HttpInMessage;
+import com.google.code.jahath.common.http.HttpInMessageImpl;
 import com.google.code.jahath.common.http.HttpProtocolException;
+import com.google.code.jahath.http.HttpResponse;
 
-public class HttpResponse extends HttpInMessage {
+public class HttpResponseImpl extends HttpInMessageImpl implements HttpResponse {
     private int statusCode;
     private String reasonPhrase;
     
-    HttpResponse(InputStream in) {
+    HttpResponseImpl(InputStream in) {
         super(in);
     }
 

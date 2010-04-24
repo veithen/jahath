@@ -26,11 +26,26 @@ import com.google.code.jahath.common.cli.Type;
 
 public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
+	    registerPortCommand(context);
+	    registerEndpointCommand(context);
+	}
+	
+	private void registerPortCommand(BundleContext context) {
         Sequence sequence = new Sequence();
         sequence.add(new Argument("port", Type.INTEGER));
         sequence.add(new Argument("service"));
         context.registerService(Command.class.getName(), new ConfigurationCommand(context,
                 "port", "Manage ports", "port", sequence), null);
+	}
+	
+	private void registerEndpointCommand(BundleContext context) {
+        Sequence sequence = new Sequence();
+        sequence.add(new Argument("name"));
+        sequence.add(new Argument("host"));
+        sequence.add(new Argument("port", Type.INTEGER));
+        sequence.add(new Argument("gateway"));
+        context.registerService(Command.class.getName(), new ConfigurationCommand(context,
+                "endpoint", "Manage TCP endpoints", "endpoint", sequence), null);
 	}
 
 	public void stop(BundleContext context) throws Exception {
