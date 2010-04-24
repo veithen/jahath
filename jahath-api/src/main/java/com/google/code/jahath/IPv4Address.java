@@ -16,6 +16,8 @@
 package com.google.code.jahath;
 
 public class IPv4Address extends IPAddress {
+    public static final IPv4Address LOOPBACK = new IPv4Address(new byte[] { 127, 0, 0, 1 });
+    
     public IPv4Address(byte[] address) {
         super(address);
         if (address == null || address.length != 4) {

@@ -20,6 +20,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.code.jahath.DnsAddress;
 import com.google.code.jahath.IPAddress;
+import com.google.code.jahath.IPv4Address;
 import com.google.code.jahath.resolver.Resolver;
 import com.google.code.jahath.resolver.ResolverPlugin;
 
@@ -32,10 +33,16 @@ public class ResolverImpl implements Resolver {
     }
 
     public IPAddress resolve(DnsAddress address) {
-        for (Object service : tracker.getServices()) {
-            IPAddress result = ((ResolverPlugin)service).resolve(address);
-            if (result != null) {
-                return result;
+        if (address.getName().equals("localhost")) {
+            return IPv4Address.LOOPBACK;
+        }
+        Object[] services = tracker.getServices();
+        if (services != null) {
+            for (Object service : services) {
+                IPAddress result = ((ResolverPlugin)service).resolve(address);
+                if (result != null) {
+                    return result;
+                }
             }
         }
         return null;
