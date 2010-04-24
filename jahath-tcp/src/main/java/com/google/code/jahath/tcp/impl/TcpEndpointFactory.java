@@ -16,11 +16,16 @@
 package com.google.code.jahath.tcp.impl;
 
 import java.util.Dictionary;
+import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationException;
 
+import com.google.code.jahath.DnsAddress;
+import com.google.code.jahath.Endpoint;
+import com.google.code.jahath.common.osgi.DeletionListener;
 import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
+import com.google.code.jahath.tcp.SocketAddress;
 
 public class TcpEndpointFactory extends SimpleManagedServiceFactory {
     public TcpEndpointFactory(BundleContext bundleContext) {
@@ -29,6 +34,19 @@ public class TcpEndpointFactory extends SimpleManagedServiceFactory {
 
     @Override
     protected void configure(Instance instance, Dictionary properties) throws ConfigurationException {
-        // TODO
+        String name = (String)properties.get("name");
+        String host = (String)properties.get("host");
+        int port = (Integer)properties.get("port");
+        String gateway = (String)properties.get("gateway");
+        Properties serviceProps = new Properties();
+        serviceProps.put("name", name);
+        // TODO: parse host address correctly!
+        final TcpEndpoint endpoint = new TcpEndpoint(bundleContext, new SocketAddress(new DnsAddress(host), port), gateway);
+        instance.registerService(Endpoint.class.getName(), endpoint, serviceProps);
+        instance.addDeletionListener(new DeletionListener() {
+            public void deleted() {
+                endpoint.destroy();
+            }
+        });
     }
 }

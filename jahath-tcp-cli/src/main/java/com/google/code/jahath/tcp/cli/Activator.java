@@ -45,7 +45,7 @@ public class Activator implements BundleActivator {
         sequence.add(new Argument("port", Type.INTEGER));
         sequence.add(new Argument("gateway"));
         context.registerService(Command.class.getName(), new ConfigurationCommand(context,
-                "endpoint", "Manage TCP endpoints", "endpoint", sequence), null);
+                "endpoint", "Manage TCP endpoints", "endpoint-tcp", sequence), null);
 	}
 
 	public void stop(BundleContext context) throws Exception {

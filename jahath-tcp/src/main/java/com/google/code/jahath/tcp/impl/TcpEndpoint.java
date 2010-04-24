@@ -17,6 +17,10 @@ package com.google.code.jahath.tcp.impl;
 
 import java.io.IOException;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.util.tracker.ServiceTracker;
+
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.Endpoint;
 import com.google.code.jahath.tcp.Gateway;
@@ -24,14 +28,29 @@ import com.google.code.jahath.tcp.SocketAddress;
 
 public class TcpEndpoint implements Endpoint {
     private final SocketAddress address;
-    private final Gateway gateway;
+    private final ServiceTracker gatewayTracker;
 
-    public TcpEndpoint(SocketAddress address, Gateway gateway) {
+    public TcpEndpoint(BundleContext bundleContext, SocketAddress address, String gatewayName) {
         this.address = address;
-        this.gateway = gateway;
+        try {
+            gatewayTracker = new ServiceTracker(bundleContext,
+                    bundleContext.createFilter("(&(objectClass=" + Gateway.class.getName() + ")(name=" + gatewayName + "))"), null);
+            gatewayTracker.open();
+        } catch (InvalidSyntaxException ex) {
+            throw new Error(ex);
+        }
     }
 
     public Connection connect() throws IOException {
-        return gateway.connect(address);
+        Gateway gateway = (Gateway)gatewayTracker.getService();
+        if (gateway == null) {
+            throw new IOException("Gateway not available");
+        } else {
+            return gateway.connect(address);
+        }
+    }
+    
+    public void destroy() {
+        gatewayTracker.close();
     }
 }
