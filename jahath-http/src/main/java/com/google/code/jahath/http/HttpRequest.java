@@ -15,8 +15,12 @@
  */
 package com.google.code.jahath.http;
 
+import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.common.http.HttpOutMessage;
 
 public interface HttpRequest extends HttpOutMessage {
     public enum Method { GET, POST, DELETE };
+    
+    HttpResponse getResponse() throws HttpException;
+    HttpResponse execute() throws HttpException;
 }

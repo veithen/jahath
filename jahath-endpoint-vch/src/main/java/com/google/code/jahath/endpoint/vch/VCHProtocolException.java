@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client.vch;
+package com.google.code.jahath.endpoint.vch;
 
 /**
  * Indicates a VC/H protocol error, i.e. an unexpected HTTP response. An exception of this class is

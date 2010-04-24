@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client.vch;
+package com.google.code.jahath.endpoint.vch;
 
 /**
- * Indicates that the HTTP status code returned by the server was unexpected in the given context.
+ * Indicates that there is no service endpoint with the given name.
  * 
  * @author Andreas Veithen
  */
-public class UnexpectedStatusCodeException extends VCHProtocolException {
-    private static final long serialVersionUID = 2522183669935389380L;
+public class NoSuchServiceException extends VCHException {
+    private static final long serialVersionUID = -5196391309359021845L;
 
-    public UnexpectedStatusCodeException(int statusCode, String reasonPhrase) {
-        super("Unexpected status code " + statusCode + " (" + reasonPhrase + ")");
+    public NoSuchServiceException(String serviceName) {
+        super("No such service: '" + serviceName + "'");
     }
 }

@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client.vch;
+package com.google.code.jahath.endpoint.vch;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
 import com.google.code.jahath.common.http.HttpException;
-import com.google.code.jahath.common.http.client.HttpClient;
-import com.google.code.jahath.common.http.client.HttpRequest;
+import com.google.code.jahath.http.HttpRequest;
 
 class VCHOutputStream extends OutputStream {
     private final HttpClient httpClient;

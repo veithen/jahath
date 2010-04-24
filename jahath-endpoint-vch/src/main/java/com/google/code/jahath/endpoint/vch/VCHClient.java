@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client.vch;
+package com.google.code.jahath.endpoint.vch;
 
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
-import com.google.code.jahath.common.http.client.HttpClient;
-import com.google.code.jahath.common.http.client.HttpRequest;
-import com.google.code.jahath.common.http.client.HttpResponse;
-import com.google.code.jahath.common.http.client.ProxyConfiguration;
+import com.google.code.jahath.http.HttpGateway;
+import com.google.code.jahath.http.HttpRequest;
+import com.google.code.jahath.http.HttpResponse;
+import com.google.code.jahath.tcp.SocketAddress;
 
 public class VCHClient {
     private final HttpClient httpClient;
     
-    public VCHClient(String serverHost, int serverPort, ProxyConfiguration proxyConfiguration) {
-        httpClient = new HttpClient(serverHost, serverPort, proxyConfiguration);
+    public VCHClient(SocketAddress server, HttpGateway gateway) {
+        httpClient = new HttpClient(server, gateway);
     }
     
     public Connection createConnection(String serviceName) throws VCHException {

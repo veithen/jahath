@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.http;
+package com.google.code.jahath.endpoint.vch;
 
-import com.google.code.jahath.common.http.HttpException;
-import com.google.code.jahath.common.http.HttpInMessage;
+import java.io.IOException;
 
-public interface HttpResponse extends HttpInMessage {
-    int getStatusCode() throws HttpException;
-    String getReasonPhrase() throws HttpException;
+public class VCHException extends IOException {
+    private static final long serialVersionUID = 3472876761060704974L;
+
+    public VCHException(String message) {
+        super(message);
+    }
+
+    public VCHException(Throwable cause) {
+        initCause(cause);
+    }
 }

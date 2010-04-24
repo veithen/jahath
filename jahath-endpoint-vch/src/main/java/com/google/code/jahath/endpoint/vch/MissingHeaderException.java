@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.http;
+package com.google.code.jahath.endpoint.vch;
 
-import com.google.code.jahath.common.http.HttpException;
-import com.google.code.jahath.common.http.HttpInMessage;
+public class MissingHeaderException extends VCHProtocolException {
+    private static final long serialVersionUID = 1191970505557653345L;
 
-public interface HttpResponse extends HttpInMessage {
-    int getStatusCode() throws HttpException;
-    String getReasonPhrase() throws HttpException;
+    public MissingHeaderException(String headerName) {
+        super("Expected a " + headerName + " header");
+    }
 }

@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client.vch;
+package com.google.code.jahath.endpoint.vch;
 
-import java.io.IOException;
+import java.util.Properties;
 
-public class VCHException extends IOException {
-    private static final long serialVersionUID = 3472876761060704974L;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.cm.ManagedServiceFactory;
 
-    public VCHException(String message) {
-        super(message);
+public class Activator implements BundleActivator {
+    public void start(BundleContext context) throws Exception {
+        Properties props = new Properties();
+        props.put("service.pid", "endpoint-vch");
+        context.registerService(ManagedServiceFactory.class.getName(), new VCHEndpointFactory(context), props);
     }
 
-    public VCHException(Throwable cause) {
-        initCause(cause);
+    public void stop(BundleContext context) throws Exception {
     }
 }

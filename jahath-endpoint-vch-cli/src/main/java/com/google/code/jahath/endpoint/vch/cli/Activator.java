@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.http;
+package com.google.code.jahath.endpoint.vch.cli;
 
-import com.google.code.jahath.common.http.HttpException;
-import com.google.code.jahath.common.http.HttpInMessage;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
-public interface HttpResponse extends HttpInMessage {
-    int getStatusCode() throws HttpException;
-    String getReasonPhrase() throws HttpException;
+public class Activator implements BundleActivator {
+    public void start(BundleContext context) throws Exception {
+        
+    }
+
+    public void stop(BundleContext context) throws Exception {
+    }
 }

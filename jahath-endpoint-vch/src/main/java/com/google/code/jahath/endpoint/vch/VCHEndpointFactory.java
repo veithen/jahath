@@ -13,12 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client.vch;
+package com.google.code.jahath.endpoint.vch;
 
-public class MissingHeaderException extends VCHProtocolException {
-    private static final long serialVersionUID = 1191970505557653345L;
+import java.util.Dictionary;
 
-    public MissingHeaderException(String headerName) {
-        super("Expected a " + headerName + " header");
+import org.osgi.framework.BundleContext;
+import org.osgi.service.cm.ConfigurationException;
+
+import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
+
+public class VCHEndpointFactory extends SimpleManagedServiceFactory {
+    public VCHEndpointFactory(BundleContext bundleContext) {
+        super(bundleContext);
+    }
+
+    @Override
+    protected void configure(Instance instance, Dictionary properties) throws ConfigurationException {
+        // TODO
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath.client.vch;
+package com.google.code.jahath.endpoint.vch;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,9 +22,8 @@ import java.io.OutputStream;
 import com.google.code.jahath.AbstractConnection;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
-import com.google.code.jahath.common.http.client.HttpClient;
-import com.google.code.jahath.common.http.client.HttpRequest;
-import com.google.code.jahath.common.http.client.HttpResponse;
+import com.google.code.jahath.http.HttpRequest;
+import com.google.code.jahath.http.HttpResponse;
 
 class ConnectionImpl extends AbstractConnection {
     private final HttpClient httpClient;
