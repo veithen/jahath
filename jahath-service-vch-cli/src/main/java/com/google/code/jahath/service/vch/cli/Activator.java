@@ -22,12 +22,13 @@ import org.osgi.framework.BundleContext;
 import com.google.code.jahath.common.cli.Argument;
 import com.google.code.jahath.common.cli.ConfigurationCommand;
 import com.google.code.jahath.common.cli.Sequence;
+import com.google.code.jahath.common.cli.Type;
 
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         Sequence sequence = new Sequence();
         sequence.add(new Argument("name"));
-        // TODO: list of services here
+        sequence.add(new Argument("services", Type.arrayOf(Type.STRING)));
         context.registerService(Command.class.getName(), new ConfigurationCommand(context,
                 "vchsvc", "Manipulate VC/H services", "service-vch", sequence), null);
     }

@@ -33,4 +33,8 @@ class ServiceRegistry {
         }
         services.put(name, service);
     }
+    
+    public synchronized void unregisterService(String name) {
+        services.remove(name);
+    }
 }

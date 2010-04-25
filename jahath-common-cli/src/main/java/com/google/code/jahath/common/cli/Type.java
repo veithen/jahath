@@ -15,8 +15,15 @@
  */
 package com.google.code.jahath.common.cli;
 
+import java.lang.reflect.Array;
+
 public abstract class Type {
     public static final Type STRING = new Type() {
+        @Override
+        public Class getValueClass() {
+            return String.class;
+        }
+        
         @Override
         public Object parse(String s) throws ParseException {
             return s;
@@ -25,10 +32,35 @@ public abstract class Type {
     
     public static final Type INTEGER = new Type() {
         @Override
+        public Class getValueClass() {
+            return Integer.class;
+        }
+        
+        @Override
         public Object parse(String s) throws ParseException {
             return Integer.valueOf(s); // TODO: exception handling
         }
     };
     
+    public static Type arrayOf(final Type type) {
+        return new Type() {
+            @Override
+            public Class getValueClass() {
+                return Array.newInstance(type.getValueClass(), 0).getClass();
+            }
+
+            @Override
+            public Object parse(String s) throws ParseException {
+                String[] elements = s.split(",");
+                Object[] result = (Object[])Array.newInstance(type.getValueClass(), elements.length);
+                for (int i=0; i<elements.length; i++) {
+                    result[i] = type.parse(elements[i]);
+                }
+                return result;
+            }
+        };
+    }
+    
+    public abstract Class getValueClass();
     public abstract Object parse(String s) throws ParseException;
 }

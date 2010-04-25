@@ -15,12 +15,17 @@
  */
 package com.google.code.jahath.service.vch;
 
+import java.util.Properties;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.cm.ManagedServiceFactory;
 
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
-        
+        Properties props = new Properties();
+        props.put("service.pid", "service-vch");
+        context.registerService(ManagedServiceFactory.class.getName(), new VCHServiceFactory(context), props);
     }
 
     public void stop(BundleContext context) throws Exception {

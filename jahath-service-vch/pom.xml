@@ -39,6 +39,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-common-osgi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
@@ -73,7 +78,7 @@
                         <Bundle-Name>Jahath VC/H Service</Bundle-Name>
                         <Bundle-Activator>com.google.code.jahath.service.vch.Activator</Bundle-Activator>
                         <Export-Package></Export-Package>
-                        <Embed-Dependency>jahath-common-http,commons-io</Embed-Dependency>
+                        <Embed-Dependency>jahath-common-*,commons-io</Embed-Dependency>
                     </instructions>
                 </configuration>
             </plugin>

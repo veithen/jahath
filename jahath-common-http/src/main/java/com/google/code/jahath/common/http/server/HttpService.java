@@ -31,7 +31,7 @@ import com.google.code.jahath.common.http.HttpOutputStream;
 import com.google.code.jahath.common.io.ErrorListenerInputStream;
 import com.google.code.jahath.common.io.ErrorListenerOutputStream;
 
-class HttpService implements Service, HttpHeadersProvider {
+public class HttpService implements Service, HttpHeadersProvider {
     private static final Logger log = Logger.getLogger(HttpService.class.getName());
     
     private final HttpRequestHandler requestHandler;

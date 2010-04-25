@@ -28,14 +28,14 @@ public class EchoTest {
         OSGiRuntime vchServer = new OSGiRuntime();
         try {
             vchServer.cmd("vchsvc add vch echo");
-            vchServer.cmd("port add 9001 vchsvc");
+            vchServer.cmd("port add 9001 vch");
             OSGiRuntime vchClient = new OSGiRuntime();
             try {
                 vchClient.cmd("direct-http add http direct");
-                vchClient.cmd("vchep add remote-echo localhost:9001 echo direct-http");
+                vchClient.cmd("vchep add remote-echo localhost:9001 echo http");
                 vchClient.cmd("forward add local-echo remote-echo");
                 vchClient.cmd("port add 9000 local-echo");
-                Thread.sleep(1000); // TODO
+                Thread.sleep(1500); // TODO
                 Socket socket = new Socket("localhost", 9000);
                 EchoTestUtil.testEcho(new SocketConnection(socket));
                 socket.close();
