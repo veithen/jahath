@@ -20,10 +20,10 @@ import java.io.UnsupportedEncodingException;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.common.http.HttpHeadersProvider;
-import com.google.code.jahath.common.http.HttpOutMessage;
+import com.google.code.jahath.common.http.HttpOutMessageImpl;
 import com.google.code.jahath.common.http.HttpOutputStream;
 
-public class HttpResponse extends HttpOutMessage {
+public class HttpResponse extends HttpOutMessageImpl {
     HttpResponse(HttpOutputStream out, HttpHeadersProvider headersProvider) {
         super(out, headersProvider);
     }

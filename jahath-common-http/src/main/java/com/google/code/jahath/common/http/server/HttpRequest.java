@@ -20,10 +20,10 @@ import java.io.InputStream;
 
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
-import com.google.code.jahath.common.http.HttpInMessage;
+import com.google.code.jahath.common.http.HttpInMessageImpl;
 import com.google.code.jahath.common.http.HttpProtocolException;
 
-public class HttpRequest extends HttpInMessage {
+public class HttpRequest extends HttpInMessageImpl {
     private final boolean secure;
     private String path;
     

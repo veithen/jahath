@@ -34,7 +34,7 @@ public class EchoTest {
             OSGiRuntime vchClient = new OSGiRuntime();
             try {
                 vchClient.cmd("direct-http add http direct");
-                
+                vchClient.cmd("");
             } finally {
                 vchClient.stop();
             }

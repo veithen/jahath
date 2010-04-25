@@ -21,6 +21,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationException;
 
 import com.google.code.jahath.common.osgi.SimpleManagedServiceFactory;
+import com.google.code.jahath.tcp.SocketAddress;
 
 public class VCHEndpointFactory extends SimpleManagedServiceFactory {
     public VCHEndpointFactory(BundleContext bundleContext) {
@@ -29,6 +30,13 @@ public class VCHEndpointFactory extends SimpleManagedServiceFactory {
 
     @Override
     protected void configure(Instance instance, Dictionary properties) throws ConfigurationException {
+        String name = (String)properties.get("name");
+        SocketAddress server = null; // TODO
+        String service = (String)properties.get("service");
+        String httpGateway = (String)properties.get("http-gateway");
+        
+        VCHEndpoint endpoint = new VCHEndpoint(bundleContext, server, service, httpGateway);
+        
         // TODO
     }
 }

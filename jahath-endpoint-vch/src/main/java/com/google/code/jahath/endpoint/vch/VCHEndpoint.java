@@ -24,11 +24,16 @@ import org.osgi.util.tracker.ServiceTracker;
 import com.google.code.jahath.Connection;
 import com.google.code.jahath.Endpoint;
 import com.google.code.jahath.http.HttpGateway;
+import com.google.code.jahath.tcp.SocketAddress;
 
 public class VCHEndpoint implements Endpoint {
+    private final SocketAddress server;
+    private final String serviceName;
     private final ServiceTracker httpGatewayTracker;
 
-    public VCHEndpoint(BundleContext bundleContext, String httpGatewayName) {
+    public VCHEndpoint(BundleContext bundleContext, SocketAddress server, String serviceName, String httpGatewayName) {
+        this.server = server;
+        this.serviceName = serviceName;
         try {
             httpGatewayTracker = new ServiceTracker(bundleContext,
                     bundleContext.createFilter("(&(objectClass=" + HttpGateway.class.getName() + ")(name=" + httpGatewayName + "))"), null);
@@ -43,8 +48,7 @@ public class VCHEndpoint implements Endpoint {
         if (httpGateway == null) {
             throw new IOException("Gateway not available");
         } else {
-            // TODO Auto-generated method stub
-            return null;
+            return new VCHClient(server, httpGateway).createConnection(serviceName);
         }
     }
     

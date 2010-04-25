@@ -15,12 +15,23 @@
  */
 package com.google.code.jahath.endpoint.vch.cli;
 
+import org.apache.felix.shell.Command;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+import com.google.code.jahath.common.cli.Argument;
+import com.google.code.jahath.common.cli.ConfigurationCommand;
+import com.google.code.jahath.common.cli.Sequence;
+
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
-        
+        Sequence sequence = new Sequence();
+        sequence.add(new Argument("name"));
+        // TODO: server socket address
+        sequence.add(new Argument("service"));
+        sequence.add(new Argument("http-gateway"));
+        context.registerService(Command.class.getName(), new ConfigurationCommand(context,
+                "vchep", "Manage VC/H endpoints", "endpoint-vch", sequence), null);
     }
 
     public void stop(BundleContext context) throws Exception {

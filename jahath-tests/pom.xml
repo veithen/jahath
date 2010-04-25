@@ -48,18 +48,34 @@
             <type>bundle</type>
             <scope>test</scope>
         </dependency>
-        <!-- dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jahath-gateway-vch</artifactId>
+            <artifactId>jahath-endpoint-vch</artifactId>
             <version>${project.version}</version>
+            <type>bundle</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-endpoint-vch-cli</artifactId>
+            <version>${project.version}</version>
+            <type>bundle</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jahath-service-vch</artifactId>
             <version>${project.version}</version>
+            <type>bundle</type>
             <scope>test</scope>
-        </dependency-->
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jahath-service-vch-cli</artifactId>
+            <version>${project.version}</version>
+            <type>bundle</type>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jahath-api</artifactId>

@@ -15,7 +15,6 @@
  */
 package com.google.code.jahath.common.http.server;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
