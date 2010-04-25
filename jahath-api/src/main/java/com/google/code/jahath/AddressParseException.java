@@ -15,25 +15,22 @@
  */
 package com.google.code.jahath;
 
-public class IPv6Address extends IPAddress {
-    public IPv6Address(byte[] address) {
-//        super(address);
-        if (address == null || address.length != 16) {
-            throw new IllegalArgumentException();
-        }
+public class AddressParseException extends Exception {
+    private static final long serialVersionUID = 1380380661995020103L;
+
+    public AddressParseException() {
+        super();
     }
 
-    // TODO: implement toString and hashCode
-    @Override
-    public String toString() {
-        // TODO Auto-generated method stub
-        return null;
+    public AddressParseException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    @Override
-    public byte[] getAddress() {
-        // TODO Auto-generated method stub
-        return null;
+    public AddressParseException(String message) {
+        super(message);
     }
 
+    public AddressParseException(Throwable cause) {
+        super(cause);
+    }
 }

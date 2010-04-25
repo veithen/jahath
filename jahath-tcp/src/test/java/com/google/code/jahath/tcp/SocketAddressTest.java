@@ -13,27 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.jahath;
+package com.google.code.jahath.tcp;
 
-public class IPv6Address extends IPAddress {
-    public IPv6Address(byte[] address) {
-//        super(address);
-        if (address == null || address.length != 16) {
-            throw new IllegalArgumentException();
-        }
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.google.code.jahath.IPv4Address;
+
+public class SocketAddressTest {
+    @Test
+    public void testParse() throws Exception {
+        Assert.assertEquals(new SocketAddress(IPv4Address.LOOPBACK, 1234), SocketAddress.parse("127.0.0.1:1234"));
     }
-
-    // TODO: implement toString and hashCode
-    @Override
-    public String toString() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public byte[] getAddress() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }
