@@ -15,11 +15,28 @@
  */
 package com.google.code.jahath.http.impl;
 
+import java.util.Properties;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.cm.ManagedServiceFactory;
 
 public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
+        registerDirectHttpGatewayFactory(context);
+        registerHttpProxyGatewayFactory(context);
+    }
+    
+    private void registerDirectHttpGatewayFactory(BundleContext context) {
+        Properties props = new Properties();
+        props.put("service.pid", "http-gateway-direct");
+        context.registerService(ManagedServiceFactory.class.getName(), new DirectHttpGatewayFactory(context), props);
+    }
+
+    private void registerHttpProxyGatewayFactory(BundleContext context) {
+        Properties props = new Properties();
+        props.put("service.pid", "http-gateway-proxy");
+        context.registerService(ManagedServiceFactory.class.getName(), new HttpProxyGatewayFactory(context), props);
     }
 
     public void stop(BundleContext context) throws Exception {

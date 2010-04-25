@@ -72,7 +72,7 @@
                         <Bundle-Name>Jahath VC/H Endpoint</Bundle-Name>
                         <Bundle-Activator>com.google.code.jahath.endpoint.vch.Activator</Bundle-Activator>
                         <Export-Package></Export-Package>
-                        <Embed-Dependency>jahath-common-*</Embed-Dependency>
+                        <Embed-Dependency>jahath-common-*,commons-io</Embed-Dependency>
                     </instructions>
                 </configuration>
             </plugin>

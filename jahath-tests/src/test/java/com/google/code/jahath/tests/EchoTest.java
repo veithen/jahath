@@ -15,13 +15,11 @@
  */
 package com.google.code.jahath.tests;
 
+import java.net.Socket;
+
 import org.junit.Test;
 
-import com.google.code.jahath.Connection;
-import com.google.code.jahath.client.vch.VCHClient;
-import com.google.code.jahath.common.vch.VCHConstants;
-import com.google.code.jahath.service.echo.EchoService;
-import com.google.code.jahath.service.vch.VCHServer;
+import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.testutils.EchoTestUtil;
 
 public class EchoTest {
@@ -34,21 +32,18 @@ public class EchoTest {
             OSGiRuntime vchClient = new OSGiRuntime();
             try {
                 vchClient.cmd("direct-http add http direct");
-                vchClient.cmd("");
+                vchClient.cmd("vchep add remote-echo localhost:9001 echo direct-http");
+                vchClient.cmd("forward add local-echo remote-echo");
+                vchClient.cmd("port add 9000 local-echo");
+                Thread.sleep(1000); // TODO
+                Socket socket = new Socket("localhost", 9000);
+                EchoTestUtil.testEcho(new SocketConnection(socket));
+                socket.close();
             } finally {
                 vchClient.stop();
             }
         } finally {
             vchServer.stop();
         }
-        
-        
-        VCHServer server = new VCHServer(5555);
-        server.registerService(VCHConstants.Services.ECHO, new EchoService());
-        VCHClient client = new VCHClient("localhost", 5555, null);
-        Connection connection = client.createConnection(VCHConstants.Services.ECHO);
-        EchoTestUtil.testEcho(connection);
-        client.shutdown();
-        server.stop();
     }
 }

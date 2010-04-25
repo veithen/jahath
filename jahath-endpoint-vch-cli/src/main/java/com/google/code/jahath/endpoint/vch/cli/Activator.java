@@ -27,7 +27,7 @@ public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         Sequence sequence = new Sequence();
         sequence.add(new Argument("name"));
-        // TODO: server socket address
+        sequence.add(new Argument("server"));
         sequence.add(new Argument("service"));
         sequence.add(new Argument("http-gateway"));
         context.registerService(Command.class.getName(), new ConfigurationCommand(context,
