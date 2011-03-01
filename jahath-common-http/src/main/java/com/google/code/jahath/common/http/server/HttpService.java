@@ -46,8 +46,8 @@ public class HttpService implements Service, HttpHeadersProvider {
 
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
-            ErrorListenerInputStream in = new ErrorListenerInputStream(connection.getInputStream());
-            ErrorListenerOutputStream out = new ErrorListenerOutputStream(connection.getOutputStream());
+            ErrorListenerInputStream in = new ErrorListenerInputStream(connection.getStreamSource().getInputStream());
+            ErrorListenerOutputStream out = new ErrorListenerOutputStream(connection.getStreamSink().getOutputStream());
             log.fine("New connection");
             while (true) {
                 HttpRequest httpRequest = new HttpRequest(in, connection.isSecure());

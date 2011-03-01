@@ -20,8 +20,8 @@ import com.google.code.jahath.common.http.HttpException;
 /**
  * Indicates that an error occurred because of a problem with the underlying HTTP connection. This
  * exception wraps an {@link HttpException} and may be thrown by the streams returned by
- * {@link com.googlecode.sisme.stream.Connection#getInputStream()} and
- * {@link com.googlecode.sisme.stream.Connection#getOutputStream()}.
+ * {@link com.googlecode.sisme.stream.Connection#getStreamSource()} and
+ * {@link com.googlecode.sisme.stream.Connection#getStreamSink()}.
  * 
  * @author Andreas Veithen
  */

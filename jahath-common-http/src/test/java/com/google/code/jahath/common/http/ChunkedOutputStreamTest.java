@@ -92,8 +92,8 @@ public class ChunkedOutputStreamTest {
         Server server = new Server(5555, new Service() {
             public void handle(ExecutionEnvironment env, Connection connection) {
                 try {
-                    CRLFInputStream in = new CRLFInputStream(connection.getInputStream());
-                    HttpOutputStream out = new HttpOutputStream(connection.getOutputStream());
+                    CRLFInputStream in = new CRLFInputStream(connection.getStreamSource().getInputStream());
+                    HttpOutputStream out = new HttpOutputStream(connection.getStreamSink().getOutputStream());
                     while (true) {
                         Util.consumeHeaders(in);
                         out.writeLine("HTTP/1.1 200 OK");

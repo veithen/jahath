@@ -36,7 +36,7 @@ public class SocketConnectionTest {
 
         public void run() {
             try {
-                connection.getInputStream().read();
+                connection.getStreamSource().getInputStream().read();
             } catch (IOException ex) {
                 exception = ex;
             }

@@ -28,8 +28,8 @@ public class EchoTestUtil {
     private EchoTestUtil() {}
     
     public static void testEcho(Connection connection) throws IOException {
-        OutputStream out = connection.getOutputStream();
-        InputStream in = connection.getInputStream();
+        OutputStream out = connection.getStreamSink().getOutputStream();
+        InputStream in = connection.getStreamSource().getInputStream();
         Random random = new Random();
         byte[] buffer1 = new byte[512];
         byte[] buffer2 = new byte[512];

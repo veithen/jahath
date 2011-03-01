@@ -53,8 +53,8 @@ public class SocksGateway implements Gateway {
             throw new IOException("Endpoint not available");
         }
         Connection connection = endpoint.connect();
-        SocksDataOutputStream out = new SocksDataOutputStream(new BufferedOutputStream(connection.getOutputStream(), 64));
-        SocksDataInputStream in = new SocksDataInputStream(connection.getInputStream());
+        SocksDataOutputStream out = new SocksDataOutputStream(new BufferedOutputStream(connection.getStreamSink().getOutputStream(), 64));
+        SocksDataInputStream in = new SocksDataInputStream(connection.getStreamSource().getInputStream());
         
         out.writeByte(SocksConstants.SOCKS_VERSION);
         out.writeByte(2);

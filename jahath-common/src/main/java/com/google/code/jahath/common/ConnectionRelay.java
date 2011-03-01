@@ -44,8 +44,8 @@ public class ConnectionRelay implements Runnable {
 
     public void run() {
         try {
-            Future<?> f1 = env.submit(new StreamRelay(log, label1 + " -> " + label2, connection1.getInputStream(), connection2.getOutputStream()));
-            Future<?> f2 = env.submit(new StreamRelay(log, label2 + " -> " + label1, connection2.getInputStream(), connection1.getOutputStream()));
+            Future<?> f1 = env.submit(new StreamRelay(log, label1 + " -> " + label2, connection1.getStreamSource().getInputStream(), connection2.getStreamSink().getOutputStream()));
+            Future<?> f2 = env.submit(new StreamRelay(log, label2 + " -> " + label1, connection2.getStreamSource().getInputStream(), connection1.getStreamSink().getOutputStream()));
             f1.get();
             f2.get();
         } catch (Exception ex) {

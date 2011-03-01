@@ -35,9 +35,9 @@ public abstract class AbstractHttpGateway implements HttpGateway {
     public HttpRequest createRequest(HttpRequest.Method method, SocketAddress server, String path) throws HttpException {
         try {
             Connection connection = createHttpConnection(server);
-            HttpOutputStream request = new HttpOutputStream(LogUtil.log(connection.getOutputStream(), log, Level.FINER, "HTTP request"));
+            HttpOutputStream request = new HttpOutputStream(LogUtil.log(connection.getStreamSink().getOutputStream(), log, Level.FINER, "HTTP request"));
             request.writeLine(method + " " + getRequestTarget(server, path) + " " + HttpConstants.HTTP_VERSION_1_1);
-            HttpRequest httpRequest = new HttpRequestImpl(request, LogUtil.log(connection.getInputStream(), log, Level.FINER, "HTTP response"));
+            HttpRequest httpRequest = new HttpRequestImpl(request, LogUtil.log(connection.getStreamSource().getInputStream(), log, Level.FINER, "HTTP response"));
             httpRequest.addHeader(HttpConstants.Headers.HOST, getHostHeader(server));
             httpRequest.addHeader(HttpConstants.Headers.CONNECTION, "keep-alive");
             addHeaders(httpRequest);

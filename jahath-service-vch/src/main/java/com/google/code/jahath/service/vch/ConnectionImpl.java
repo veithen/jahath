@@ -25,6 +25,10 @@ import com.google.code.jahath.common.LogUtil;
 import com.google.code.jahath.common.io.SwappableInputStream;
 import com.google.code.jahath.common.io.SwappableOutputStream;
 import com.googlecode.sisme.stream.AbstractConnection;
+import com.googlecode.sisme.stream.InputStreamAdapter;
+import com.googlecode.sisme.stream.OutputStreamAdapter;
+import com.googlecode.sisme.stream.StreamSink;
+import com.googlecode.sisme.stream.StreamSource;
 
 class ConnectionImpl extends AbstractConnection {
     private static final Logger log = Logger.getLogger(ConnectionImpl.class.getName());
@@ -56,12 +60,12 @@ class ConnectionImpl extends AbstractConnection {
         outputStream.swap(out);
     }
     
-    public InputStream getInputStream() {
-        return LogUtil.log(inputStream, log, Level.FINER, "in");
+    public StreamSource getStreamSource() {
+        return new InputStreamAdapter(LogUtil.log(inputStream, log, Level.FINER, "in"));
     }
     
-    public OutputStream getOutputStream() {
-        return LogUtil.log(outputStream, log, Level.FINER, "out");
+    public StreamSink getStreamSink() {
+        return new OutputStreamAdapter(LogUtil.log(outputStream, log, Level.FINER, "out"));
     }
 
     @Override

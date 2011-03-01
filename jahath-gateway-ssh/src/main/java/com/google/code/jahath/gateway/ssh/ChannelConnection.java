@@ -16,10 +16,12 @@
 package com.google.code.jahath.gateway.ssh;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import com.googlecode.sisme.stream.AbstractConnection;
+import com.googlecode.sisme.stream.InputStreamAdapter;
+import com.googlecode.sisme.stream.OutputStreamAdapter;
+import com.googlecode.sisme.stream.StreamSink;
+import com.googlecode.sisme.stream.StreamSource;
 import com.jcraft.jsch.Channel;
 
 public class ChannelConnection extends AbstractConnection {
@@ -29,12 +31,12 @@ public class ChannelConnection extends AbstractConnection {
         this.channel = channel;
     }
 
-    public InputStream getInputStream() throws IOException {
-        return channel.getInputStream();
+    public StreamSource getStreamSource() throws IOException {
+        return new InputStreamAdapter(channel.getInputStream());
     }
 
-    public OutputStream getOutputStream() throws IOException {
-        return channel.getOutputStream();
+    public StreamSink getStreamSink() throws IOException {
+        return new OutputStreamAdapter(channel.getOutputStream());
     }
 
     @Override

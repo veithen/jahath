@@ -43,8 +43,8 @@ public class SocksService implements Service {
         try {
             boolean fineEnabled = log.isLoggable(Level.FINE);
             
-            SocksDataInputStream in = new SocksDataInputStream(connection.getInputStream());
-            SocksDataOutputStream out = new SocksDataOutputStream(new BufferedOutputStream(connection.getOutputStream(), 64));
+            SocksDataInputStream in = new SocksDataInputStream(connection.getStreamSource().getInputStream());
+            SocksDataOutputStream out = new SocksDataOutputStream(new BufferedOutputStream(connection.getStreamSink().getOutputStream(), 64));
             
             if (fineEnabled) {
                 log.fine("Waiting for SOCKS request");

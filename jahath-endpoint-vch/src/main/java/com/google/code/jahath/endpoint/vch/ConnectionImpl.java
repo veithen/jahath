@@ -24,6 +24,10 @@ import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.http.HttpRequest;
 import com.google.code.jahath.http.HttpResponse;
 import com.googlecode.sisme.stream.AbstractConnection;
+import com.googlecode.sisme.stream.InputStreamAdapter;
+import com.googlecode.sisme.stream.OutputStreamAdapter;
+import com.googlecode.sisme.stream.StreamSink;
+import com.googlecode.sisme.stream.StreamSource;
 
 class ConnectionImpl extends AbstractConnection {
     private final HttpClient httpClient;
@@ -38,12 +42,12 @@ class ConnectionImpl extends AbstractConnection {
         in = new VCHInputStream(httpClient, connectionId);
     }
     
-    public OutputStream getOutputStream() {
-        return out;
+    public StreamSink getStreamSink() {
+        return new OutputStreamAdapter(out);
     }
 
-    public InputStream getInputStream() {
-        return in;
+    public StreamSource getStreamSource() {
+        return new InputStreamAdapter(in);
     }
 
     @Override

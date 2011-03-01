@@ -16,12 +16,14 @@
 package com.google.code.jahath.common.connection;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 
 import com.googlecode.sisme.stream.AbstractConnection;
 import com.googlecode.sisme.stream.Connection;
+import com.googlecode.sisme.stream.InputStreamAdapter;
+import com.googlecode.sisme.stream.OutputStreamAdapter;
+import com.googlecode.sisme.stream.StreamSink;
+import com.googlecode.sisme.stream.StreamSource;
 
 /**
  * Adapts a {@link Socket} to the {@link Connection} interface.
@@ -35,12 +37,12 @@ public class SocketConnection extends AbstractConnection {
         this.socket = socket;
     }
 
-    public InputStream getInputStream() throws IOException {
-        return new SocketInputStream(this, socket.getInputStream());
+    public StreamSource getStreamSource() throws IOException {
+        return new InputStreamAdapter(new SocketInputStream(this, socket.getInputStream()));
     }
 
-    public OutputStream getOutputStream() throws IOException {
-        return socket.getOutputStream();
+    public StreamSink getStreamSink() throws IOException {
+        return new OutputStreamAdapter(socket.getOutputStream());
     }
 
     @Override

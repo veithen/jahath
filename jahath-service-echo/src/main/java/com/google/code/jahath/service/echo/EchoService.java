@@ -27,8 +27,8 @@ public class EchoService implements Service {
     public void handle(ExecutionEnvironment env, Connection connection) {
         try {
             byte[] buffer = new byte[4096];
-            InputStream in = connection.getInputStream();
-            OutputStream out = connection.getOutputStream();
+            InputStream in = connection.getStreamSource().getInputStream();
+            OutputStream out = connection.getStreamSink().getOutputStream();
             int c;
             while ((c = in.read(buffer)) != -1) {
                 out.write(buffer, 0, c);
