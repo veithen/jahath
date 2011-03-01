@@ -17,10 +17,10 @@ package com.google.code.jahath.tcp.impl;
 
 import org.osgi.framework.BundleContext;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.osgi.NamedServiceProxy;
+import com.googlecode.sisme.stream.Connection;
 
 public class EndpointProxy extends NamedServiceProxy<Service> implements Service {
     public EndpointProxy(BundleContext bundleContext, String name) {

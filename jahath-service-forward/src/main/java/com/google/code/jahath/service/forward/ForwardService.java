@@ -22,11 +22,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.Endpoint;
 import com.google.code.jahath.common.ConnectionRelay;
 import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.googlecode.sisme.stream.Connection;
 
 public class ForwardService implements Service {
     private static final Logger log = Logger.getLogger(ForwardService.class.getName());

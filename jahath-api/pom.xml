@@ -29,6 +29,11 @@
     <packaging>bundle</packaging>
     <dependencies>
         <dependency>
+            <groupId>com.googlecode.sisme</groupId>
+            <artifactId>stream</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>

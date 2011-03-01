@@ -18,8 +18,6 @@ package com.google.code.jahath.common.http.server;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.Connection;
-import com.google.code.jahath.ConnectionClosedLocallyException;
 import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.http.HttpConstants;
@@ -30,6 +28,8 @@ import com.google.code.jahath.common.http.HttpOutMessage;
 import com.google.code.jahath.common.http.HttpOutputStream;
 import com.google.code.jahath.common.io.ErrorListenerInputStream;
 import com.google.code.jahath.common.io.ErrorListenerOutputStream;
+import com.googlecode.sisme.stream.Connection;
+import com.googlecode.sisme.stream.ConnectionClosedLocallyException;
 
 public class HttpService implements Service, HttpHeadersProvider {
     private static final Logger log = Logger.getLogger(HttpService.class.getName());

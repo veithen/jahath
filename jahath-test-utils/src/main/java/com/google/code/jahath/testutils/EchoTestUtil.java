@@ -22,7 +22,7 @@ import java.util.Random;
 
 import org.junit.Assert;
 
-import com.google.code.jahath.Connection;
+import com.googlecode.sisme.stream.Connection;
 
 public class EchoTestUtil {
     private EchoTestUtil() {}

@@ -21,10 +21,10 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.http.HttpRequest;
 import com.google.code.jahath.tcp.Gateway;
 import com.google.code.jahath.tcp.SocketAddress;
+import com.googlecode.sisme.stream.Connection;
 
 public class DirectHttpGateway extends AbstractHttpGateway {
     private final ServiceTracker tcpGatewayTracker;

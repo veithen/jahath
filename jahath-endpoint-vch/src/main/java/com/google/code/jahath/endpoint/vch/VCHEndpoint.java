@@ -21,10 +21,10 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.Endpoint;
 import com.google.code.jahath.http.HttpGateway;
 import com.google.code.jahath.tcp.SocketAddress;
+import com.googlecode.sisme.stream.Connection;
 
 public class VCHEndpoint implements Endpoint {
     private final SocketAddress server;

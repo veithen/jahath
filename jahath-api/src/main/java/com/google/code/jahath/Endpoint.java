@@ -17,6 +17,8 @@ package com.google.code.jahath;
 
 import java.io.IOException;
 
+import com.googlecode.sisme.stream.Connection;
+
 /**
  * A (remote) endpoint.
  */

@@ -21,12 +21,12 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.Endpoint;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.http.HttpRequest;
 import com.google.code.jahath.tcp.SocketAddress;
+import com.googlecode.sisme.stream.Connection;
 
 public class HttpProxyGateway extends AbstractHttpGateway {
     private final ServiceTracker endpointTracker;

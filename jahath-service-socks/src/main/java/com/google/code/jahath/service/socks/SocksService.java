@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.ConnectionRelay;
 import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
@@ -29,6 +28,7 @@ import com.google.code.jahath.common.socks.SocksDataInputStream;
 import com.google.code.jahath.common.socks.SocksDataOutputStream;
 import com.google.code.jahath.tcp.Gateway;
 import com.google.code.jahath.tcp.SocketAddress;
+import com.googlecode.sisme.stream.Connection;
 
 public class SocksService implements Service {
     private static final Logger log = Logger.getLogger(SocksService.class.getName());

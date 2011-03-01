@@ -19,10 +19,10 @@ import java.io.IOException;
 
 import org.osgi.framework.BundleContext;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.osgi.NamedServiceProxy;
 import com.google.code.jahath.tcp.Gateway;
 import com.google.code.jahath.tcp.SocketAddress;
+import com.googlecode.sisme.stream.Connection;
 
 // TODO: eliminate this
 public class GatewayProxy extends NamedServiceProxy<Gateway> implements Gateway {

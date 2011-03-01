@@ -29,12 +29,12 @@ import org.junit.Test;
 import org.mortbay.jetty.Request;
 import org.mortbay.jetty.handler.AbstractHandler;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.CRLFInputStream;
 import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.server.Server;
 import com.google.code.jahath.testutils.CRC;
+import com.googlecode.sisme.stream.Connection;
 
 public class ChunkedOutputStreamTest {
     private void testClient(int requestCount) throws Exception {

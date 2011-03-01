@@ -18,8 +18,8 @@ package com.google.code.jahath.common.connection;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.google.code.jahath.Connection;
-import com.google.code.jahath.ConnectionClosedLocallyException;
+import com.googlecode.sisme.stream.Connection;
+import com.googlecode.sisme.stream.ConnectionClosedLocallyException;
 
 class SocketInputStream extends InputStream {
     private final SocketConnection connection;

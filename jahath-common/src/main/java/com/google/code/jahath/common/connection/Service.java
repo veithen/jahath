@@ -15,8 +15,8 @@
  */
 package com.google.code.jahath.common.connection;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.googlecode.sisme.stream.Connection;
 
 /**
  * Blocking connection handler.

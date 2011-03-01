@@ -20,8 +20,8 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.googlecode.sisme.stream.Connection;
 
 public class ConnectionRelay implements Runnable {
     private final Logger log;

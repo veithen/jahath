@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.connection.Service;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
+import com.googlecode.sisme.stream.Connection;
 
 public class EchoService implements Service {
     public void handle(ExecutionEnvironment env, Connection connection) {

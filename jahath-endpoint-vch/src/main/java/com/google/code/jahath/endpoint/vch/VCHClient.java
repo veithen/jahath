@@ -15,13 +15,13 @@
  */
 package com.google.code.jahath.endpoint.vch;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.http.HttpConstants;
 import com.google.code.jahath.common.http.HttpException;
 import com.google.code.jahath.http.HttpGateway;
 import com.google.code.jahath.http.HttpRequest;
 import com.google.code.jahath.http.HttpResponse;
 import com.google.code.jahath.tcp.SocketAddress;
+import com.googlecode.sisme.stream.Connection;
 
 public class VCHClient {
     private final HttpClient httpClient;

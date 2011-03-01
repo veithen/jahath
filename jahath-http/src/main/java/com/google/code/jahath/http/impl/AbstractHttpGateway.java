@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.LogUtil;
 import com.google.code.jahath.common.http.HttpConnectionException;
 import com.google.code.jahath.common.http.HttpConstants;
@@ -28,6 +27,7 @@ import com.google.code.jahath.common.http.HttpOutputStream;
 import com.google.code.jahath.http.HttpGateway;
 import com.google.code.jahath.http.HttpRequest;
 import com.google.code.jahath.tcp.SocketAddress;
+import com.googlecode.sisme.stream.Connection;
 
 public abstract class AbstractHttpGateway implements HttpGateway {
     private static final Logger log = Logger.getLogger(AbstractHttpGateway.class.getName());

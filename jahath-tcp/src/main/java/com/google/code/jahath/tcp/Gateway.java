@@ -17,7 +17,7 @@ package com.google.code.jahath.tcp;
 
 import java.io.IOException;
 
-import com.google.code.jahath.Connection;
+import com.googlecode.sisme.stream.Connection;
 
 public interface Gateway {
     Connection connect(SocketAddress socketAddress) throws IOException;

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.google.code.jahath.AbstractConnection;
+import com.googlecode.sisme.stream.AbstractConnection;
 import com.jcraft.jsch.Channel;
 
 public class ChannelConnection extends AbstractConnection {

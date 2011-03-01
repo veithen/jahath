@@ -24,13 +24,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.Endpoint;
 import com.google.code.jahath.common.socks.SocksConstants;
 import com.google.code.jahath.common.socks.SocksDataInputStream;
 import com.google.code.jahath.common.socks.SocksDataOutputStream;
 import com.google.code.jahath.tcp.Gateway;
 import com.google.code.jahath.tcp.SocketAddress;
+import com.googlecode.sisme.stream.Connection;
 
 public class SocksGateway implements Gateway {
     private static final Logger log = Logger.getLogger(SocksGateway.class.getName());

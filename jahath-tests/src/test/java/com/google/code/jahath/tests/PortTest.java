@@ -19,9 +19,9 @@ import java.net.Socket;
 
 import org.junit.Test;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.testutils.EchoTestUtil;
+import com.googlecode.sisme.stream.Connection;
 
 public class PortTest {
     @Test

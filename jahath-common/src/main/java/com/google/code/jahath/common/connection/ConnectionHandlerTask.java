@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.common.container.ExecutionEnvironment;
 import com.google.code.jahath.common.container.Task;
+import com.googlecode.sisme.stream.Connection;
 
 public class ConnectionHandlerTask implements Task {
     private static final Logger log = Logger.getLogger(ConnectionHandlerTask.class.getName());

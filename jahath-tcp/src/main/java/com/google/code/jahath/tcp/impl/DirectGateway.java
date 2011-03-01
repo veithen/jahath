@@ -22,7 +22,6 @@ import java.net.UnknownHostException;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.google.code.jahath.Connection;
 import com.google.code.jahath.DnsAddress;
 import com.google.code.jahath.HostAddress;
 import com.google.code.jahath.IPAddress;
@@ -30,6 +29,7 @@ import com.google.code.jahath.common.connection.SocketConnection;
 import com.google.code.jahath.resolver.Resolver;
 import com.google.code.jahath.tcp.Gateway;
 import com.google.code.jahath.tcp.SocketAddress;
+import com.googlecode.sisme.stream.Connection;
 
 public class DirectGateway implements Gateway {
     private final ServiceTracker resolverTracker;
